@@ -1,0 +1,21 @@
+{
+    "short_name": "LIS Calculator",
+    "name": "eGFR & LDL Calculator",
+    "icons": [
+      {
+        "src": "/flasg/vn.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/flasg/vn.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#ff6347"
+  }
