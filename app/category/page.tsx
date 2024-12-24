@@ -9,8 +9,147 @@ import TaskTable from './TaskTable'
 import SeasonModal from './SeasonModal'
 import StageModal from './StageModal'
 import TaskModal from './TaskModal'
+import { Plus, Edit2, Calendar, Layers, ClipboardList } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-// Sample data (replace with actual data fetching logic)
+export default function CategoryPage() {
+  const [isSeasonModalOpen, setIsSeasonModalOpen] = useState(false)
+  const [isStageModalOpen, setIsStageModalOpen] = useState(false)
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState(null)
+
+  const handleEdit = (item, type) => {
+    setEditingItem(item)
+    switch (type) {
+      case 'season':
+        setIsSeasonModalOpen(true)
+        break
+      case 'stage':
+        setIsStageModalOpen(true)
+        break
+      case 'task':
+        setIsTaskModalOpen(true)
+        break
+      default:
+        break
+    }
+  }
+
+  const handleAdd = (type) => {
+    setEditingItem(null)
+    switch (type) {
+      case 'season':
+        setIsSeasonModalOpen(true)
+        break
+      case 'stage':
+        setIsStageModalOpen(true)
+        break
+      case 'task':
+        setIsTaskModalOpen(true)
+        break
+      default:
+        break
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold text-center text-gray-800 mb-6"
+      >
+        📁 Quản Lý Danh Mục
+      </motion.h1>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Tabs defaultValue="seasons" className="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-md">
+          <TabsList className="flex space-x-1 bg-gray-100 p-1 rounded-t-lg">
+            <TabsTrigger
+              value="seasons"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Mùa Vụ</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="stages"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <Layers className="w-4 h-4" />
+              <span>Giai Đoạn</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="tasks"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <ClipboardList className="w-4 h-4" />
+              <span>Công Việc</span>
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="seasons" className="p-4">
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={() => handleAdd('season')}
+                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Thêm Mùa Vụ Mới</span>
+              </Button>
+            </div>
+            <SeasonTable data={seasons} onEdit={(item) => handleEdit(item, 'season')} />
+          </TabsContent>
+          <TabsContent value="stages" className="p-4">
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={() => handleAdd('stage')}
+                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Thêm Giai Đoạn Mới</span>
+              </Button>
+            </div>
+            <StageTable data={stages} onEdit={(item) => handleEdit(item, 'stage')} />
+          </TabsContent>
+          <TabsContent value="tasks" className="p-4">
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={() => handleAdd('task')}
+                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Thêm Công Việc Mới</span>
+              </Button>
+            </div>
+            <TaskTable data={tasks} onEdit={(item) => handleEdit(item, 'task')} />
+          </TabsContent>
+        </Tabs>
+      </motion.div>
+
+      {/* Modals */}
+      <SeasonModal
+        isOpen={isSeasonModalOpen}
+        onClose={() => setIsSeasonModalOpen(false)}
+        item={editingItem}
+      />
+      <StageModal
+        isOpen={isStageModalOpen}
+        onClose={() => setIsStageModalOpen(false)}
+        item={editingItem}
+      />
+      <TaskModal
+        isOpen={isTaskModalOpen}
+        onClose={() => setIsTaskModalOpen(false)}
+        item={editingItem}
+      />
+    </div>
+  )
+}
+
 const seasons = [
   {
     "_id": "673c2dd01f8b41e75f4d39e8",
@@ -443,82 +582,3 @@ const tasks = [
       "xId": "tng"
   },
 ]
-
-export default function CategoryPage() {
-  const [isSeasonModalOpen, setIsSeasonModalOpen] = useState(false)
-  const [isStageModalOpen, setIsStageModalOpen] = useState(false)
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
-
-  const handleEdit = (item, type) => {
-    setEditingItem(item)
-    switch (type) {
-      case 'season':
-        setIsSeasonModalOpen(true)
-        break
-      case 'stage':
-        setIsStageModalOpen(true)
-        break
-      case 'task':
-        setIsTaskModalOpen(true)
-        break
-    }
-  }
-
-  const handleAdd = (type) => {
-    setEditingItem(null)
-    switch (type) {
-      case 'season':
-        setIsSeasonModalOpen(true)
-        break
-      case 'stage':
-        setIsStageModalOpen(true)
-        break
-      case 'task':
-        setIsTaskModalOpen(true)
-        break
-    }
-  }
-
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Quản lý danh mục</h1>
-      <Tabs defaultValue="seasons" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="seasons">Mùa vụ</TabsTrigger>
-          <TabsTrigger value="stages">Giai đoạn</TabsTrigger>
-          <TabsTrigger value="tasks">Công việc</TabsTrigger>
-        </TabsList>
-        <TabsContent value="seasons">
-          <Button onClick={() => handleAdd('season')} className="mb-4 w-full md:w-auto">Thêm mùa vụ mới</Button>
-          <SeasonTable data={seasons} onEdit={(item) => handleEdit(item, 'season')} />
-        </TabsContent>
-        <TabsContent value="stages">
-          <Button onClick={() => handleAdd('stage')} className="mb-4 w-full md:w-auto">Thêm giai đoạn mới</Button>
-          <StageTable data={stages} onEdit={(item) => handleEdit(item, 'stage')} />
-        </TabsContent>
-        <TabsContent value="tasks">
-          <Button onClick={() => handleAdd('task')} className="mb-4 w-full md:w-auto">Thêm công việc mới</Button>
-          <TaskTable data={tasks} onEdit={(item) => handleEdit(item, 'task')} />
-        </TabsContent>
-      </Tabs>
-
-      <SeasonModal
-        isOpen={isSeasonModalOpen}
-        onClose={() => setIsSeasonModalOpen(false)}
-        item={editingItem}
-      />
-      <StageModal
-        isOpen={isStageModalOpen}
-        onClose={() => setIsStageModalOpen(false)}
-        item={editingItem}
-      />
-      <TaskModal
-        isOpen={isTaskModalOpen}
-        onClose={() => setIsTaskModalOpen(false)}
-        item={editingItem}
-      />
-    </div>
-  )
-}
-

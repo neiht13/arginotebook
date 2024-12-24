@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import {
   Table,
@@ -8,83 +10,113 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Edit2 } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function SeasonTable({ data, onEdit }) {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       {/* Desktop view */}
-      <div className="hidden md:block">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Mùa vụ</TableHead>
-              <TableHead>Năm</TableHead>
-              <TableHead>Ngày bắt đầu</TableHead>
-              <TableHead>Phương pháp</TableHead>
-              <TableHead>Giống</TableHead>
-              <TableHead>Diện tích</TableHead>
-              <TableHead>Số lượng</TableHead>
-              <TableHead>Thao tác</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((season) => (
-              <TableRow key={season._id}>
-                <TableCell>{season.muavu}</TableCell>
-                <TableCell>{season.nam}</TableCell>
-                <TableCell>{season.ngaybatdau}</TableCell>
-                <TableCell>{season.phuongphap}</TableCell>
-                <TableCell>{season.giong}</TableCell>
-                <TableCell>{season.dientich}</TableCell>
-                <TableCell>{season.soluong}</TableCell>
-                <TableCell>
-                  <Button onClick={() => onEdit(season)}>Sửa</Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <div className="hidden md:block w-full max-w-6xl">
+        <Card className="w-full shadow-lg rounded-lg bg-white">
+          <CardHeader className="border-b">
+            <CardTitle className="text-2xl font-extrabold text-gray-800">
+              📅 Danh Sách Mùa Vụ
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="py-4">
+            <Table className="min-w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mùa Vụ</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Năm</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày Bắt Đầu</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phương Pháp</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giống</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diện Tích</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số Lượng</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Thao Tác</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((season, index) => (
+                  <motion.tr
+                    key={season._id}
+                    whileHover={{ scale: 1.02, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}
+                    transition={{ duration: 0.3 }}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{season.muavu}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{season.nam}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{season.ngaybatdau}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{season.phuongphap}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{season.giong}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{season.dientich}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{season.soluong}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-center">
+                      <Button
+                        variant="ghost"
+                        onClick={() => onEdit(season)}
+                        className="flex items-center justify-center text-blue-500 hover:text-blue-700 transition"
+                      >
+                        <Edit2 className="w-4 h-4 mr-1" />
+                        Sửa
+                      </Button>
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Mobile view */}
-      <div className="md:hidden space-y-4">
-        {data.map((season) => (
-          <Card key={season._id}>
-            <CardContent className="pt-6">
+      <div className="md:hidden space-y-4 w-full max-w-md">
+        {data.map((season, index) => (
+          <Card key={season._id} className="shadow-md rounded-lg bg-white">
+            <CardContent className="pt-4">
               <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="font-bold">Mùa vụ:</span>
-                  <span>{season.muavu}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Mùa Vụ:</span>
+                  <span className="text-gray-600">{season.muavu}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Năm:</span>
-                  <span>{season.nam}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Năm:</span>
+                  <span className="text-gray-600">{season.nam}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Ngày bắt đầu:</span>
-                  <span>{season.ngaybatdau}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Ngày Bắt Đầu:</span>
+                  <span className="text-gray-600">{season.ngaybatdau}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Phương pháp:</span>
-                  <span>{season.phuongphap}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Phương Pháp:</span>
+                  <span className="text-gray-600">{season.phuongphap}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Giống:</span>
-                  <span>{season.giong}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Giống:</span>
+                  <span className="text-gray-600">{season.giong}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Diện tích:</span>
-                  <span>{season.dientich}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Diện Tích:</span>
+                  <span className="text-gray-600">{season.dientich}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Số lượng:</span>
-                  <span>{season.soluong}</span>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-gray-700">Số Lượng:</span>
+                  <span className="text-gray-600">{season.soluong}</span>
                 </div>
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => onEdit(season)} className="w-full">Sửa</Button>
+              <Button
+                onClick={() => onEdit(season)}
+                className="w-full flex items-center justify-center text-blue-500 hover:text-blue-700 transition"
+                variant="ghost"
+              >
+                <Edit2 className="w-4 h-4 mr-1" />
+                Sửa
+              </Button>
             </CardFooter>
           </Card>
         ))}

@@ -7,6 +7,8 @@ import {
   ContactIcon,
   LayoutDashboardIcon,
   UserIcon,
+  UtilityPole,
+  UtilityPoleIcon,
 } from "lucide-react";
 
 const Header = () => {
@@ -26,8 +28,9 @@ const Header = () => {
   const navItems = [
     { href: "/timeline", label: "Nhật ký", icon: <LayoutDashboardIcon className="w-5 h-5"/> },
     { href: "/category", label: "Danh mục", icon: <ContactIcon  className="w-5 h-5"/> },
-    { href: "/thongke", label: "Thống kê", icon: <ChartBarIcon  className="w-5 h-5"/> },
-    { href: "/user", label: "Người dùng", icon: <UserIcon  className="w-5 h-5"/> },
+    { href: "/statistics", label: "Thống kê", icon: <ChartBarIcon  className="w-5 h-5"/> },
+    { href: "/ultilities", label: "Tiện ích", icon: <UtilityPoleIcon  className="w-5 h-5"/> },
+    { href: "/profile", label: "Người dùng", icon: <UserIcon  className="w-5 h-5"/> },
   ];
 
   return (
