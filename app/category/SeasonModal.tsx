@@ -1,8 +1,13 @@
+// SeasonModal.jsx
+"use client"
+
 import React, { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { X } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function SeasonModal({ isOpen, onClose, item }) {
   const [formData, setFormData] = useState({
@@ -20,7 +25,18 @@ export default function SeasonModal({ isOpen, onClose, item }) {
 
   useEffect(() => {
     if (item) {
-      setFormData(item)
+      setFormData({
+        muavu: item.muavu || '',
+        nam: item.nam || '',
+        ngaybatdau: item.ngaybatdau || '',
+        phuongphap: item.phuongphap || '',
+        giong: item.giong || '',
+        dientich: item.dientich || '',
+        soluong: item.soluong || '',
+        giagiong: item.giagiong || '',
+        sothua: item.sothua || '',
+        chiphikhac: item.chiphikhac || '',
+      })
     } else {
       setFormData({
         muavu: '',
@@ -44,46 +60,65 @@ export default function SeasonModal({ isOpen, onClose, item }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
+    // Xử lý thêm mới hoặc cập nhật dữ liệu
     console.log('Submitting:', formData)
     onClose()
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{item ? 'Sửa mùa vụ' : 'Thêm mùa vụ mới'}</DialogTitle>
+      <DialogContent as={motion.div}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.3 }}
+        className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all"
+      >
+        <DialogHeader className="flex justify-between items-center">
+          <DialogTitle className="text-lg font-semibold text-gray-900">
+            {item ? 'Sửa Mùa Vụ' : 'Thêm Mùa Vụ Mới'}
+          </DialogTitle>
+          <Button onClick={onClose} variant="ghost" className="p-1">
+            <X className="w-5 h-5 text-gray-500" />
+          </Button>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="muavu" className="text-right">
-                Mùa vụ
+        <form onSubmit={handleSubmit} className="mt-4">
+          <div className="grid gap-4">
+            {/* Mùa vụ */}
+            <div className="flex flex-col">
+              <Label htmlFor="muavu" className="mb-1 font-medium text-gray-700">
+                Mùa Vụ
               </Label>
               <Input
                 id="muavu"
                 name="muavu"
                 value={formData.muavu}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập mùa vụ"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="nam" className="text-right">
+            {/* Năm */}
+            <div className="flex flex-col">
+              <Label htmlFor="nam" className="mb-1 font-medium text-gray-700">
                 Năm
               </Label>
               <Input
                 id="nam"
                 name="nam"
+                type="number"
                 value={formData.nam}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập năm"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="ngaybatdau" className="text-right">
-                Ngày bắt đầu
+            {/* Ngày bắt đầu */}
+            <div className="flex flex-col">
+              <Label htmlFor="ngaybatdau" className="mb-1 font-medium text-gray-700">
+                Ngày Bắt Đầu
               </Label>
               <Input
                 id="ngaybatdau"
@@ -91,23 +126,28 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="date"
                 value={formData.ngaybatdau}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phuongphap" className="text-right">
-                Phương pháp
+            {/* Phương pháp */}
+            <div className="flex flex-col">
+              <Label htmlFor="phuongphap" className="mb-1 font-medium text-gray-700">
+                Phương Pháp
               </Label>
               <Input
                 id="phuongphap"
                 name="phuongphap"
                 value={formData.phuongphap}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập phương pháp"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="giong" className="text-right">
+            {/* Giống */}
+            <div className="flex flex-col">
+              <Label htmlFor="giong" className="mb-1 font-medium text-gray-700">
                 Giống
               </Label>
               <Input
@@ -115,12 +155,15 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 name="giong"
                 value={formData.giong}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập giống"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="dientich" className="text-right">
-                Diện tích
+            {/* Diện tích */}
+            <div className="flex flex-col">
+              <Label htmlFor="dientich" className="mb-1 font-medium text-gray-700">
+                Diện Tích (ha)
               </Label>
               <Input
                 id="dientich"
@@ -128,12 +171,15 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="number"
                 value={formData.dientich}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập diện tích"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="soluong" className="text-right">
-                Số lượng
+            {/* Số lượng */}
+            <div className="flex flex-col">
+              <Label htmlFor="soluong" className="mb-1 font-medium text-gray-700">
+                Số Lượng
               </Label>
               <Input
                 id="soluong"
@@ -141,12 +187,15 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="number"
                 value={formData.soluong}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập số lượng"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="giagiong" className="text-right">
-                Giá giống
+            {/* Giá giống */}
+            <div className="flex flex-col">
+              <Label htmlFor="giagiong" className="mb-1 font-medium text-gray-700">
+                Giá Giống (VNĐ)
               </Label>
               <Input
                 id="giagiong"
@@ -154,12 +203,15 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="number"
                 value={formData.giagiong}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập giá giống"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="sothua" className="text-right">
-                Số thửa
+            {/* Số thửa */}
+            <div className="flex flex-col">
+              <Label htmlFor="sothua" className="mb-1 font-medium text-gray-700">
+                Số Thửa
               </Label>
               <Input
                 id="sothua"
@@ -167,12 +219,15 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="number"
                 value={formData.sothua}
                 onChange={handleChange}
-                className="col-span-3"
+                required
+                placeholder="Nhập số thửa"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="chiphikhac" className="text-right">
-                Chi phí khác
+            {/* Chi phí khác */}
+            <div className="flex flex-col">
+              <Label htmlFor="chiphikhac" className="mb-1 font-medium text-gray-700">
+                Chi Phí Khác (VNĐ)
               </Label>
               <Input
                 id="chiphikhac"
@@ -180,16 +235,21 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 type="number"
                 value={formData.chiphikhac}
                 onChange={handleChange}
-                className="col-span-3"
+                placeholder="Nhập chi phí khác"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button type="submit">Lưu</Button>
+          <DialogFooter className="flex justify-end mt-4 space-x-2">
+            <Button type="button" onClick={onClose} variant="ghost" className="px-4 py-2">
+              Hủy
+            </Button>
+            <Button type="submit" className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white">
+              Lưu
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   )
 }
-

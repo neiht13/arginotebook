@@ -46,15 +46,14 @@ export default function PestIdentifier() {
 
       // 2. Gửi request tới Hugging Face Inference API
       const response = await fetch(
-        `/models/${MODEL_ID}`,
+        `http://10.93.30.39:3003/predict`,
         {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${HF_API_TOKEN}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            inputs: base64Image,
+            image: base64Image,
           }),
         }
       );
@@ -68,14 +67,25 @@ export default function PestIdentifier() {
       // Ví dụ: data có thể là mảng gồm nhiều đối tượng, 
       // hoặc 1 object { label: "...", score: 0.99 } ...
       // Ở đây minh hoạ kiểu data = [{ label: 'Corn Leaf Blight', score: 0.95 }, ...]
+      const { predictions } = data; // Lấy ra mảng "predictions"
 
-      if (Array.isArray(data) && data.length > 0) {
-        const topPrediction = data[0];
-        const { label, score } = topPrediction;
-        setResult(
-          `**Bệnh/Sâu hại dự đoán:** ${label} (độ tin cậy: ${(score * 100).toFixed(2)}%)`
-        );
+      // Kiểm tra mảng predictions
+      if (Array.isArray(predictions) && predictions.length > 0) {
+        // Tạo 1 chuỗi để hiển thị 3 dự đoán
+        // Ví dụ: "1) Tên_nhãn_1 (75.00%), 2) Tên_nhãn_2 (15.00%), 3) Tên_nhãn_3 (10.00%)"
+        const resultString = predictions
+          .map((item, index) => `${index + 1}) ${item.label}: ${(item.probability * 100).toFixed(2)}%`)
+          .join('\n');
+    
+        // Hoặc bạn cũng có thể hiển thị từng dòng một
+        // const resultString = predictions
+        //   .map((item, index) => `${index + 1}) ${item.label} - ${(item.probability * 100).toFixed(2)}%`)
+        //   .join('\n');
+    
+        setResult(`Dự đoán top 3: \n${resultString}`);
+        
       } else {
+        // Không có kết quả hoặc trả về rỗng
         setError('Không thể xác định bệnh. Vui lòng thử lại với ảnh khác.');
       }
     } catch (error) {
@@ -91,7 +101,7 @@ export default function PestIdentifier() {
       <Card className="w-full max-w-md shadow-lg rounded-lg bg-white">
         <CardHeader className="border-b">
           <CardTitle className="text-3xl font-extrabold text-gray-800 flex items-center">
-            🐞 Nhận Diện Dịch Hại
+            🐞 Nhận Diện Sâu Bệnh
           </CardTitle>
         </CardHeader>
         <CardContent className="py-6">

@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { EyeIcon, EyeOffIcon, LoaderIcon } from "lucide-react";
@@ -24,25 +23,41 @@ export function UserAuthForm({ className, ...props }) {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const result = await signIn("credentials", {
-      ...form
-    });
-
-    setIsLoading(false);
-      console.log("result",result)
-    if (result?.ok) {
-      toast({
-        title: "Thành công",
-        description: "Đăng nhập thành công.",
-      });
-      router.push("/timeline");
-    } else {
-      toast({
-        title: "Lỗi",
-        description: "Đăng nhập thất bại.",
-      });
-    }
+    await handleLogin();
+    setIsLoading(false)
+    
   };
+  async function handleLogin() {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+      console.log(res);
+      
+      if (res.ok) {
+        toast({
+          title: "Thành công",
+          description: "Đăng nhập thành công.",
+        });
+        router.push("/timeline");
+      } else {
+        toast({
+          title: "Đăng nhập thất bại",
+          variant: "destructive",
+          description: "Đăng nhập thất bại",
+        });
+      }
+    } catch (err: any) {
+      console.error("Login error:", err);
+      alert("Có lỗi xảy ra.");
+    }
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,15 +75,10 @@ export function UserAuthForm({ className, ...props }) {
       setRemember(true);
     }
   }, []);
-  const credentialsAction = (formData: FormData) => {
-    console.log("formData", formData);
-    signIn("credentials", formData)
-  }
-  
 
   return (
     <form
-      action={credentialsAction}
+      onSubmit={onSubmit}
       className={cn("space-y-4 text-left", className)}
       {...props}
       
@@ -77,10 +87,10 @@ export function UserAuthForm({ className, ...props }) {
         <div className="grid gap-1">
           {/* <Label htmlFor="email">Email</Label> */}
           <Input
-            id="email"
-            name="email"
-            label="Email"
-            type="email"
+            id="username"
+            name="username"
+            label="Username"
+            type="text"
             className="h-11"
             autoComplete="email"
             disabled={isLoading}

@@ -1,23 +1,37 @@
+// PersonalInfoForm.jsx
 "use client"
 
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { MapPin } from 'lucide-react'
+import { MapPin, Phone, Mail, User, Home } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { motion } from 'framer-motion'
 
 const Map = dynamic(() => import('./Map'), { ssr: false })
 
 export default function PersonalInfoForm({ user, setUser }) {
   const [formData, setFormData] = useState({
-    name: user?.name,
-    email: user?.email,
+    name: user?.name || '',
+    email: user?.email || '',
     phone: '',
     address: '',
-    location: { lat: 10.762622, lng: 106.660172 } // Default to Ho Chi Minh City
+    location: { lat: 10.452992, lng: 105.6178176 }, 
   })
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        address: user.address || '',
+        location: user.location || { lat: 10.452992, lng: 105.6178176 },
+      })
+    }
+  }, [user])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -26,9 +40,9 @@ export default function PersonalInfoForm({ user, setUser }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
+    // Xử lý thêm mới hoặc cập nhật dữ liệu
     console.log('Submitting:', formData)
-    setUser(prev => ({ ...prev, name: formData.name, email: formData.email }))
+    setUser(prev => ({ ...prev, name: formData.name, email: formData.email, phone: formData.phone, address: formData.address, location: formData.location }))
   }
 
   const handleLocationSelect = (location) => {
@@ -55,32 +69,113 @@ export default function PersonalInfoForm({ user, setUser }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Họ tên</Label>
-        <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
+    <motion.form
+      onSubmit={handleSubmit}
+      className="space-y-6 mb-16"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Họ tên */}
+      <div className="flex items-center space-x-2">
+        <User className="w-5 h-5 text-gray-500" />
+        <div className="flex-1">
+          <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            Họ Tên
+          </Label>
+          <Input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            placeholder="Nhập họ tên"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+
+      {/* Email */}
+      <div className="flex items-center space-x-2">
+        <Mail className="w-5 h-5 text-gray-500" />
+        <div className="flex-1">
+          <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            Email
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            placeholder="Nhập email"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="phone">Số điện thoại</Label>
-        <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} />
+
+      {/* Số điện thoại */}
+      <div className="flex items-center space-x-2">
+        <Phone className="w-5 h-5 text-gray-500" />
+        <div className="flex-1">
+          <Label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            Số Điện Thoại
+          </Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Nhập số điện thoại"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="address">Địa chỉ</Label>
-        <Textarea id="address" name="address" value={formData.address} onChange={handleChange} />
+
+      {/* Địa chỉ */}
+      <div className="flex items-start space-x-2">
+        <Home className="w-5 h-5 text-gray-500 mt-1" />
+        <div className="flex-1">
+          <Label htmlFor="address" className="block text-sm font-medium text-gray-700">
+            Địa Chỉ
+          </Label>
+          <Textarea
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Nhập địa chỉ"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
-      <div className="space-y-2">
-        <Label>Vị trí trên bản đồ</Label>
-        <Map location={formData.location} onLocationSelect={handleLocationSelect} />
-        <Button type="button" onClick={handleGetCurrentLocation} className="mt-2">
-          <MapPin className="mr-2 h-4 w-4" /> Lấy vị trí hiện tại
+
+      {/* Vị trí trên bản đồ */}
+      <div className="space-y-2" style={{zIndex: -1}}>
+        <Label className="block text-sm font-medium text-gray-700">
+          Vị Trí Trên Bản Đồ
+        </Label>
+        <div className="relative h-72">
+          <Map location={formData.location} onLocationSelect={handleLocationSelect} />
+          <Button
+            type="button"
+            onClick={handleGetCurrentLocation}
+            className="absolute z-10 top-2 right-2 flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow"
+          >
+            <MapPin className="w-4 h-4" />
+            <span>Lấy Vị Trí</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Nút Lưu */}
+      <div className="flex justify-end">
+        <Button type="submit" className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow">
+          <span>Lưu Thay Đổi</span>
         </Button>
       </div>
-      <Button type="submit">Lưu thay đổi</Button>
-    </form>
+    </motion.form>
   )
 }
-

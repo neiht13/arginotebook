@@ -5,7 +5,7 @@ import { Nunito } from 'next/font/google';
 import "./styles/globals.css"
 import Head from 'next/head';
 import Header from './components/Header';
-import SessionProvider from './components/SessionProvider';
+import {Toaster as ToasterProvider} from "@/components/ui/toaster"
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -33,12 +33,11 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
       </Head>
       <body className={nunito.className}>
         <Header />
-        <SessionProvider>
-
+<ToasterProvider/>
+{/* <SonnerProvider/> */}
         <Providers>
           {children}
         </Providers>
-        </SessionProvider>
       </body>
     </html>
   );

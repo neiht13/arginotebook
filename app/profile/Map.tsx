@@ -12,14 +12,14 @@ export default function Map({ location, onLocationSelect }) {
     if (!mapRef.current) {
       mapRef.current = L.map('map').setView([location.lat, location.lng], 13)
 
-      L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+     L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
     }).addTo(mapRef.current)
 
       markerRef.current = L.marker([location.lat, location.lng], { draggable: true }).addTo(mapRef.current)
 
-      markerRef..currenton('dragend', function() {
+      markerRef.current.on('dragend', function() {
         const position = markerRef.current.getLatLng()
         onLocationSelect({ lat: position.lat, lng: position.lng })
       })
@@ -29,6 +29,6 @@ export default function Map({ location, onLocationSelect }) {
     }
   }, [location, onLocationSelect])
 
-  return <div id="map" style={{ width: '100%', height: '300px' }} />
+  return <div id="map" style={{ width: '100%', height: '300px', zIndex: 0 }} />
 }
 

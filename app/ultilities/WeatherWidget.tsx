@@ -1,169 +1,228 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect } from "react"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Sun, Cloud, CloudRain, Wind, AlertCircle } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Search,
+  Sun,
+  Cloud,
+  CloudRain,
+  Wind,
+  AlertCircle,
+} from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
 
 export default function WeatherWidget() {
-  const [city, setCity] = useState('Ho Chi Minh City')
-  const [weather, setWeather] = useState(null)
-  const [forecast, setForecast] = useState(null)
+  const [city, setCity] = useState("Cao Lãnh")
+  const [weather, setWeather] = useState<any>(null)
+  const [forecast, setForecast] = useState<any>(null)
+  const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     fetchWeather()
     fetchForecast()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchWeather = async () => {
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
+      setIsLoading(true)
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=vi`
+      )
       const data = await response.json()
+      setIsLoading(false)
       if (data.cod === 200) {
         setWeather(data)
-        setError('')
+        setError("")
       } else {
         setError(data.message)
         setWeather(null)
       }
     } catch (error) {
-      console.error('Error fetching weather data:', error)
-      setError('Không thể lấy dữ liệu thời tiết. Vui lòng thử lại sau.')
+      console.error("Error fetching weather data:", error)
+      setError("Không thể lấy dữ liệu thời tiết. Vui lòng thử lại sau.")
       setWeather(null)
+      setIsLoading(false)
     }
   }
 
   const fetchForecast = async () => {
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`)
+      setIsLoading(true)
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=vi`
+      )
       const data = await response.json()
+      setIsLoading(false)
       if (data.cod === "200") {
         setForecast(data)
-        setError('')
+        setError("")
       } else {
         setError(data.message)
         setForecast(null)
       }
     } catch (error) {
-      console.error('Error fetching forecast data:', error)
-      setError('Không thể lấy dữ liệu dự báo. Vui lòng thử lại sau.')
+      console.error("Error fetching forecast data:", error)
+      setError("Không thể lấy dữ liệu dự báo. Vui lòng thử lại sau.")
       setForecast(null)
+      setIsLoading(false)
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     fetchWeather()
     fetchForecast()
   }
 
-  const getWeatherIcon = (condition) => {
+  const getWeatherIcon = (condition: string) => {
     switch (condition) {
-      case 'Clear':
+      case "Clear":
         return <Sun className="h-8 w-8 text-yellow-400" />
-      case 'Clouds':
-        return <Cloud className="h-8 w-8 text-gray-400" />
-      case 'Rain':
+      case "Clouds":
+        return <Cloud className="h-8 w-8 text-gray-300" />
+      case "Rain":
         return <CloudRain className="h-8 w-8 text-blue-400" />
       default:
-        return <Wind className="h-8 w-8 text-gray-600" />
+        return <Wind className="h-8 w-8 text-gray-500" />
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-3xl shadow-lg rounded-lg bg-white">
-        <CardHeader className="border-b">
-          <CardTitle className="text-3xl font-extrabold text-gray-800 flex items-center">
-            ☀️ Thông Tin Thời Tiết
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="py-6">
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-            <Input
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Nhập tên thành phố"
-              className="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
-            <Button type="submit" className="flex items-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-              <Search className="w-5 h-5 mr-2" />
-              Tìm kiếm
-            </Button>
-          </form>
+    <div
+      className="h-auto w-full overflow-hidden 
+                 flex items-center justify-center shadow-lg rounded-lg
+                 "
+    >
+      {/* Container box */}
+      <div className="relative max-w-md w-full bg-white/80 backdrop-blur-md rounded-xl shadow-2xl p-6 flex flex-col">
+        {/* Form tìm kiếm */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-center gap-2 mb-4"
+        >
+          <Input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="Nhập tên thành phố..."
+            className="flex-1"
+          />
+          <Button
+            type="submit"
+            variant="default"
+            className="inline-flex items-center gap-1"
+          >
+            <Search className="w-4 h-4" />
+            <span>Tìm</span>
+          </Button>
+        </form>
 
-          {/* Hiển thị lỗi */}
-          <AnimatePresence>
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
-                className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center"
-              >
-                <AlertCircle className="w-6 h-6 mr-2" />
-                <span>{error}</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Hiển thị thời tiết hiện tại */}
-          {weather && (
+        {/* Thông báo lỗi */}
+        <AnimatePresence>
+          {error && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gradient-to-r from-blue-500 to-blue-300 text-white rounded-lg p-6 mb-6 shadow-md"
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="mb-3 p-3 rounded-lg flex items-center 
+                         border border-red-400 bg-red-100 text-red-700"
             >
-              <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-4xl font-semibold">{weather.name}</h2>
-                  <p className="text-6xl font-bold mt-2">{Math.round(weather.main.temp)}°C</p>
-                  <p className="text-xl mt-2 capitalize">{weather.weather[0].description}</p>
-                </div>
-                <div>
-                  {getWeatherIcon(weather.weather[0].main)}
-                </div>
-              </div>
-              <div className="flex justify-between mt-4 text-lg">
-                <p>Độ ẩm: {weather.main.humidity}%</p>
-                <p>Tốc độ gió: {weather.wind.speed} m/s</p>
-                <p>Mây: {weather.clouds.all}%</p>
-              </div>
+              <AlertCircle className="mr-2 w-5 h-5" />
+              <span>{error}</span>
             </motion.div>
           )}
+        </AnimatePresence>
 
-          {/* Hiển thị dự báo 5 ngày */}
-          {forecast && (
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-700 mb-4">🌤️ Dự Báo 5 Ngày Tới</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-                {forecast.list.filter((item, index) => index % 8 === 0).map((item, index) => (
-                  <Card key={index} className="bg-gray-50 rounded-lg shadow-sm">
-                    <CardContent className="p-4 flex flex-col items-center">
-                      <p className="font-semibold">{new Date(item.dt * 1000).toLocaleDateString()}</p>
-                      <div className="flex items-center justify-center my-2">
-                        {getWeatherIcon(item.weather[0].main)}
-                      </div>
-                      <p className="text-2xl font-bold">{Math.round(item.main.temp)}°C</p>
-                      <p className="text-sm capitalize text-gray-600">{item.weather[0].description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+        {/* Loading state */}
+        {isLoading && (
+          <div className="mb-3 text-gray-600 text-sm animate-pulse">
+            Đang tải dữ liệu...
+          </div>
+        )}
+
+        {/* Thời tiết hiện tại */}
+        {weather && !error && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.4 }}
+            className="rounded-lg p-4 bg-gradient-to-r from-blue-500 to-blue-400 text-white shadow-lg mb-4"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold">{weather.name}</h2>
+                <p className="text-4xl font-semibold mt-1">
+                  {Math.round(weather.main.temp)}°C
+                </p>
+                <p className="text-base capitalize mt-1">
+                  {weather.weather[0].description}
+                </p>
               </div>
+              <div>{getWeatherIcon(weather.weather[0].main)}</div>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <div className="mt-3 flex flex-col gap-1 text-sm">
+              <p>Độ ẩm: {weather.main.humidity}%</p>
+              <p>Tốc độ gió: {weather.wind.speed} m/s</p>
+              <p>Mây: {weather.clouds.all}%</p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Dự báo 5 ngày - cuộn ngang */}
+        {forecast && !error && (
+          <div className="flex flex-col">
+            <h3 className="text-lg font-bold text-gray-700 mb-2">
+              Dự Báo 5 Ngày
+            </h3>
+            <div
+              className="flex gap-4 overflow-x-auto pb-2 rounded-lg shadow-lg"
+              // có thể thêm "scrollbar-thin scrollbar-thumb-rounded" nếu muốn
+            >
+              {/* Lấy mỗi 8 item => 1 ngày */}
+              {forecast.list
+                .filter((_, index: number) => index % 8 === 0)
+                .map((item: any, index: number) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="min-w-[120px] rounded-lg bg-white shadow-sm p-3 flex flex-col items-center"
+                  >
+                    <p className="text-sm font-medium mb-1">
+                      {new Date(item.dt * 1000).toLocaleDateString("vi-VN", {
+                        weekday: "short",
+                        day: "2-digit",
+                        month: "2-digit",
+                      })}
+                    </p>
+                    <div>{getWeatherIcon(item.weather[0].main)}</div>
+                    <p className="text-xl font-bold mt-1">
+                      {Math.round(item.main.temp)}°C
+                    </p>
+                    <p className="text-sm text-gray-500 capitalize">
+                      {item.weather[0].description}
+                    </p>
+                  </motion.div>
+                ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -7,14 +7,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import PersonalInfoForm from './PersonalInfoForm'
-import ChangePasswordForm from './ChangePassswordForm'
+import ChangePasswordForm from './ChangePasswordForm'
 import ProductInfoForm from './ProductInfoForm'
+import { Edit2, Lock, ClipboardList, User, Key, Package } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function ProfilePage() {
     const [user, setUser] = useState({
         name: 'Nguyễn Văn A',
         email: 'nguyenvana@example.com',
-        avatar: '/placeholder.svg?height=100&width=100'
+        avatar: '/placeholder.svg?height=100&width=100',
+        phone: '',
+        address: '',
+        location: { lat: 10.452992, lng: 105.6178176 }
     })
 
     const handleAvatarChange = (e) => {
@@ -29,69 +34,74 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <Card className="w-full max-w-4xl mx-auto">
-                <CardHeader className="flex flex-col items-center space-y-4">
-                    <div className="relative">
-                        <Avatar className="w-24 h-24">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-1 cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                                <circle cx="12" cy="13" r="4"></circle>
-                            </svg>
-                        </label>
-                        <Input
-                            id="avatar-upload"
-                            type="file"
-                            className="hidden"
-                            onChange={handleAvatarChange}
-                            accept="image/*"
-                        />
-                    </div>
-                    <div className="text-center">
-                        <CardTitle className="text-2xl">{user.name}</CardTitle>
-                        <CardDescription>{user.email}</CardDescription>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <Tabs defaultValue="personal" className="w-full">
-                        <TabsList className="h-auto grid w-full grid-cols-3 mb-4">
-                            <TabsTrigger
-                                className="flex flex-col items-center justify-center h-full whitespace-normal text-center"
-                                value="personal"
-                            >
-                                Thông tin cá nhân
-                            </TabsTrigger>
-                            <TabsTrigger
-                                className="flex flex-col items-center justify-center h-full  whitespace-normal text-center"
-                                value="password"
-                            >
-                                Đổi mật khẩu
-                            </TabsTrigger>
-                            <TabsTrigger
-                                className="flex flex-col items-center justify-center h-full  whitespace-normal text-center"
-                                value="product"
-                            >
-                                Thông tin sản phẩm
-                            </TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="personal">
-                            <PersonalInfoForm user={user} setUser={setUser} />
-                        </TabsContent>
-                        <TabsContent value="password">
-                            <ChangePasswordForm />
-                        </TabsContent>
-                        <TabsContent value="product">
-                            <ProductInfoForm />
-                        </TabsContent>
-                    </Tabs>
-
-                </CardContent>
-            </Card>
+        <div className="min-h-screen bg-gray-100 p-4">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-4xl mx-auto"
+            >
+                <Card className="w-full bg-white shadow-lg rounded-lg">
+                    <CardHeader className="flex flex-col items-center space-y-4 p-6 border-b">
+                        <div className="relative">
+                            <Avatar className="w-24 h-24">
+                                <AvatarImage src={user.avatar} alt={user.name} />
+                                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors">
+                                <Edit2 className="w-4 h-4" />
+                            </label>
+                            <Input
+                                id="avatar-upload"
+                                type="file"
+                                className="hidden"
+                                onChange={handleAvatarChange}
+                                accept="image/*"
+                            />
+                        </div>
+                        <div className="text-center">
+                            <CardTitle className="text-2xl font-semibold text-gray-800">{user.name}</CardTitle>
+                            <CardDescription className="text-gray-500">{user.email}</CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <Tabs defaultValue="personal" className="w-full">
+                            <TabsList className="flex h-auto space-x-2 mb-6 bg-gray-200 p-1 rounded-md">
+                                <TabsTrigger
+                                    value="personal"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <User className="w-4 h-4" />
+                                    <span>Thông Tin Cá Nhân</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="password"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <Lock className="w-4 h-4" />
+                                    <span>Đổi Mật Khẩu</span>
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="product"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <Package className="w-4 h-4" />
+                                    <span>Thông Tin Sản Phẩm</span>
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="personal" className="mt-4">
+                                <PersonalInfoForm user={user} setUser={setUser} />
+                            </TabsContent>
+                            <TabsContent value="password" className="mt-4">
+                                <ChangePasswordForm />
+                            </TabsContent>
+                            <TabsContent value="product" className="mt-4">
+                                <ProductInfoForm />
+                            </TabsContent>
+                        </Tabs>
+                    </CardContent>
+                </Card>
+            </motion.div>
         </div>
     )
 }
-
