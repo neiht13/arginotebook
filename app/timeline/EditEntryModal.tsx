@@ -1,11 +1,14 @@
+// components/EditEntryModal.tsx
+
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,271 +20,317 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
 import { TimelineEntry, Agrochemical } from "./types"
+import { CalendarIcon, EditIcon } from "lucide-react"
+import { toast } from "react-toastify"
+
+import AgrochemicalForm from "./AgrochemicalForm" // Import AgrochemicalForm component
+
+import { format, parse } from 'date-fns' // Import các hàm từ date-fns
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { vi } from "date-fns/locale"
 
 interface EditEntryModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  entry: TimelineEntry
-  onUpdate: (updatedEntry: TimelineEntry) => void
+  onEdit: (entry: TimelineEntry) => void
 }
 
-const EditEntryModal: React.FC<EditEntryModalProps> = ({
-  open,
-  onOpenChange,
-  entry,
-  onUpdate,
-}) => {
-  const [editedEntry, setEditedEntry] = useState<Partial<TimelineEntry>>({})
-  const [tempAgrochemical, setTempAgrochemical] = useState<Partial<Agrochemical>>({})
+export interface EditEntryModalHandle {
+  open: (entry: TimelineEntry) => void
+  close: () => void
+}
 
-  // Copy dữ liệu entry vào state local khi modal mở
-  useEffect(() => {
-    if (open && entry) {
-      setEditedEntry({ ...entry })
+const EditEntryModal = forwardRef<EditEntryModalHandle, EditEntryModalProps>(
+  ({ onEdit }, ref) => {
+    const [open, setOpen] = useState(false)
+    const [currentEntry, setCurrentEntry] = useState<Partial<TimelineEntry>>({})
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined) // State cho ngày được chọn
+
+    useImperativeHandle(ref, () => ({
+      open: (entry: TimelineEntry) => {
+        setCurrentEntry(entry)
+        if (entry.ngayThucHien) {
+          const parsedDate = parse(entry.ngayThucHien, 'dd-MM-yyyy', new Date(), { locale: vi })
+          setSelectedDate(parsedDate)
+        } else {
+          setSelectedDate(undefined)
+        }
+        setOpen(true)
+      },
+      close: () => setOpen(false),
+    }))
+
+    // Hàm xử lý thay đổi ngày
+    const handleDateChange = (date: Date | undefined) => {
+      setSelectedDate(date)
+      if (date) {
+        const formattedDate = format(date, 'dd-MM-yyyy', { locale: vi })
+        setCurrentEntry((prev) => ({ ...prev, ngayThucHien: formattedDate }))
+      } else {
+        setCurrentEntry((prev) => ({ ...prev, ngayThucHien: undefined }))
+      }
     }
-  }, [open, entry])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setEditedEntry((prev) => ({ ...prev, [name]: value }))
-  }
+    const handleInputChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = e.target
+      setCurrentEntry((prev) => ({ ...prev, [name]: value }))
+    }
 
-  const handleSelectChange = (field: keyof TimelineEntry, value: string) => {
-    setEditedEntry((prev) => ({ ...prev, [field]: value }))
-  }
+    const handleSelectChange = (name: string, value: string) => {
+      setCurrentEntry((prev) => ({ ...prev, [name]: value }))
+    }
 
-  // Thêm agrochemical mới
-  const addAgrochemical = () => {
-    if (tempAgrochemical.name && tempAgrochemical.type) {
-      setEditedEntry((prev) => ({
+    const addAgrochemical = (agrochemical: Agrochemical) => {
+      setCurrentEntry((prev) => ({
         ...prev,
         agrochemicals: [
           ...(prev.agrochemicals || []),
-          { ...tempAgrochemical, id: Date.now().toString() },
+          agrochemical,
         ],
       }))
-      setTempAgrochemical({})
     }
-  }
 
-  const handleUpdate = () => {
-    const updated: TimelineEntry = {
-      ...entry, // Giữ nguyên _id
-      ...editedEntry,
-      chiPhiCong: Number(editedEntry.chiPhiCong) || 0,
-      chiPhiVatTu: Number(editedEntry.chiPhiVatTu) || 0,
+    const handleSubmit = () => {
+      // Các trường bắt buộc
+      if (currentEntry.congViec && currentEntry.giaiDoan && currentEntry.ngayThucHien) {
+        onEdit(currentEntry as TimelineEntry)
+        toast.success("Chỉnh sửa công việc thành công!")
+        setCurrentEntry({})
+        setSelectedDate(undefined)
+        setOpen(false)
+      } else {
+        toast.error("Vui lòng điền đầy đủ các trường bắt buộc.")
+      }
     }
-    onUpdate(updated)
-    onOpenChange(false)
-  }
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* Không có DialogTrigger ở đây, 
-          ta điều khiển open/close từ ngoài */}
-      <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden rounded-lg shadow-lg border-0">
-        <DialogHeader className="bg-gradient-to-r from-green-500 to-lime-500 px-4 py-3">
-          <DialogTitle className="text-white text-lg font-bold">
-            Chỉnh sửa công việc
-          </DialogTitle>
-        </DialogHeader>
-        <div className="px-6 py-4 space-y-4 bg-white">
-          {/* Công việc */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="congViec" className="text-right text-sm font-medium">
-              Công việc
-            </Label>
-            <Input
-              id="congViec"
-              name="congViec"
-              value={editedEntry.congViec || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Giai đoạn */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="giaiDoan" className="text-right text-sm font-medium">
-              Giai đoạn
-            </Label>
-            <Input
-              id="giaiDoan"
-              name="giaiDoan"
-              value={editedEntry.giaiDoan || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Ngày thực hiện */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="ngayThucHien" className="text-right text-sm font-medium">
-              Ngày thực hiện
-            </Label>
-            <Input
-              id="ngayThucHien"
-              name="ngayThucHien"
-              type="date"
-              value={editedEntry.ngayThucHien || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Chi phí công */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="chiPhiCong" className="text-right text-sm font-medium">
-              Chi phí công
-            </Label>
-            <Input
-              id="chiPhiCong"
-              name="chiPhiCong"
-              type="number"
-              value={editedEntry.chiPhiCong || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Chi phí vật tư */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="chiPhiVatTu" className="text-right text-sm font-medium">
-              Chi phí vật tư
-            </Label>
-            <Input
-              id="chiPhiVatTu"
-              name="chiPhiVatTu"
-              type="number"
-              value={editedEntry.chiPhiVatTu || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Mùa vụ */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="muaVu" className="text-right text-sm font-medium">
-              Mùa vụ
-            </Label>
-            <Select
-              value={editedEntry.muaVu || ""}
-              onValueChange={(val) => handleSelectChange("muaVu", val)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Chọn mùa vụ" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Xuân Hè">Xuân Hè</SelectItem>
-                <SelectItem value="Hè Thu">Hè Thu</SelectItem>
-                <SelectItem value="Thu Đông">Thu Đông</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Số lượng công */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="soLuongCong" className="text-right text-sm font-medium">
-              Số lượng công
-            </Label>
-            <Input
-              id="soLuongCong"
-              name="soLuongCong"
-              type="number"
-              value={editedEntry.soLuongCong || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Số lượng vật tư */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="soLuongVatTu" className="text-right text-sm font-medium">
-              Số lượng vật tư
-            </Label>
-            <Input
-              id="soLuongVatTu"
-              name="soLuongVatTu"
-              type="number"
-              value={editedEntry.soLuongVatTu || ""}
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          {/* Thêm mới Agrochemical */}
-          <div className="grid grid-cols-4 items-start gap-4">
-            <Label className="text-right text-sm font-medium pt-1">
-              Vật tư mới
-            </Label>
-            <div className="col-span-3 space-y-2">
+    useEffect(() => {
+      if (!open) {
+        setCurrentEntry({})
+        setSelectedDate(undefined)
+      }
+    }, [open])
+
+    // Hàm định dạng tiền tệ (nếu cần)
+    const formatCurrency = (amount: number) => {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)
+    }
+
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger>
+          <Button variant="outline">
+            <EditIcon className="mr-2 h-4 w-4" /> Chỉnh sửa
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden rounded-lg shadow-lg border-0">
+          {/* Header */}
+          <DialogHeader className="bg-gradient-to-r from-lime-500 to-lime-800 px-4 py-3">
+            <DialogTitle className="text-white text-lg font-bold">
+              Chỉnh sửa công việc
+            </DialogTitle>
+          </DialogHeader>
+
+          {/* Body */}
+          <div className="px-6 py-4 space-y-4 bg-white">
+            {/* Trường Công việc */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="congViec" className="text-right text-sm font-medium">
+                Công việc
+              </Label>
               <Input
-                placeholder="Tên vật tư"
-                name="name"
-                value={tempAgrochemical.name || ""}
-                onChange={(e) =>
-                  setTempAgrochemical((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
+                id="congViec"
+                name="congViec"
+                placeholder="VD: Cấy dặm, Phun thuốc..."
+                value={currentEntry.congViec || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
               />
-              <Select
-                onValueChange={(val) =>
-                  setTempAgrochemical((prev) => ({ ...prev, type: val }))
-                }
+            </div>
+
+            {/* Trường Giai đoạn */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="giaiDoan" className="text-right text-sm font-medium">
+                Giai đoạn
+              </Label>
+              <Input
+                id="giaiDoan"
+                name="giaiDoan"
+                placeholder="VD: Lúa mạ, Đẻ nhánh..."
+                value={currentEntry.giaiDoan || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
+              />
+            </div>
+
+            {/* Trường Ngày thực hiện */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label
+                htmlFor="ngayThucHien"
+                className="text-right text-sm font-medium"
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Loại vật tư" />
+                Ngày thực hiện
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "col-span-3 justify-start text-left font-normal",
+                      !selectedDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate
+                      ? format(selectedDate, 'dd-MM-yyyy', { locale: vi })
+                      : <span>Chọn ngày</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={handleDateChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Trường Chi phí công */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="chiPhiCong" className="text-right text-sm font-medium">
+                Chi phí công
+              </Label>
+              <Input
+                id="chiPhiCong"
+                name="chiPhiCong"
+                type="number"
+                placeholder="0"
+                value={currentEntry.chiPhiCong || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
+              />
+            </div>
+
+            {/* Trường Chi phí vật tư */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label
+                htmlFor="chiPhiVatTu"
+                className="text-right text-sm font-medium"
+              >
+                Chi phí vật tư
+              </Label>
+              <Input
+                id="chiPhiVatTu"
+                name="chiPhiVatTu"
+                type="number"
+                placeholder="0"
+                value={currentEntry.chiPhiVatTu || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
+              />
+            </div>
+
+            {/* Trường Mùa vụ (Select) */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="muaVu" className="text-right text-sm font-medium">
+                Mùa vụ
+              </Label>
+              <Select
+                name="muaVu"
+                onValueChange={(value) => handleSelectChange("muaVu", value)}
+                value={currentEntry.muaVu || ""}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Chọn mùa vụ" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="thuốc">Thuốc</SelectItem>
-                  <SelectItem value="phân">Phân</SelectItem>
+                  <SelectItem value="Xuân Hè">Xuân Hè</SelectItem>
+                  <SelectItem value="Hè Thu">Hè Thu</SelectItem>
+                  <SelectItem value="Thu Đông">Thu Đông</SelectItem>
                 </SelectContent>
               </Select>
-              <Input
-                placeholder="Liều lượng"
-                name="lieuLuong"
-                value={tempAgrochemical.lieuLuong || ""}
-                onChange={(e) =>
-                  setTempAgrochemical((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-              <Input
-                placeholder="Đơn vị tính"
-                name="donViTinh"
-                value={tempAgrochemical.donViTinh || ""}
-                onChange={(e) =>
-                  setTempAgrochemical((prev) => ({
-                    ...prev,
-                    [e.target.name]: e.target.value,
-                  }))
-                }
-              />
-              <Button variant="secondary" onClick={addAgrochemical} type="button">
-                Thêm vật tư
-              </Button>
             </div>
-          </div>
-          {/* Danh sách Agrochemicals hiện có */}
-          {editedEntry.agrochemicals && editedEntry.agrochemicals.length > 0 && (
+
+            {/* Trường Số lượng công */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label
+                htmlFor="soLuongCong"
+                className="text-right text-sm font-medium"
+              >
+                Số lượng công
+              </Label>
+              <Input
+                id="soLuongCong"
+                name="soLuongCong"
+                type="number"
+                placeholder="0"
+                value={currentEntry.soLuongCong || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
+              />
+            </div>
+
+            {/* Trường Số lượng vật tư */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label
+                htmlFor="soLuongVatTu"
+                className="text-right text-sm font-medium"
+              >
+                Số lượng vật tư
+              </Label>
+              <Input
+                id="soLuongVatTu"
+                name="soLuongVatTu"
+                type="number"
+                placeholder="0"
+                value={currentEntry.soLuongVatTu || ""}
+                onChange={handleInputChange}
+                className="col-span-3"
+              />
+            </div>
+
+            {/* Thêm Vật tư sử dụng */}
             <div className="grid grid-cols-4 items-start gap-4">
-              <Label className="text-right text-sm font-medium pt-1">Đã thêm:</Label>
-              <ul className="col-span-3 list-disc pl-5 space-y-1">
-                {editedEntry.agrochemicals.map((item, index) => (
-                  <li key={index} className="text-sm text-gray-700 flex gap-2">
-                    <span>{item.name}</span>
-                    <span className="text-gray-400">- {item.type}</span>
-                  </li>
-                ))}
-              </ul>
+              <Label className="text-right text-sm font-medium pt-1">
+                Vật tư sử dụng
+              </Label>
+              <div className="col-span-3">
+                <AgrochemicalForm onAdd={addAgrochemical} />
+              </div>
             </div>
-          )}
-          {/* Nút lưu */}
-          <Button onClick={handleUpdate} className="w-full bg-green-600 hover:bg-green-700 text-white">
-            Lưu thay đổi
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
+
+            {/* Danh sách vật tư đã thêm */}
+            {currentEntry.agrochemicals && currentEntry.agrochemicals.length > 0 && (
+              <div className="grid grid-cols-4 items-start gap-4">
+                <Label className="text-right text-sm font-medium pt-1">Đã thêm:</Label>
+                <ul className="col-span-3 list-disc pl-5 space-y-1">
+                  {currentEntry.agrochemicals.map((item, index) => (
+                    <li key={index} className="text-sm text-gray-700">
+                      {item.name} - {item.type} - {item.isOrganic ? 'Hữu cơ' : 'Không hữu cơ'} - {item.lieuLuong} {item.donViTinh.join(', ')}
+                      {item.donGia && ` (${formatCurrency(item.donGia)}/${item.donViTinh.join(', ')})`}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Nút submit */}
+            <Button
+              onClick={handleSubmit}
+              className="w-full bg-lime-600 hover:bg-lime-700 text-white"
+            >
+              Chỉnh sửa công việc
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
+  }
+)
+EditEntryModal.displayName = "EditEntryModal"
 
 export default EditEntryModal

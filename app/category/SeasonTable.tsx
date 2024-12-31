@@ -16,7 +16,7 @@ import { motion } from 'framer-motion'
 
 export default function SeasonTable({ data, onEdit }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="h-auto bg-gray-100 flex items-center justify-center p-4">
       {/* Desktop view */}
       <div className="hidden md:block w-full max-w-6xl">
         <Card className="w-full shadow-lg rounded-lg bg-white">
@@ -58,7 +58,7 @@ export default function SeasonTable({ data, onEdit }) {
                       <Button
                         variant="ghost"
                         onClick={() => onEdit(season)}
-                        className="flex items-center justify-center text-blue-500 hover:text-blue-700 transition"
+                        className="flex items-center justify-center text-cyan-500 hover:text-cyan-700 transition"
                       >
                         <Edit2 className="w-4 h-4 mr-1" />
                         Sửa
@@ -111,7 +111,7 @@ export default function SeasonTable({ data, onEdit }) {
             <CardFooter>
               <Button
                 onClick={() => onEdit(season)}
-                className="w-full flex items-center justify-center text-blue-500 hover:text-blue-700 transition"
+                className="w-full flex items-center justify-center text-cyan-500 hover:text-cyan-700 transition"
                 variant="ghost"
               >
                 <Edit2 className="w-4 h-4 mr-1" />

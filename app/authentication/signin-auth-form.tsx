@@ -129,7 +129,7 @@ export function UserAuthForm({ className, ...props }) {
               name="remember"
               checked={remember}
               onCheckedChange={() => setRemember(!remember)}
-              className="h-4 w-4 text-blue-600"
+              className="h-4 w-4 text-cyan-600"
             />
             <Label htmlFor="remember" className="text-sm">
               Ghi nhớ đăng nhập
@@ -137,13 +137,13 @@ export function UserAuthForm({ className, ...props }) {
           </div>
           <a
             href="/forgot-password"
-            className="text-sm text-blue-600 hover:underline"
+            className="text-sm text-cyan-600 hover:underline"
           >
             Quên mật khẩu?
           </a>
         </div>
         <Button
-          className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="w-full bg-cyan-600 text-white hover:bg-cyan-700 transition-colors"
           disabled={isLoading}
           type="submit"
         >

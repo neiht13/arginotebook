@@ -48,7 +48,7 @@ export default function ProfilePage() {
                                 <AvatarImage src={user.avatar} alt={user.name} />
                                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2 cursor-pointer hover:bg-blue-600 transition-colors">
+                            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-cyan-500 text-white rounded-full p-2 cursor-pointer hover:bg-cyan-600 transition-colors">
                                 <Edit2 className="w-4 h-4" />
                             </label>
                             <Input
@@ -69,21 +69,21 @@ export default function ProfilePage() {
                             <TabsList className="flex h-auto space-x-2 mb-6 bg-gray-200 p-1 rounded-md">
                                 <TabsTrigger
                                     value="personal"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <User className="w-4 h-4" />
                                     <span>Thông Tin Cá Nhân</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="password"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <Lock className="w-4 h-4" />
                                     <span>Đổi Mật Khẩu</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="product"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <Package className="w-4 h-4" />
                                     <span>Thông Tin Sản Phẩm</span>

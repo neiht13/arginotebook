@@ -135,7 +135,7 @@ export function UserSignUpForm({ className, ...props }) {
         </button>
         </div>
         <Button
-          className="w-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="w-full bg-cyan-600 text-white hover:bg-cyan-700 transition-colors"
           disabled={isLoading}
           type="submit"
         >

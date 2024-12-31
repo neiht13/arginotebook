@@ -23,8 +23,8 @@ const Result: React.FC<ResultProps> = ({ type, value, unit }) => {
   if (type === 'egfr') {
     if (value >= 90) {
       statusKey = 'normal';
-      bgColor = 'bg-green-100';
-      textColor = 'text-green-700';
+      bgColor = 'bg-lime-100';
+      textColor = 'text-lime-700';
     } else if (value >= 60) {
       statusKey = 'mild';
       bgColor = 'bg-yellow-100';
@@ -37,8 +37,8 @@ const Result: React.FC<ResultProps> = ({ type, value, unit }) => {
   } else if (type === 'ldl') {
     if (value < 100) {
       statusKey = 'normal';
-      bgColor = 'bg-green-100';
-      textColor = 'text-green-700';
+      bgColor = 'bg-lime-100';
+      textColor = 'text-lime-700';
     } else if (value < 160) {
       statusKey = 'risk';
       bgColor = 'bg-yellow-100';

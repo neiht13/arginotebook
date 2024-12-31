@@ -10,8 +10,8 @@ module.exports = {
     "registry/**/*.{ts,tsx}",],
     safelist: [
       'bg-teal-500',
-      'bg-blue-500',
-      'bg-green-500',
+      'bg-cyan-500',
+      'bg-lime-500',
       'bg-red-500',
       'bg-yellow-500',
       'bg-white',
@@ -19,8 +19,8 @@ module.exports = {
       'text-white',
       'text-black',
       'text-red-500',
-      'text-blue-500',
-      'text-green-500',
+      'text-cyan-500',
+      'text-lime-500',
       'text-yellow-500',
     ],
   theme: {

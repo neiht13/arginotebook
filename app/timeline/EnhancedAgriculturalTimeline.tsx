@@ -1,10 +1,13 @@
+// components/EnhancedAgriculturalTimeline.tsx
+
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { TimelineEntry } from "./types"
-import AddEntryModal from "./AddEntryModal"
-import EditEntryModal from "./EditEntryModal"
+import AddEditEntryModal, { AddEditEntryModalHandle } from "./AddEditEntryModal"
 import TimelineEntryComponent from "./TimelineEntryComponent"
+import { PlusCircleIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 // VD: Prop
 interface EnhancedAgriculturalTimelineProps {
@@ -18,41 +21,40 @@ const EnhancedAgriculturalTimeline: React.FC<EnhancedAgriculturalTimelineProps> 
 }) => {
   const [data, setData] = useState<TimelineEntry[]>(initialData)
 
-  // Quản lý state cho Modal "Thêm"
-  // (bạn có thể giữ nguyên code AddEntryModal cũ – tuỳ ý)
-  // Ở đây ta chỉ gọi AddEntryModal khi cần
-  // => AddEntryModal tự có DialogTrigger
-  // => Không cần open/close ở đây
-  // (Tuy nhiên, tuỳ logic bạn có, có thể thay đổi)
-  
-  // Quản lý state cho Modal "Chỉnh sửa"
-  const [editModalOpen, setEditModalOpen] = useState(false)
-  const [editingEntry, setEditingEntry] = useState<TimelineEntry | null>(null)
+  // Ref để điều khiển AddEditEntryModal
+  const modalRef = useRef<AddEditEntryModalHandle>(null)
 
-  // Hàm thêm entry mới (từ AddEntryModal)
+  // Hàm thêm entry mới (từ AddEditEntryModal)
   const handleAddEntry = (newEntry: TimelineEntry) => {
     setData((prev) => [...prev, newEntry])
     onAddEntry(newEntry)
   }
 
-  // Mở Modal Edit
-  const handleEdit = (entry: TimelineEntry) => {
-    setEditingEntry(entry)
-    setEditModalOpen(true)
-  }
-
-  // Lưu thay đổi
-  const handleUpdate = (updatedEntry: TimelineEntry) => {
+  // Hàm chỉnh sửa entry (từ AddEditEntryModal)
+  const handleEditEntry = (updatedEntry: TimelineEntry) => {
     setData((prev) =>
       prev.map((item) => (item._id === updatedEntry._id ? updatedEntry : item))
     )
+    // Có thể thêm logic cập nhật API tại đây nếu cần
+  }
+
+  // Hàm mở modal thêm mới
+  const openAddModal = () => {
+    modalRef.current?.open()
+  }
+
+  // Hàm mở modal chỉnh sửa với entry cụ thể
+  const openEditModal = (entry: TimelineEntry) => {
+    modalRef.current?.open(entry)
   }
 
   return (
     <div className="max-w-3xl mx-auto my-8 flow-root">
-      {/* Nút Thêm (AddEntryModal) */}
+      {/* Nút Thêm (AddEditEntryModal) */}
       <div className="mb-4 flex justify-end">
-        <AddEntryModal onAddEntry={handleAddEntry}/>
+        <Button onClick={openAddModal} className="flex items-center gap-2">
+          <PlusCircleIcon className="h-5 w-5" /> Thêm mới công việc
+        </Button>
       </div>
 
       {/* Danh sách Timeline */}
@@ -63,21 +65,18 @@ const EnhancedAgriculturalTimeline: React.FC<EnhancedAgriculturalTimelineProps> 
               data={entry}
               isLast={index === data.length - 1}
               // Truyền onEdit => hiển thị nút "Chỉnh sửa"
-              onEdit={handleEdit}
+              onEdit={openEditModal}
             />
           </li>
         ))}
       </ul>
 
-      {/* EDIT MODAL (mở khi user bấm "Chỉnh sửa") */}
-      {editingEntry && (
-        <EditEntryModal
-          open={editModalOpen}
-          onOpenChange={setEditModalOpen}
-          entry={editingEntry}
-          onUpdate={handleUpdate}
-        />
-      )}
+      {/* AddEditEntryModal */}
+      <AddEditEntryModal
+        ref={modalRef}
+        onAddEntry={handleAddEntry}
+        onEditEntry={handleEditEntry}
+      />
     </div>
   )
 }

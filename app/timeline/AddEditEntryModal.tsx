@@ -1,4 +1,4 @@
-// AddEditEntryModal.jsx
+// components/AddEditEntryModal.tsx
 
 "use client"
 
@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,11 +20,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { TimelineEntry, Agrochemical } from "./types"
-import { PlusCircleIcon } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { toast } from "react-toastify"
 
+import AgrochemicalForm from "./AgrochemicalForm" // Import AgrochemicalForm component
+
+import { format, parse } from 'date-fns' // Import các hàm từ date-fns
+import { vi } from 'date-fns/locale' // Import locale tiếng Việt
+
 import { Calendar } from "@/components/ui/calendar" // Import Calendar component đã cập nhật
-import { CalendarIcon } from "lucide-react" // Import CalendarIcon từ lucide-react
 import { cn } from "@/lib/utils" // Import utility function nếu cần
 import {
   Popover,
@@ -33,12 +36,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover" // Import Popover components
 
-import { format, parse } from 'date-fns' // Import các hàm từ date-fns
-import { vi } from 'date-fns/locale' // Import locale tiếng Việt
-
 interface AddEditEntryModalProps {
   onAddEntry: (entry: TimelineEntry) => void
-  onEditEntry?: (entry: TimelineEntry) => void
+  onEditEntry: (entry: TimelineEntry) => void
 }
 
 export interface AddEditEntryModalHandle {
@@ -53,7 +53,6 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
     const [currentEntry, setCurrentEntry] = useState<Partial<TimelineEntry>>({
       agrochemicals: [],
     })
-    const [agrochemical, setAgrochemical] = useState<Partial<Agrochemical>>({})
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined) // State cho ngày được chọn
 
     useImperativeHandle(ref, () => ({
@@ -95,36 +94,24 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
       setCurrentEntry((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleSelectChange = (name: string, value: string) => {
+    const handleSelectChange = (name: keyof TimelineEntry, value: string) => {
       setCurrentEntry((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleAgrochemicalChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-      const { name, value } = e.target
-      setAgrochemical((prev) => ({ ...prev, [name]: value }))
-    }
-
-    const addAgrochemical = () => {
-      if (agrochemical.name && agrochemical.type && agrochemical.lieuLuong && agrochemical.donViTinh) {
-        setCurrentEntry((prev) => ({
-          ...prev,
-          agrochemicals: [
-            ...(prev.agrochemicals || []),
-            { ...agrochemical, id: Date.now().toString() } as Agrochemical,
-          ],
-        }))
-        setAgrochemical({})
-      } else {
-        toast.error("Vui lòng điền đầy đủ thông tin vật tư.")
-      }
+    const addAgrochemical = (agrochemical: Agrochemical) => {
+      setCurrentEntry((prev) => ({
+        ...prev,
+        agrochemicals: [
+          ...(prev.agrochemicals || []),
+          agrochemical,
+        ],
+      }))
     }
 
     const handleSubmit = () => {
       // Các trường bắt buộc
       if (currentEntry.congViec && currentEntry.giaiDoan && currentEntry.ngayThucHien) {
-        if (isEditMode && onEditEntry) {
+        if (isEditMode) {
           onEditEntry(currentEntry as TimelineEntry)
           toast.success("Chỉnh sửa công việc thành công!")
         } else {
@@ -142,7 +129,6 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
     useEffect(() => {
       if (!open) {
         setCurrentEntry({ agrochemicals: [] })
-        setAgrochemical({})
         setIsEditMode(false)
         setSelectedDate(undefined)
       }
@@ -155,12 +141,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>
-          <Button className="w-full bg-gradient-to-r from-lime-500 to-lime-800 text-white">
-            <PlusCircleIcon className="mr-2 h-5 w-5" /> Thêm mới
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden rounded-lg shadow-lg border-0">
+        <DialogContent className="sm:max-w-[550px] p-0 rounded-lg shadow-lg border-0 max-h-[90vh] overflow-scroll custom-scrollbar">
           {/* Header */}
           <DialogHeader className="bg-gradient-to-r from-lime-500 to-lime-800 px-4 py-3">
             <DialogTitle className="text-white text-lg font-bold">
@@ -333,47 +314,8 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
               <Label className="text-right text-sm font-medium pt-1">
                 Vật tư sử dụng
               </Label>
-              <div className="col-span-3 space-y-2">
-                <Input
-                  placeholder="Tên vật tư (vd: Ure, Thuốc trừ sâu...)"
-                  name="name"
-                  value={agrochemical.name || ""}
-                  onChange={handleAgrochemicalChange}
-                />
-                <Select
-                  name="type"
-                  onValueChange={(value) => setAgrochemical((prev) => ({ ...prev, type: value }))}
-                  value={agrochemical.type || ""}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Loại vật tư" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="thuốc">Thuốc</SelectItem>
-                    <SelectItem value="phân">Phân</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input
-                  placeholder="Liều lượng (vd: 20)"
-                  name="lieuLuong"
-                  type="number"
-                  value={agrochemical.lieuLuong || ""}
-                  onChange={handleAgrochemicalChange}
-                />
-                <Input
-                  placeholder="Đơn vị tính (vd: kg, l...)"
-                  name="donViTinh"
-                  value={agrochemical.donViTinh || ""}
-                  onChange={handleAgrochemicalChange}
-                />
-                <Button
-                  variant="secondary"
-                  onClick={addAgrochemical}
-                  type="button"
-                  className="w-full sm:w-auto"
-                >
-                  Thêm vật tư
-                </Button>
+              <div className="col-span-3">
+                <AgrochemicalForm onAdd={addAgrochemical} />
               </div>
             </div>
 
@@ -384,8 +326,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
                 <ul className="col-span-3 list-disc pl-5 space-y-1">
                   {currentEntry.agrochemicals.map((item, index) => (
                     <li key={index} className="text-sm text-gray-700">
-                      {item.name} - {item.type} - {item.lieuLuong} {item.donViTinh}
-                      {/* Nếu có đơn giá, hiển thị thêm */}
+                      {item.name} - {item.type} - {item.isOrganic ? 'Hữu cơ' : 'Không hữu cơ'} - {item.lieuLuong} {item.donViTinh}
                       {item.donGia && ` (${formatCurrency(item.donGia)}/${item.donViTinh})`}
                     </li>
                   ))}

@@ -53,7 +53,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="h-auto bg-gray-100 p-4">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -66,26 +66,27 @@ export default function CategoryPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
+        
       >
-        <Tabs defaultValue="seasons" className="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-md">
-          <TabsList className="flex space-x-1 bg-gray-100 p-1 rounded-t-lg">
+        <Tabs defaultValue="seasons" className="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-md m-2">
+          <TabsList className="flex space-x-1 bg-zinc-100 rounded-t-lg px-1 py-5 w-fit mx-auto mt-2">
             <TabsTrigger
               value="seasons"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <Calendar className="w-4 h-4" />
               <span>Mùa Vụ</span>
             </TabsTrigger>
             <TabsTrigger
               value="stages"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <Layers className="w-4 h-4" />
               <span>Giai Đoạn</span>
             </TabsTrigger>
             <TabsTrigger
               value="tasks"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <ClipboardList className="w-4 h-4" />
               <span>Công Việc</span>
@@ -95,7 +96,7 @@ export default function CategoryPage() {
             <div className="flex justify-end mb-4">
               <Button
                 onClick={() => handleAdd('season')}
-                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+                className="flex items-center space-x-2 bg-lime-500 hover:bg-lime-600 text-white"
               >
                 <Plus className="w-4 h-4" />
                 <span>Thêm Mùa Vụ Mới</span>
@@ -107,7 +108,7 @@ export default function CategoryPage() {
             <div className="flex justify-end mb-4">
               <Button
                 onClick={() => handleAdd('stage')}
-                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+                className="flex items-center space-x-2 bg-lime-500 hover:bg-lime-600 text-white"
               >
                 <Plus className="w-4 h-4" />
                 <span>Thêm Giai Đoạn Mới</span>
@@ -119,7 +120,7 @@ export default function CategoryPage() {
             <div className="flex justify-end mb-4">
               <Button
                 onClick={() => handleAdd('task')}
-                className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white"
+                className="flex items-center space-x-2 bg-lime-500 hover:bg-lime-600 text-white"
               >
                 <Plus className="w-4 h-4" />
                 <span>Thêm Công Việc Mới</span>

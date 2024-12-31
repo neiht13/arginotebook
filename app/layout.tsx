@@ -5,7 +5,8 @@ import { Nunito } from 'next/font/google';
 import "./styles/globals.css"
 import Head from 'next/head';
 import Header from './components/Header';
-import {Toaster as ToasterProvider} from "@/components/ui/toaster"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -33,11 +34,24 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
       </Head>
       <body className={nunito.className}>
         <Header />
-<ToasterProvider/>
-{/* <SonnerProvider/> */}
-        <Providers>
-          {children}
-        </Providers>
+
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+              <div className='lg:mt-16'>
+          <Providers>
+            {children}
+          </Providers>
+        </div>
+
       </body>
     </html>
   );

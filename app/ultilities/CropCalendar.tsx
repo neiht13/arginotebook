@@ -414,7 +414,7 @@ export default function CropCalendar() {
                       <Accordion type="single" collapsible>
                         <AccordionItem value={`item-${index}`}>
                           <AccordionTrigger
-                            className="text-green-700 hover:text-green-900 flex items-center gap-1"
+                            className="text-lime-700 hover:text-lime-900 flex items-center gap-1"
                           >
                             Xem chi tiết
                           </AccordionTrigger>

@@ -73,7 +73,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu hiện tại"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -93,7 +93,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -113,18 +113,18 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Xác nhận mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Thông báo lỗi hoặc thành công */}
       {error && <div className="text-red-500 text-sm">{error}</div>}
-      {success && <div className="text-green-500 text-sm">{success}</div>}
+      {success && <div className="text-lime-500 text-sm">{success}</div>}
 
       {/* Nút Lưu */}
       <div className="flex justify-end">
-        <Button type="submit" className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow">
+        <Button type="submit" className="flex items-center space-x-2 bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md shadow">
           <span>Đổi Mật Khẩu</span>
         </Button>
       </div>

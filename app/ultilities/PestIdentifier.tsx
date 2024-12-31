@@ -107,7 +107,7 @@ export default function PestIdentifier() {
         <CardContent className="py-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col items-center">
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-cyan-400 transition">
                 {image ? (
                   <img src={image} alt="Uploaded" className="object-cover w-full h-full rounded-lg" />
                 ) : (
@@ -161,7 +161,7 @@ export default function PestIdentifier() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5 }}
-                className="mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg"
+                className="mt-6 p-4 bg-lime-100 border border-lime-400 text-lime-700 rounded-lg"
               >
                 <CheckCircle className="w-6 h-6 inline mr-2" />
                 <span

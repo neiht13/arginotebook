@@ -23,6 +23,10 @@ import AreaChartComponent from "@/app/components/chart/AreaChartComponent"
 import BarChartComponent from "@/app/components/chart/BarChartComponent"
 import PieChartComponent from "@/app/components/chart/PieChartComponent"
 import RadarChartComponent from "@/app/components/chart/RadarChartComponent"
+import TaskCountChart from "./TaskCountChart"
+import TaskDateChart from "./TaskDateChart"
+import TaskTypeChart from "./TaskTypeChart"
+import FinancialChart from "./FinancialChart"
 
 // ---------------------- DỮ LIỆU GỐC ----------------------
 const farmingLogs = [{
@@ -1207,7 +1211,7 @@ export default function StatisticsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero / Header */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-green-400 to-green-600 text-white shadow-md">
+      <div className="relative overflow-hidden bg-gradient-to-r from-lime-400 to-lime-600 text-white shadow-md">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1219,7 +1223,7 @@ export default function StatisticsPage() {
           </h1>
           <Button
             onClick={exportToExcel}
-            className="flex items-center gap-2 bg-white text-green-700 hover:bg-green-100 font-semibold px-4 py-2 rounded shadow-md transition-transform active:scale-95"
+            className="flex items-center gap-2 bg-white text-lime-700 hover:bg-lime-100 font-semibold px-4 py-2 rounded shadow-md transition-transform active:scale-95"
           >
             <Download className="w-4 h-4" />
             <span>Xuất Excel</span>
@@ -1275,8 +1279,11 @@ export default function StatisticsPage() {
             <p className="mb-4 text-gray-600">
               <strong>Tất cả ({farmingLogs.length})</strong> công việc.
             </p>
-            {/* Biểu đồ Area */}
-            <AreaChartComponent data={areaBarData} />
+            <TaskCountChart data={farmingLogs}/>
+            <TaskDateChart data={farmingLogs}/>
+            <TaskTypeChart data={farmingLogs}/>
+            <FinancialChart data={farmingLogs}/>
+            
           </TabsContent>
 
           <TabsContent value="week" className="mt-6">
@@ -1284,36 +1291,42 @@ export default function StatisticsPage() {
               <strong>{filteredLogs.length}</strong> công việc trong 7 ngày qua.
             </p>
             {/* Biểu đồ Bar */}
-            <BarChartComponent data={areaBarData} />
-          </TabsContent>
+
+            <TaskCountChart data={filteredLogs}/>
+            <TaskDateChart data={filteredLogs}/>
+            <TaskTypeChart data={filteredLogs}/>
+            <FinancialChart data={filteredLogs}/>  
+                    </TabsContent>
 
           <TabsContent value="month" className="mt-6">
             <p className="mb-4 text-gray-600">
               <strong>{filteredLogs.length}</strong> công việc trong 1 tháng qua.
             </p>
-            {/* Biểu đồ Pie */}
-            <PieChartComponent
-              data={pieData}
-              totalValue={pieData.reduce((acc, cur) => acc + cur.value, 0)}
-              totalLabel="Công việc"
-            />
+           
+            <TaskCountChart data={filteredLogs}/>
+            <TaskDateChart data={filteredLogs}/>
+            <TaskTypeChart data={filteredLogs}/>
+            <FinancialChart data={filteredLogs}/>
           </TabsContent>
 
           <TabsContent value="year" className="mt-6">
             <p className="mb-4 text-gray-600">
               <strong>{filteredLogs.length}</strong> công việc trong 1 năm qua.
             </p>
-            {/* Biểu đồ Radar */}
-            <RadarChartComponent data={radarData} />
-          </TabsContent>
+
+            <TaskCountChart data={filteredLogs}/>
+            <TaskDateChart data={filteredLogs}/>
+            <TaskTypeChart data={filteredLogs}/>
+            <FinancialChart data={filteredLogs}/>   
+                   </TabsContent>
         </Tabs>
 
         {/* Khối thống kê nhanh (Cards) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <Card className="shadow-lg border-t-4 border-green-500">
+          <Card className="shadow-lg border-t-4 border-lime-500">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <LineChartIcon className="text-green-500 w-5 h-5" />
+                <LineChartIcon className="text-lime-500 w-5 h-5" />
                 Tổng công việc
               </CardTitle>
             </CardHeader>
@@ -1322,10 +1335,10 @@ export default function StatisticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg border-t-4 border-blue-500">
+          <Card className="shadow-lg border-t-4 border-cyan-500">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChartIcon className="text-blue-500 w-5 h-5" />
+                <BarChartIcon className="text-cyan-500 w-5 h-5" />
                 Chi phí
               </CardTitle>
             </CardHeader>

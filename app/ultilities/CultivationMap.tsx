@@ -79,7 +79,7 @@ export default function CultivationMap() {
           <div className="flex items-center justify-between mb-4">
             <Button
               onClick={toggleMapView}
-              className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="flex items-center px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition"
             >
               <Satellite className="w-5 h-5 mr-2" />
               {isSatellite ? 'Chế độ Đường' : 'Chế độ Vệ Tinh'}
@@ -91,7 +91,7 @@ export default function CultivationMap() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg"
+                  className="flex items-center bg-lime-100 border border-lime-400 text-lime-700 px-4 py-2 rounded-lg"
                 >
                   <MapPin className="w-5 h-5 mr-2" />
                   Chế độ bản đồ đã được cập nhật!

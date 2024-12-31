@@ -7,6 +7,7 @@ export interface Agrochemical {
   lieuLuong: number | string;
   donViTinh: string;
   donGia?: number;
+
 }
 
 export interface TimelineEntry {

@@ -6,7 +6,7 @@ import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-
+import { vi } from "date-fns/locale" // Import locale tiếng Việt từ date-fns
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({
@@ -17,6 +17,7 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
+    locale={vi}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

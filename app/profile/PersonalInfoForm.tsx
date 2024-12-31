@@ -90,7 +90,7 @@ export default function PersonalInfoForm({ user, setUser }) {
             onChange={handleChange}
             required
             placeholder="Nhập họ tên"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function PersonalInfoForm({ user, setUser }) {
             onChange={handleChange}
             required
             placeholder="Nhập email"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function PersonalInfoForm({ user, setUser }) {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Nhập số điện thoại"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function PersonalInfoForm({ user, setUser }) {
             value={formData.address}
             onChange={handleChange}
             placeholder="Nhập địa chỉ"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function PersonalInfoForm({ user, setUser }) {
           <Button
             type="button"
             onClick={handleGetCurrentLocation}
-            className="absolute z-10 top-2 right-2 flex items-center space-x-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow"
+            className="absolute z-10 top-2 right-2 flex items-center space-x-1 bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded-md shadow"
           >
             <MapPin className="w-4 h-4" />
             <span>Lấy Vị Trí</span>
@@ -172,7 +172,7 @@ export default function PersonalInfoForm({ user, setUser }) {
 
       {/* Nút Lưu */}
       <div className="flex justify-end">
-        <Button type="submit" className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow">
+        <Button type="submit" className="flex items-center space-x-2 bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md shadow">
           <span>Lưu Thay Đổi</span>
         </Button>
       </div>
