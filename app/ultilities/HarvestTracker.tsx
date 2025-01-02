@@ -64,10 +64,10 @@ export default function HarvestTracker() {
   }
 
   return (
-    <div className="h-auto max-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="h-auto max-h-screen bg-slate-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-lg shadow-lg rounded-lg bg-white">
         <CardHeader className="border-b">
-          <CardTitle className="text-3xl font-extrabold text-gray-800">🌾 Sổ cân nặng</CardTitle>
+          <CardTitle className="text-3xl font-extrabold text-slate-800">🌾 Sổ cân nặng</CardTitle>
         </CardHeader>
         <CardContent className="py-6">
           {/* Form Thêm Cân Nặng */}
@@ -80,7 +80,7 @@ export default function HarvestTracker() {
                 placeholder="Nhập cân nặng (kg)"
                 step="0.01"
                 required
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 transition"
+                className="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 transition"
               />
               <Button
                 type="submit"
@@ -95,13 +95,13 @@ export default function HarvestTracker() {
           {/* Hiển Thị Lịch Sử Nhập Liệu */}
           {history.length > 0 && (
             <div className="mt-6">
-              <h2 className="text-2xl font-semibold text-gray-700 mb-4">📜 Lịch Sử Nhập</h2>
-              <ul className="max-h-48 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-lime-500 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-lime-700">
+              <h2 className="text-2xl font-semibold text-slate-700 mb-4">📜 Lịch Sử Nhập</h2>
+              <ul className="max-h-48 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-lime-500 scrollbar-track-slate-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-lime-700">
                 {history.map((entry, index) => (
-                  <li key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
+                  <li key={index} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg shadow-sm">
                     <div>
-                      <p className="text-lg font-medium text-gray-800">{entry.weight.toFixed(2)} kg</p>
-                      <p className="text-sm text-gray-500">{entry.timestamp.toLocaleString()}</p>
+                      <p className="text-lg font-medium text-slate-800">{entry.weight.toFixed(2)} kg</p>
+                      <p className="text-sm text-slate-500">{entry.timestamp.toLocaleString()}</p>
                     </div>
                   </li>
                 ))}
@@ -136,7 +136,7 @@ export default function HarvestTracker() {
           {/* Hiển Thị Tổng Cân Nặng */}
           <div className="mt-8 text-center">
             <div className="space-x-2">
-              <p className="text-xl text-gray-600">Tổng Cân Nặng Hiện Tại:</p>
+              <p className="text-xl text-slate-600">Tổng Cân Nặng Hiện Tại:</p>
               <div className='flex items-center justify-center '>
                 <p className="text-4xl font-bold text-lime-600">{totalWeight.toFixed(2)} kg</p>
                 </div>
@@ -144,7 +144,7 @@ export default function HarvestTracker() {
               <Button
                 type="button"
                 onClick={handleCopy}
-                className="ml-2 p-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition"
+                className="ml-2 p-2 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300 transition"
               >
                 {copied ? <ClipboardCheckIcon className="w-5 h-5" /> : <ClipboardIcon className="w-5 h-5" />} Sao chép
               </Button></div>

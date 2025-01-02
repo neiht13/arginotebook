@@ -82,7 +82,7 @@ const Header = () => {
                   className={`group font-medium transition-colors flex items-center gap-1 ${
                     activeLink === item.href
                       ? "text-rose-500"
-                      : "text-gray-700 hover:text-rose-500"
+                      : "text-slate-700 hover:text-rose-500"
                   }`}
                 >
                   {/* Icon + Label */}
@@ -116,7 +116,7 @@ const Header = () => {
                 "flex flex-col items-center justify-center py-2 w-full text-xs font-medium border-t-2 transition-all " +
                 (activeLink === item.href
                   ? "border-rose-500 text-rose-500"
-                  : "border-transparent text-gray-700 hover:text-rose-500")
+                  : "border-transparent text-slate-700 hover:text-rose-500")
               }
             >
               <div

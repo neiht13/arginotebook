@@ -2,27 +2,36 @@
 
 "use client"
 
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { TimelineEntry } from "./types"
 import AddEditEntryModal, { AddEditEntryModalHandle } from "./AddEditEntryModal"
 import TimelineEntryComponent from "./TimelineEntryComponent"
 import { PlusCircleIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import Spinner from "@/components/ui/spinner"
+import Button from "../components/Button"
 
 // VD: Prop
 interface EnhancedAgriculturalTimelineProps {
   data: TimelineEntry[]
   onAddEntry: (entry: TimelineEntry) => void
+  isLoading: boolean
 }
 
 const EnhancedAgriculturalTimeline: React.FC<EnhancedAgriculturalTimelineProps> = ({
   data: initialData,
+  isLoading,
   onAddEntry,
 }) => {
-  const [data, setData] = useState<TimelineEntry[]>(initialData)
+  const [data, setData] = useState<TimelineEntry[]>([])
+
 
   // Ref để điều khiển AddEditEntryModal
   const modalRef = useRef<AddEditEntryModalHandle>(null)
+
+  useEffect(() => {
+    setData(initialData)
+  }, [initialData])
+  
 
   // Hàm thêm entry mới (từ AddEditEntryModal)
   const handleAddEntry = (newEntry: TimelineEntry) => {
@@ -50,12 +59,13 @@ const EnhancedAgriculturalTimeline: React.FC<EnhancedAgriculturalTimelineProps> 
 
   return (
     <div className="max-w-3xl mx-auto my-8 flow-root">
-      {/* Nút Thêm (AddEditEntryModal) */}
-      <div className="mb-4 flex justify-end">
-        <Button onClick={openAddModal} className="flex items-center gap-2">
-          <PlusCircleIcon className="h-5 w-5" /> Thêm mới công việc
+      {isLoading ? 
+      <Spinner/> : <div className="mb-4 flex justify-end">
+        <Button onClick={openAddModal} className="flex items-center gap-2" icon={<PlusCircleIcon className="h-5 w-5" />}>
+          Thêm mới 
         </Button>
       </div>
+      } 
 
       {/* Danh sách Timeline */}
       <ul role="list" className="-mb-8">

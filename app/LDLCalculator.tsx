@@ -111,7 +111,7 @@ const LDLCalculator: React.FC = () => {
             onChange={(value) =>
               setTotalChol(value === '' ? '' : (typeof value === 'number' ? value : parseFloat(value)))
             }
-            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-gray-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
+            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-slate-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
             required
             suffix={
 
@@ -146,7 +146,7 @@ const LDLCalculator: React.FC = () => {
             onChange={(value) =>
               setHdl(value === '' ? '' : (typeof value === 'number' ? value : parseFloat(value)))
             }
-            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-gray-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
+            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-slate-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
             required
             suffix={
 
@@ -182,7 +182,7 @@ const LDLCalculator: React.FC = () => {
             onChange={(value) =>
               setTrig(value === '' ? '' : (typeof value === 'number' ? value : parseFloat(value)))
             }
-            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-gray-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
+            className="w-full h-12 p-3 rounded-xl rounded-r-none bg-slate-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
             required
             suffix={
               <CustomSelect

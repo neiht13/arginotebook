@@ -113,7 +113,7 @@ export function UserAuthForm({ className, ...props }) {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-2 top-3 text-gray-500 hover:text-gray-700"
+            className="absolute right-2 top-3 text-slate-500 hover:text-slate-700"
           >
             {showPassword ? (
               <EyeOffIcon className="w-5 h-5" />

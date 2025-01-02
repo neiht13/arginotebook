@@ -105,7 +105,8 @@ const AgrochemicalForm: React.FC<AgrochemicalFormProps> = ({ onAdd }) => {
       </div>
 
       {/* Loại Vật tư */}
-      <div className="flex flex-col">
+      <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-col col-span-2">
         <Label htmlFor="type" className="mb-1">Loại Vật tư<span className="text-red-500">*</span></Label>
         <Select
           name="type"
@@ -124,19 +125,22 @@ const AgrochemicalForm: React.FC<AgrochemicalFormProps> = ({ onAdd }) => {
       </div>
 
       {/* Organic */}
-      <div className="flex items-center">
-        <Label htmlFor="isOrganic" className="mr-2">Hữu cơ:</Label>
+      <div className="flex flex-col items-center align-middle">
+        <Label htmlFor="isOrganic" className="mr-2 mb-2">Hữu cơ:</Label>
         <input
           type="checkbox"
           name="isOrganic"
           id="isOrganic"
           checked={agrochemical.isOrganic}
           onChange={handleChange}
-          className="h-4 w-4 text-lime-600 border-gray-300 rounded"
+          className="h-4 w-4 text-lime-600 hover:border-lime-600 border-slate-300 rounded"
         />
+      </div>
       </div>
 
       {/* Liều Lượng */}
+
+      <div className="grid grid-cols-2 gap-4">
       <div className="flex flex-col">
         <Label htmlFor="lieuLuong" className="mb-1">Liều lượng<span className="text-red-500">*</span></Label>
         <Input
@@ -169,6 +173,7 @@ const AgrochemicalForm: React.FC<AgrochemicalFormProps> = ({ onAdd }) => {
             ))}
           </SelectContent>
         </Select>
+      </div>
       </div>
 
       {/* Đơn Giá (Tùy chọn) */}

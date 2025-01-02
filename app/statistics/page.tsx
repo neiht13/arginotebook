@@ -1209,7 +1209,7 @@ export default function StatisticsPage() {
 
   // Bắt đầu phần hiển thị
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero / Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-lime-400 to-lime-600 text-white shadow-md">
         <motion.div
@@ -1244,31 +1244,31 @@ export default function StatisticsPage() {
           onValueChange={setSelectedPeriod}
           className="mb-8"
         >
-          <TabsList className="bg-white border border-gray-200 rounded-md shadow-sm flex justify-center md:justify-start">
+          <TabsList className="bg-white border border-slate-200 rounded-md shadow-sm flex justify-center md:justify-start">
             <TabsTrigger
               value="all"
-              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none"
             >
               <Calendar className="w-4 h-4" />
               <span>Tất cả</span>
             </TabsTrigger>
             <TabsTrigger
               value="week"
-              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none"
             >
               <TrendingUpIcon className="w-4 h-4" />
               <span>Tuần</span>
             </TabsTrigger>
             <TabsTrigger
               value="month"
-              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none"
             >
               <TrendingUpIcon className="w-4 h-4" />
               <span>Tháng</span>
             </TabsTrigger>
             <TabsTrigger
               value="year"
-              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none"
             >
               <TrendingUpIcon className="w-4 h-4" />
               <span>Năm</span>
@@ -1276,7 +1276,7 @@ export default function StatisticsPage() {
           </TabsList>
 
           <TabsContent value="all" className="mt-6">
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-slate-600">
               <strong>Tất cả ({farmingLogs.length})</strong> công việc.
             </p>
             <TaskCountChart data={farmingLogs}/>
@@ -1287,7 +1287,7 @@ export default function StatisticsPage() {
           </TabsContent>
 
           <TabsContent value="week" className="mt-6">
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-slate-600">
               <strong>{filteredLogs.length}</strong> công việc trong 7 ngày qua.
             </p>
             {/* Biểu đồ Bar */}
@@ -1299,7 +1299,7 @@ export default function StatisticsPage() {
                     </TabsContent>
 
           <TabsContent value="month" className="mt-6">
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-slate-600">
               <strong>{filteredLogs.length}</strong> công việc trong 1 tháng qua.
             </p>
            
@@ -1310,7 +1310,7 @@ export default function StatisticsPage() {
           </TabsContent>
 
           <TabsContent value="year" className="mt-6">
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-slate-600">
               <strong>{filteredLogs.length}</strong> công việc trong 1 năm qua.
             </p>
 
@@ -1331,7 +1331,7 @@ export default function StatisticsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-800">{totalTasks}</div>
+              <div className="text-3xl font-bold text-slate-800">{totalTasks}</div>
             </CardContent>
           </Card>
 
@@ -1343,7 +1343,7 @@ export default function StatisticsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-800">
+              <div className="text-3xl font-bold text-slate-800">
                 {totalCost.toLocaleString()} <span className="text-xl">VND</span>
               </div>
             </CardContent>
@@ -1357,7 +1357,7 @@ export default function StatisticsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gray-800">
+              <div className="text-3xl font-bold text-slate-800">
                 {profit.toLocaleString()} <span className="text-xl">VND</span>
               </div>
             </CardContent>

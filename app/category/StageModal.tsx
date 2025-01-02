@@ -57,18 +57,18 @@ export default function StageModal({ isOpen, onClose, item }) {
         className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all"
       >
         <DialogHeader className="flex justify-between items-center">
-          <DialogTitle className="text-lg font-semibold text-gray-900">
+          <DialogTitle className="text-lg font-semibold text-slate-900">
             {item ? 'Sửa Giai Đoạn' : 'Thêm Giai Đoạn Mới'}
           </DialogTitle>
           <Button onClick={onClose} variant="ghost" className="p-1">
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-slate-500" />
           </Button>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="grid gap-4">
             {/* Giai Đoạn */}
             <div className="flex flex-col">
-              <Label htmlFor="giaidoan" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="giaidoan" className="mb-1 font-medium text-slate-700">
                 Giai Đoạn
               </Label>
               <Input
@@ -79,12 +79,12 @@ export default function StageModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giai đoạn"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Tên Giai Đoạn */}
             <div className="flex flex-col">
-              <Label htmlFor="tengiaidoan" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="tengiaidoan" className="mb-1 font-medium text-slate-700">
                 Tên Giai Đoạn
               </Label>
               <Input
@@ -94,12 +94,12 @@ export default function StageModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập tên giai đoạn"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Màu sắc */}
             <div className="flex flex-col">
-              <Label htmlFor="color" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="color" className="mb-1 font-medium text-slate-700">
                 Màu Sắc
               </Label>
               <input
@@ -113,7 +113,7 @@ export default function StageModal({ isOpen, onClose, item }) {
             </div>
             {/* Ghi chú */}
             <div className="flex flex-col">
-              <Label htmlFor="ghichu" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="ghichu" className="mb-1 font-medium text-slate-700">
                 Ghi Chú
               </Label>
               <Input
@@ -122,7 +122,7 @@ export default function StageModal({ isOpen, onClose, item }) {
                 value={formData.ghichu}
                 onChange={handleChange}
                 placeholder="Nhập ghi chú"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
           </div>

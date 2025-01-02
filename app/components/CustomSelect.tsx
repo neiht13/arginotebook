@@ -50,27 +50,27 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, p
       <button
         type="button"
         className={classNames(
-          "flex h-12 justify-between items-center w-full px-3 py-2 bg-gray-100 hover:bg-gray-200 focus:outline-none",
+          "flex h-12 justify-between items-center w-full px-3 py-2 bg-slate-100 hover:bg-slate-200 focus:outline-none",
           isSuffix ? "rounded-r-2xl border-l-none" : "rounded-2xl",
           isOpen ? "border border-1 border-[tomato]": ""
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className={classNames('text-gray-700', { 'text-gray-400': !selectedOption })}>
+        <span className={classNames('text-slate-700', { 'text-slate-400': !selectedOption })}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <ChevronDown className="w-4 h-4 text-gray-500" />
+        <ChevronDown className="w-4 h-4 text-slate-500" />
       </button>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto transition ease-in-out duration-200">
-          <div className="px-4 py-2 border-b border-gray-300">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-auto transition ease-in-out duration-200">
+          <div className="px-4 py-2 border-b border-slate-300">
             <div className="flex items-center">
               <input
                 type="text"
                 placeholder={"🔍"}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-1 border border-gray-100 rounded-md focus:outline-none focus:border-[tomato]"
+                className="w-full p-1 border border-slate-100 rounded-md focus:outline-none focus:border-[tomato]"
               />
             </div>
           </div>
@@ -80,8 +80,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, p
                 <li
                   key={option.value}
                   className={classNames(
-                    'flex items-center justify-between px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100',
-                    { 'bg-gray-100': option.value === value }
+                    'flex items-center justify-between px-4 py-2 text-sm text-slate-700 cursor-pointer hover:bg-slate-100',
+                    { 'bg-slate-100': option.value === value }
                   )}
                   onClick={() => {
                     onChange(option.value);
@@ -96,7 +96,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, value, onChange, p
                 </li>
               ))
             ) : (
-              <li className="px-4 py-2 text-gray-500 text-3xl text-center">∅</li>
+              <li className="px-4 py-2 text-slate-500 text-3xl text-center">∅</li>
             )}
           </ul>
         </div>

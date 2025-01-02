@@ -97,23 +97,23 @@ export default function PestIdentifier() {
   };
 
   return (
-    <div className="h-auto bg-gray-100 flex items-center justify-center p-4">
+    <div className="h-auto bg-slate-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-lg rounded-lg bg-white">
         <CardHeader className="border-b">
-          <CardTitle className="text-3xl font-extrabold text-gray-800 flex items-center">
+          <CardTitle className="text-3xl font-extrabold text-slate-800 flex items-center">
             🐞 Nhận Diện Sâu Bệnh
           </CardTitle>
         </CardHeader>
         <CardContent className="py-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col items-center">
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-cyan-400 transition">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-cyan-400 transition">
                 {image ? (
                   <img src={image} alt="Uploaded" className="object-cover w-full h-full rounded-lg" />
                 ) : (
                   <div className="flex flex-col items-center">
-                    <CameraIcon className="w-12 h-12 text-gray-400" />
-                    <p className="text-gray-400">Nhấp hoặc kéo thả hình ảnh vào đây</p>
+                    <CameraIcon className="w-12 h-12 text-slate-400" />
+                    <p className="text-slate-400">Nhấp hoặc kéo thả hình ảnh vào đây</p>
                   </div>
                 )}
                 <Input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />

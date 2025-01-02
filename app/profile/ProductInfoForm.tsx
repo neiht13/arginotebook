@@ -94,10 +94,10 @@ export default function ProductInfoForm() {
       transition={{ duration: 0.5 }}
     >
       <div className="flex items-center space-x-2">
-      <Icon iconNode={fruit} className="w-5 h-5 text-gray-500" />
+      <Icon iconNode={fruit} className="w-5 h-5 text-slate-500" />
 
       <div className="flex-1">
-        <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="name" className="block text-sm font-medium text-slate-700">
           Tên Sản Phẩm
         </Label>
         <div className="flex-1">
@@ -108,7 +108,7 @@ export default function ProductInfoForm() {
             onChange={handleChange}
             required
             placeholder="Nhập tên sản phẩm"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
@@ -117,9 +117,9 @@ export default function ProductInfoForm() {
 
       {/* Mô tả sản phẩm */}
       <div className="flex items-start space-x-2"> 
-        <InfoIcon className="w-5 h-5 text-gray-500" />
+        <InfoIcon className="w-5 h-5 text-slate-500" />
       <div className="flex-1">
-        <Label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="description" className="block text-sm font-medium text-slate-700">
           Mô Tả Sản Phẩm
         </Label>
         <div className="flex-1">
@@ -130,7 +130,7 @@ export default function ProductInfoForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mô tả sản phẩm"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
             rows={4}
           />
         </div>
@@ -139,7 +139,7 @@ export default function ProductInfoForm() {
 
       {/* Tải lên hình ảnh */}
       <div className="space-y-2">
-        <Label htmlFor="image-upload" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="image-upload" className="block text-sm font-medium text-slate-700">
           Hình Ảnh Sản Phẩm (tối đa 5 ảnh)
         </Label>
         <div className="flex items-center space-x-4">
@@ -162,7 +162,7 @@ export default function ProductInfoForm() {
             accept="image/*"
             className="hidden"
           />
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-slate-500">
             {formData.images.length}/5 đã tải lên
           </span>
         </div>

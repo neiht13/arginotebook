@@ -75,18 +75,18 @@ export default function SeasonModal({ isOpen, onClose, item }) {
         className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all"
       >
         <DialogHeader className="flex justify-between items-center">
-          <DialogTitle className="text-lg font-semibold text-gray-900">
+          <DialogTitle className="text-lg font-semibold text-slate-900">
             {item ? 'Sửa Mùa Vụ' : 'Thêm Mùa Vụ Mới'}
           </DialogTitle>
           <Button onClick={onClose} variant="ghost" className="p-1">
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-slate-500" />
           </Button>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="grid gap-4">
             {/* Mùa vụ */}
             <div className="flex flex-col">
-              <Label htmlFor="muavu" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="muavu" className="mb-1 font-medium text-slate-700">
                 Mùa Vụ
               </Label>
               <Input
@@ -96,12 +96,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập mùa vụ"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Năm */}
             <div className="flex flex-col">
-              <Label htmlFor="nam" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="nam" className="mb-1 font-medium text-slate-700">
                 Năm
               </Label>
               <Input
@@ -112,12 +112,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập năm"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Ngày bắt đầu */}
             <div className="flex flex-col">
-              <Label htmlFor="ngaybatdau" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="ngaybatdau" className="mb-1 font-medium text-slate-700">
                 Ngày Bắt Đầu
               </Label>
               <Input
@@ -127,12 +127,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 value={formData.ngaybatdau}
                 onChange={handleChange}
                 required
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Phương pháp */}
             <div className="flex flex-col">
-              <Label htmlFor="phuongphap" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="phuongphap" className="mb-1 font-medium text-slate-700">
                 Phương Pháp
               </Label>
               <Input
@@ -142,12 +142,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập phương pháp"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Giống */}
             <div className="flex flex-col">
-              <Label htmlFor="giong" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="giong" className="mb-1 font-medium text-slate-700">
                 Giống
               </Label>
               <Input
@@ -157,12 +157,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giống"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Diện tích */}
             <div className="flex flex-col">
-              <Label htmlFor="dientich" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="dientich" className="mb-1 font-medium text-slate-700">
                 Diện Tích (ha)
               </Label>
               <Input
@@ -173,12 +173,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập diện tích"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Số lượng */}
             <div className="flex flex-col">
-              <Label htmlFor="soluong" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="soluong" className="mb-1 font-medium text-slate-700">
                 Số Lượng
               </Label>
               <Input
@@ -189,12 +189,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập số lượng"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Giá giống */}
             <div className="flex flex-col">
-              <Label htmlFor="giagiong" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="giagiong" className="mb-1 font-medium text-slate-700">
                 Giá Giống (VNĐ)
               </Label>
               <Input
@@ -205,12 +205,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giá giống"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Số thửa */}
             <div className="flex flex-col">
-              <Label htmlFor="sothua" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="sothua" className="mb-1 font-medium text-slate-700">
                 Số Thửa
               </Label>
               <Input
@@ -221,12 +221,12 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập số thửa"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             {/* Chi phí khác */}
             <div className="flex flex-col">
-              <Label htmlFor="chiphikhac" className="mb-1 font-medium text-gray-700">
+              <Label htmlFor="chiphikhac" className="mb-1 font-medium text-slate-700">
                 Chi Phí Khác (VNĐ)
               </Label>
               <Input
@@ -236,7 +236,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 value={formData.chiphikhac}
                 onChange={handleChange}
                 placeholder="Nhập chi phí khác"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
           </div>

@@ -16,12 +16,12 @@ import { motion } from 'framer-motion'
 
 export default function TaskTable({ data, onEdit }) {
   return (
-    <div className="h-auto bg-gray-100 flex items-center justify-center p-4">
+    <div className="h-auto bg-slate-100 flex items-center justify-center p-4">
       {/* Desktop view */}
       <div className="hidden md:block w-full max-w-6xl">
         <Card className="w-full shadow-lg rounded-lg bg-white">
           <CardHeader className="border-b">
-            <CardTitle className="text-2xl font-extrabold text-gray-800">
+            <CardTitle className="text-2xl font-extrabold text-slate-800">
               📋 Danh Sách Công Việc
             </CardTitle>
           </CardHeader>
@@ -29,12 +29,12 @@ export default function TaskTable({ data, onEdit }) {
             <Table className="min-w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</TableHead>
-                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên Công Việc</TableHead>
-                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giai Đoạn</TableHead>
-                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chi Tiết Công Việc</TableHead>
-                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ghi Chú</TableHead>
-                  <TableHead className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Thao Tác</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">STT</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Tên Công Việc</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Giai Đoạn</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Chi Tiết Công Việc</TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Ghi Chú</TableHead>
+                  <TableHead className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Thao Tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -43,13 +43,13 @@ export default function TaskTable({ data, onEdit }) {
                     key={task._id}
                     whileHover={{ scale: 1.02, boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}
                     transition={{ duration: 0.3 }}
-                    className="hover:bg-gray-50 transition"
+                    className="hover:bg-slate-50 transition"
                   >
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{task.stt}</TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{task.tenCongViec}</TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.tenGiaiDoan}</TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.chitietcongviec}</TableCell>
-                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{task.ghichu}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{task.stt}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{task.tenCongViec}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{task.tenGiaiDoan}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{task.chitietcongviec}</TableCell>
+                    <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{task.ghichu}</TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-center">
                       <Button
                         variant="ghost"
@@ -75,24 +75,24 @@ export default function TaskTable({ data, onEdit }) {
             <CardContent className="pt-4">
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-700">STT:</span>
-                  <span className="text-gray-600">{task.stt}</span>
+                  <span className="font-bold text-slate-700">STT:</span>
+                  <span className="text-slate-600">{task.stt}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-700">Tên Công Việc:</span>
-                  <span className="text-gray-600">{task.tenCongViec}</span>
+                  <span className="font-bold text-slate-700">Tên Công Việc:</span>
+                  <span className="text-slate-600">{task.tenCongViec}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-700">Giai Đoạn:</span>
-                  <span className="text-gray-600">{task.tenGiaiDoan}</span>
+                  <span className="font-bold text-slate-700">Giai Đoạn:</span>
+                  <span className="text-slate-600">{task.tenGiaiDoan}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-gray-700">Chi Tiết Công Việc:</span>
-                  <span className="text-sm text-gray-600">{task.chitietcongviec}</span>
+                  <span className="font-bold text-slate-700">Chi Tiết Công Việc:</span>
+                  <span className="text-sm text-slate-600">{task.chitietcongviec}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-gray-700">Ghi Chú:</span>
-                  <span className="text-sm text-gray-600">{task.ghichu}</span>
+                  <span className="font-bold text-slate-700">Ghi Chú:</span>
+                  <span className="text-sm text-slate-600">{task.ghichu}</span>
                 </div>
               </div>
             </CardContent>

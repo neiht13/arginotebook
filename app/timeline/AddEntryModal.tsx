@@ -383,7 +383,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
                 <Label className="text-right text-sm font-medium pt-1">Đã thêm:</Label>
                 <ul className="col-span-3 list-disc pl-5 space-y-1">
                   {currentEntry.agrochemicals.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-700">
+                    <li key={index} className="text-sm text-slate-700">
                       {item.name} - {item.type} - {item.lieuLuong} {item.donViTinh}
                       {/* Nếu có đơn giá, hiển thị thêm */}
                       {item.donGia && ` (${formatCurrency(item.donGia)}/${item.donViTinh})`}

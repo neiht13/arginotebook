@@ -68,10 +68,10 @@ export default function CultivationMap() {
   }
 
   return (
-    <div className="h-auto  bg-gray-100 flex items-center justify-center p-4">
+    <div className="h-auto  bg-slate-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-4xl shadow-lg rounded-lg bg-white">
         <CardHeader className="border-b">
-          <CardTitle className="text-3xl font-extrabold text-gray-800 flex items-center">
+          <CardTitle className="text-3xl font-extrabold text-slate-800 flex items-center">
             🗺️ Bản Đồ Vùng Canh Tác
           </CardTitle>
         </CardHeader>

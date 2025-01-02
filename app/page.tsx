@@ -2,11 +2,12 @@
 
 import React from 'react';
 import Calculator from './Calculator';
+import TimelinePage from './timeline/page';
 
 const Home: React.FC = () => {
 
   return (
-    <Calculator />
+    <TimelinePage />
   );
 };
 

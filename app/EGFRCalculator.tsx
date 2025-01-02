@@ -87,7 +87,7 @@ const EGFRCalculator: React.FC = () => {
           placeholder={t.creatininePlaceholder}
           value={creatinine}
           onChange={(value) => setCreatinine(value === '' ? '' : (typeof value === 'number' ? value : parseFloat(value)))}
-          className="w-full h-12 p-3 rounded-xl rounded-r-none bg-gray-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
+          className="w-full h-12 p-3 rounded-xl rounded-r-none bg-slate-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
           required
           suffix={<CustomSelect
             options={[
@@ -122,12 +122,12 @@ const EGFRCalculator: React.FC = () => {
           placeholder={t.agePlaceholder}
           value={age}
           onChange={(value) => setAge(value === '' ? '' : (typeof value === 'number' ? value : parseInt(value)))}
-          className="w-full h-12 p-3 rounded-xl bg-gray-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
+          className="w-full h-12 p-3 rounded-xl bg-slate-100 focus:border focus:border-[tomato] focus:border-[tomato] focus:outline-none"
           required
         />
 
         <div className="">
-          <label className="block h-6 mb-1 font-bold text-gray-700">{t.gender}</label>
+          <label className="block h-6 mb-1 font-bold text-slate-700">{t.gender}</label>
           <CustomSelect
             options={[
               { prefix: "👨", value: 'male', label: 'Nam' },
@@ -143,7 +143,7 @@ const EGFRCalculator: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-5 mb-5">
         <div className="mb-5">
-          <label className="block font-bold mb-1  text-gray-700">{t.ethnicity}</label>
+          <label className="block font-bold mb-1  text-slate-700">{t.ethnicity}</label>
           <CustomSelect
             options={[
               { value: 'non_african', label: t.nonAfrican },
@@ -156,7 +156,7 @@ const EGFRCalculator: React.FC = () => {
           />
         </div>
         <div className="mb-5">
-          <label className="block font-bold mb-1  text-gray-700">{t.constant}</label>
+          <label className="block font-bold mb-1  text-slate-700">{t.constant}</label>
           <CustomSelect
             options={[
               { value: '186', label: '186' },

@@ -60,9 +60,9 @@ export default function ChangePasswordForm() {
     >
       {/* Mật khẩu hiện tại */}
       <div className="flex items-center space-x-2">
-        <Lock className="w-5 h-5 text-gray-500" />
+        <Lock className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="currentPassword" className="block text-sm font-medium text-slate-700">
             Mật Khẩu Hiện Tại
           </Label>
           <Input
@@ -73,16 +73,16 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu hiện tại"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Mật khẩu mới */}
       <div className="flex items-center space-x-2">
-        <Key className="w-5 h-5 text-gray-500" />
+        <Key className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="newPassword" className="block text-sm font-medium text-slate-700">
             Mật Khẩu Mới
           </Label>
           <Input
@@ -93,16 +93,16 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Xác nhận mật khẩu mới */}
       <div className="flex items-center space-x-2">
-        <Key className="w-5 h-5 text-gray-500" />
+        <Key className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700">
             Xác Nhận Mật Khẩu Mới
           </Label>
           <Input
@@ -113,7 +113,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Xác nhận mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>

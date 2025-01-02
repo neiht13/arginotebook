@@ -29,6 +29,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
   const [selectedImage, setSelectedImage] = useState<string>("")
   const [altText, setAltText] = useState<string>("")
 
+
   const formatDate = (dateString: string) => {
     const [day, month, year] = dateString.split("-")
     return `${day}/${month}/${year}`
@@ -43,7 +44,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
 
   const renderAgrochemicals = (agrochemicals: Agrochemical[]) => {
     return agrochemicals.map((item) => (
-      <div key={item.id} className="flex items-center text-sm text-gray-600 mt-2">
+      <div key={item.id} className="flex items-center text-sm text-slate-600 mt-2">
         {item.type === "thuốc" ? (
           <Droplet className="mr-2 h-4 w-4 text-cyan-500" />
         ) : (
@@ -105,7 +106,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
 
         <div className="min-w-0 flex-1 pt-1.5 flex flex-col space-y-4">
           {/* Card */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-slate-100 hover:shadow-xl transition-shadow duration-300">
             {/* Header */}
             <div className="bg-gradient-to-r from-lime-600 to-lime-500 text-white p-4 flex items-center justify-between">
               <div className="flex flex-col md:flex-row md:items-center md:gap-2">
@@ -126,10 +127,10 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
 
             {/* Body */}
             <div className="p-5">
-              <h2 className="text-xl font-semibold text-gray-800 mb-1">{data.giaiDoan}</h2>
-              <div className="flex items-center text-gray-600 mb-4">
+              <h2 className="text-xl font-bold text-slate-800 mb-1">{data.congViec}</h2>
+              <div className="flex items-center mb-4">
                 {getIconByTask(data.congViec)}
-                <span className="text-sm md:text-base font-medium">{data.congViec}</span>
+                <span className="text-sm md:text-base font-medium">{data.giaiDoan}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center">
@@ -152,16 +153,16 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
 
               {/* Agrochemicals */}
               {data.agrochemicals.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Vật tư sử dụng:</h3>
+                <div className="mt-4 pt-4 border-t border-slate-200">
+                  <h3 className="text-lg font-semibold text-slate-700 mb-2">Vật tư sử dụng:</h3>
                   {renderAgrochemicals(data.agrochemicals)}
                 </div>
               )}
 
               {/* Hình ảnh */}
               {data.image && data.image.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Hình ảnh:</h3>
+                <div className="mt-4 pt-4 border-t border-slate-200">
+                  <h3 className="text-lg font-semibold text-slate-700 mb-2">Hình ảnh:</h3>
                   <div className="flex flex-wrap gap-2">
                     {data.image.map((img, index) => (
                       <div
@@ -185,9 +186,9 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
               )}
 
               {/* Tổng chi phí + Nút "Chỉnh sửa" */}
-              <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
+              <div className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-gray-500 font-medium">Tổng chi phí:</span>
+                  <span className="text-slate-500 font-medium">Tổng chi phí:</span>
                   <span className="text-xl md:text-2xl font-bold text-lime-600">
                     {formatCurrency(data.chiPhiCong + data.chiPhiVatTu)}
                   </span>

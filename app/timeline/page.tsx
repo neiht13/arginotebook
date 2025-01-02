@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EnhancedAgriculturalTimeline from './EnhancedAgriculturalTimeline';
 import { TimelineEntry } from './types';
 
@@ -71,8 +71,14 @@ const initialTimelineData: TimelineEntry[] = [
   }
 ];
 
-export default function Page() {
-  const [timelineData, setTimelineData] = useState<TimelineEntry[]>(initialTimelineData);
+export default function TimelinePage() {
+  const [timelineData, setTimelineData] = useState<TimelineEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true)
+
+ useEffect(() => {
+  setTimelineData(initialTimelineData)
+  setIsLoading(false)
+ },[])
 
   const handleAddEntry = (newEntry: TimelineEntry) => {
     setTimelineData(prevData => [...prevData, { ...newEntry, _id: Date.now().toString() }]);
@@ -83,7 +89,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-8">Enhanced Agricultural Timeline</h1>
-      <EnhancedAgriculturalTimeline data={timelineData} onAddEntry={handleAddEntry} />
+      <EnhancedAgriculturalTimeline data={timelineData} isLoading={isLoading} onAddEntry={handleAddEntry} />
     </div>
   );
 }

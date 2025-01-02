@@ -53,12 +53,12 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="h-auto bg-gray-100 p-4">
+    <div className="h-auto bg-slate-100 p-4">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-3xl font-bold text-center text-gray-800 mb-6"
+        className="text-3xl font-bold text-center text-slate-800 mb-6"
       >
         📁 Quản Lý Danh Mục
       </motion.h1>
@@ -72,21 +72,21 @@ export default function CategoryPage() {
           <TabsList className="flex space-x-1 bg-zinc-100 rounded-t-lg px-1 py-5 w-fit mx-auto mt-2">
             <TabsTrigger
               value="seasons"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <Calendar className="w-4 h-4" />
               <span>Mùa Vụ</span>
             </TabsTrigger>
             <TabsTrigger
               value="stages"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <Layers className="w-4 h-4" />
               <span>Giai Đoạn</span>
             </TabsTrigger>
             <TabsTrigger
               value="tasks"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
             >
               <ClipboardList className="w-4 h-4" />
               <span>Công Việc</span>

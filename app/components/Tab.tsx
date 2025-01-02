@@ -15,7 +15,7 @@ const Tab: React.FC<TabProps> = ({ label, active, onClick }) => {
         "flex-1 text-center py-2 cursor-pointer font-semibold border-b-2 transition-colors duration-300",
         {
           "border-[tomato] text-[tomato] text-base": active,
-          "border-b-gray-300 hover:text-gray-700 text-gray-500 text-sm": !active,
+          "border-b-slate-300 hover:text-slate-700 text-slate-500 text-sm": !active,
         }
       )}
       onClick={onClick}

@@ -17,7 +17,7 @@ const ImageViewer: React.FC<ImageModalProps> = ({ isOpen, onClose, imageSrc, alt
         <img src={imageSrc || "/no-image.svg"} alt={altText} className="max-w-full max-h-screen rounded" />
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75"
+          className="absolute top-2 right-2 text-white bg-slate-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75"
         >
           ×
         </button>

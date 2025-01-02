@@ -355,8 +355,8 @@ export default function CropCalendar() {
                  flex items-center justify-center p-6"
     >
       <Card className="max-w-5xl w-full bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl">
-        <CardHeader className="border-b border-gray-200 px-6 py-4">
-          <CardTitle className="text-4xl font-extrabold text-gray-800">
+        <CardHeader className="border-b border-slate-200 px-6 py-4">
+          <CardTitle className="text-4xl font-extrabold text-slate-800">
             🌱 Lịch Mùa Vụ
           </CardTitle>
         </CardHeader>
@@ -368,7 +368,7 @@ export default function CropCalendar() {
               value={selectedCrop}
               onValueChange={setSelectedCrop}
             >
-              <SelectTrigger className="w-64 border border-gray-300 shadow-sm">
+              <SelectTrigger className="w-64 border border-slate-300 shadow-sm">
                 <SelectValue placeholder="Chọn cây trồng" />
               </SelectTrigger>
               <SelectContent>
@@ -386,14 +386,14 @@ export default function CropCalendar() {
           <div className="overflow-x-auto">
             <Table className="w-full text-sm md:text-base border-collapse rounded-2xl">
               <TableHeader>
-                <TableRow className="bg-gray-50 rounded-t-2xl">
-                  <TableHead className="py-2 text-left text-xs font-medium text-gray-700 uppercase">
+                <TableRow className="bg-slate-50 rounded-t-2xl">
+                  <TableHead className="py-2 text-left text-xs font-medium text-slate-700 uppercase">
                     Giai Đoạn
                   </TableHead>
-                  <TableHead className="py-2 text-left text-xs font-medium text-gray-700 uppercase">
+                  <TableHead className="py-2 text-left text-xs font-medium text-slate-700 uppercase">
                     Thời Gian
                   </TableHead>
-                  <TableHead className="py-2 text-left text-xs font-medium text-gray-700 uppercase">
+                  <TableHead className="py-2 text-left text-xs font-medium text-slate-700 uppercase">
                     Khuyến Cáo
                   </TableHead>
                 </TableRow>
@@ -402,12 +402,12 @@ export default function CropCalendar() {
                 {cropData[selectedCrop].map((stage, index) => (
                   <TableRow
                     key={index}
-                    className="hover:bg-gray-100 transition-colors"
+                    className="hover:bg-slate-100 transition-colors"
                   >
-                    <TableCell className="py-3 text-gray-800 font-semibold">
+                    <TableCell className="py-3 text-slate-800 font-semibold">
                       {stage.stage}
                     </TableCell>
-                    <TableCell className="py-3 text-gray-600">
+                    <TableCell className="py-3 text-slate-600">
                       {stage.duration}
                     </TableCell>
                     <TableCell className="py-3">
@@ -421,7 +421,7 @@ export default function CropCalendar() {
                           <AnimatePresence>
                             <AccordionContent>
                               <motion.ul
-                                className="list-disc pl-5 space-y-1 text-gray-700 mt-2"
+                                className="list-disc pl-5 space-y-1 text-slate-700 mt-2"
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}

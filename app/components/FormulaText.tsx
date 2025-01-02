@@ -7,7 +7,7 @@ interface FormulaTextProps {
 
 const FormulaText: React.FC<FormulaTextProps> = ({ children }) => {
   return (
-    <div className="text-sm text-gray-800 mb-5 p-3 bg-gray-100 rounded-md ">
+    <div className="text-sm text-slate-800 mb-5 p-3 bg-slate-100 rounded-md ">
       {children}
     </div>
   );

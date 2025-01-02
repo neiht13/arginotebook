@@ -27,10 +27,10 @@ export default function AuthenticationPage() {
       <div className="flex w-full lg:w-1/2 items-center justify-center">
         <div className="w-full max-w-md p-6">
           <div className="flex flex-col space-y-6 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-slate-800">
               {isLogin ? "Đăng nhập" : "Đăng ký"}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-slate-600">
               {isLogin
                 ? "Sử dụng email và mật khẩu của bạn để đăng nhập"
                 : "Tạo tài khoản mới bằng email của bạn"}
@@ -43,7 +43,7 @@ export default function AuthenticationPage() {
                 className={`px-4 py-2 rounded ${
                   isLogin
                     ? "bg-cyan-600 text-white"
-                    : "bg-gray-200 text-gray-700"
+                    : "bg-slate-200 text-slate-700"
                 }`}
               >
                 Đăng nhập
@@ -53,7 +53,7 @@ export default function AuthenticationPage() {
                 className={`px-4 py-2 rounded ${
                   !isLogin
                     ? "bg-cyan-600 text-white"
-                    : "bg-gray-200 text-gray-700"
+                    : "bg-slate-200 text-slate-700"
                 }`}
               >
                 Đăng ký
@@ -68,7 +68,7 @@ export default function AuthenticationPage() {
 
             {/* Liên kết chuyển đổi dưới form */}
             {isLogin ? (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 Chưa có tài khoản?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
@@ -79,7 +79,7 @@ export default function AuthenticationPage() {
                 .
               </p>
             ) : (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600">
                 Đã có tài khoản?{" "}
                 <button
                   onClick={() => setIsLogin(true)}

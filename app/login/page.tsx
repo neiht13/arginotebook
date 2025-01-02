@@ -29,7 +29,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-slate-100">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Login</CardTitle>
@@ -62,7 +62,7 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="justify-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-600">
             Don't have an account? <a href="#" className="text-cyan-600 hover:underline">Sign up</a>
           </p>
         </CardFooter>

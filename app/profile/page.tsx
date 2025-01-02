@@ -34,7 +34,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
+        <div className="min-h-screen bg-slate-100 p-4">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -60,30 +60,30 @@ export default function ProfilePage() {
                             />
                         </div>
                         <div className="text-center">
-                            <CardTitle className="text-2xl font-semibold text-gray-800">{user.name}</CardTitle>
-                            <CardDescription className="text-gray-500">{user.email}</CardDescription>
+                            <CardTitle className="text-2xl font-semibold text-slate-800">{user.name}</CardTitle>
+                            <CardDescription className="text-slate-500">{user.email}</CardDescription>
                         </div>
                     </CardHeader>
                     <CardContent className="p-6">
                         <Tabs defaultValue="personal" className="w-full">
-                            <TabsList className="flex h-auto space-x-2 mb-6 bg-gray-200 p-1 rounded-md">
+                            <TabsList className="flex h-auto space-x-2 mb-6 bg-slate-200 p-1 rounded-md">
                                 <TabsTrigger
                                     value="personal"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <User className="w-4 h-4" />
                                     <span>Thông Tin Cá Nhân</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="password"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <Lock className="w-4 h-4" />
                                     <span>Đổi Mật Khẩu</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="product"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                 >
                                     <Package className="w-4 h-4" />
                                     <span>Thông Tin Sản Phẩm</span>

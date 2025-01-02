@@ -32,6 +32,10 @@ module.exports = {
   		}
   	},
   	extend: {
+		fontFamily: {
+			'poppins': ['Poppins', 'sans-serif'],
+			'helveticaneue': ['Helvetica Neue', 'sans-serif']
+		  },
   		colors: {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
@@ -90,7 +94,6 @@ module.exports = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		fontFamily: {},
   		keyframes: {
   			'accordion-down': {
   				from: {

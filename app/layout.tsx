@@ -1,17 +1,12 @@
 // app/layout.tsx
 import React from 'react';
 import Providers from './components/Providers';
-import { Nunito } from 'next/font/google';
 import "./styles/globals.css"
 import Head from 'next/head';
 import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-const nunito = Nunito({
-  subsets: ['latin'],
-  weight: ['400', '700'], // Thêm các trọng lượng cần thiết
-});
 
 export const metadata = {
   title: 'GDR & LDL Calculator',
@@ -32,7 +27,7 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
         <title>GDR & LDL Calculator</title>
       </Head>
-      <body className={nunito.className}>
+      <body className="font-helveticaneue">
         <Header />
 
         <ToastContainer

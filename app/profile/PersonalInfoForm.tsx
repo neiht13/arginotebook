@@ -78,9 +78,9 @@ export default function PersonalInfoForm({ user, setUser }) {
     >
       {/* Họ tên */}
       <div className="flex items-center space-x-2">
-        <User className="w-5 h-5 text-gray-500" />
+        <User className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="name" className="block text-sm font-medium text-slate-700">
             Họ Tên
           </Label>
           <Input
@@ -90,16 +90,16 @@ export default function PersonalInfoForm({ user, setUser }) {
             onChange={handleChange}
             required
             placeholder="Nhập họ tên"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Email */}
       <div className="flex items-center space-x-2">
-        <Mail className="w-5 h-5 text-gray-500" />
+        <Mail className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="email" className="block text-sm font-medium text-slate-700">
             Email
           </Label>
           <Input
@@ -110,16 +110,16 @@ export default function PersonalInfoForm({ user, setUser }) {
             onChange={handleChange}
             required
             placeholder="Nhập email"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Số điện thoại */}
       <div className="flex items-center space-x-2">
-        <Phone className="w-5 h-5 text-gray-500" />
+        <Phone className="w-5 h-5 text-slate-500" />
         <div className="flex-1">
-          <Label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="phone" className="block text-sm font-medium text-slate-700">
             Số Điện Thoại
           </Label>
           <Input
@@ -129,16 +129,16 @@ export default function PersonalInfoForm({ user, setUser }) {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Nhập số điện thoại"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Địa chỉ */}
       <div className="flex items-start space-x-2">
-        <Home className="w-5 h-5 text-gray-500 mt-1" />
+        <Home className="w-5 h-5 text-slate-500 mt-1" />
         <div className="flex-1">
-          <Label htmlFor="address" className="block text-sm font-medium text-gray-700">
+          <Label htmlFor="address" className="block text-sm font-medium text-slate-700">
             Địa Chỉ
           </Label>
           <Textarea
@@ -147,14 +147,14 @@ export default function PersonalInfoForm({ user, setUser }) {
             value={formData.address}
             onChange={handleChange}
             placeholder="Nhập địa chỉ"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
           />
         </div>
       </div>
 
       {/* Vị trí trên bản đồ */}
       <div className="space-y-2" style={{zIndex: -1}}>
-        <Label className="block text-sm font-medium text-gray-700">
+        <Label className="block text-sm font-medium text-slate-700">
           Vị Trí Trên Bản Đồ
         </Label>
         <div className="relative h-72">
