@@ -9,8 +9,8 @@ import 'react-toastify/dist/ReactToastify.css'
 
 
 export const metadata = {
-  title: 'GDR & LDL Calculator',
-  description: 'GDR & LDL Calculator',
+  title: 'NKSX',
+  description: 'Nhật ký sản xuất',
   manifest: '/manifest.json',
 };
 
@@ -25,9 +25,9 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
       <Head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        <title>GDR & LDL Calculator</title>
+        <title>NKCT</title>
       </Head>
-      <body className="font-helveticaneue">
+      <body className="font-poppins">
         <Header />
 
         <ToastContainer

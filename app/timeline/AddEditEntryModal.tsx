@@ -608,6 +608,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
     }
 
     const handleSubmit = () => {
+        console.log(currentEntry)
       // Các trường bắt buộc
       if (currentEntry.congViec && currentEntry.giaiDoan && currentEntry.ngayThucHien) {
         if (isEditMode) {
@@ -656,7 +657,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
           {/* Body */}
           <div className="px-6 py-4 space-y-4 bg-white">
             {/* Trường Mùa vụ (Select) */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="muaVu" className="text-right text-sm font-medium">
                 Mùa vụ
               </Label>
@@ -678,7 +679,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
             </div>
 
             {/* Trường Giai đoạn (Select) */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="giaiDoan" className="text-right text-sm font-medium">
                 Giai đoạn
               </Label>
@@ -700,7 +701,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
             </div>
 
             {/* Trường Công việc (Select) - dựa trên stage đã chọn */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="congViec" className="text-right text-sm font-medium">
                 Công việc
               </Label>
@@ -722,7 +723,7 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
             </div>
 
             {/* Trường Ngày thực hiện */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-2">
               <Label htmlFor="ngayThucHien" className="text-right text-sm font-medium">
                 Ngày thực hiện
               </Label>
@@ -752,97 +753,96 @@ const AddEditEntryModal = forwardRef<AddEditEntryModalHandle, AddEditEntryModalP
               </Popover>
             </div>
 
-            {/* Trường Chi phí công */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="chiPhiCong" className="text-right text-sm font-medium">
-                Chi phí công
-              </Label>
-              <Input
-                id="chiPhiCong"
-                name="chiPhiCong"
-                type="number"
-                placeholder="0"
-                value={currentEntry.chiPhiCong || ""}
-                onChange={handleInputChange}
-                className="col-span-3"
-              />
-            </div>
-
-            {/* Trường Chi phí vật tư */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="chiPhiVatTu" className="text-right text-sm font-medium">
-                Chi phí vật tư
-              </Label>
-              <Input
-                id="chiPhiVatTu"
-                name="chiPhiVatTu"
-                type="number"
-                placeholder="0"
-                value={currentEntry.chiPhiVatTu || ""}
-                onChange={handleInputChange}
-                className="col-span-3"
-              />
-            </div>
-
-            {/* Trường Số lượng công */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="soLuongCong" className="text-right text-sm font-medium">
-                Số lượng công
-              </Label>
-              <Input
-                id="soLuongCong"
-                name="soLuongCong"
-                type="number"
-                placeholder="0"
-                value={currentEntry.soLuongCong || ""}
-                onChange={handleInputChange}
-                className="col-span-3"
-              />
-            </div>
-
-            {/* Trường Số lượng vật tư */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="soLuongVatTu" className="text-right text-sm font-medium">
-                Số lượng vật tư
-              </Label>
-              <Input
-                id="soLuongVatTu"
-                name="soLuongVatTu"
-                type="number"
-                placeholder="0"
-                value={currentEntry.soLuongVatTu || ""}
-                onChange={handleInputChange}
-                className="col-span-3"
-              />
-            </div>
-
-            {/* Thêm Vật tư sử dụng (AgrochemicalForm) */}
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label className="text-right text-sm font-medium pt-1">
-                Vật tư sử dụng
-              </Label>
-              <div className="col-span-3">
-                <AgrochemicalForm onAdd={addAgrochemical} />
+              <div className={"grid grid-cols-4 items-center gap-2"}>
+                  <Label htmlFor="chiPhiCong" className="text-right text-sm font-medium">
+                      Chi phí công
+                  </Label>
+                  <div className="grid grid-cols-4 col-span-3 items-center gap-2">
+                      <Input
+                          id="chiPhiCong"
+                          name="chiPhiCong"
+                          type="number"
+                          placeholder="0"
+                          value={currentEntry.chiPhiCong || ""}
+                          onChange={handleInputChange}
+                          className={"col-span-2 gap-0"}
+                      />
+                      <Label htmlFor="soLuongCong" className="text-right text-sm font-medium">
+                          Số lượng
+                      </Label>
+                      <Input
+                          id="soLuongCong"
+                          name="soLuongCong"
+                          type="number"
+                          placeholder="0"
+                          value={currentEntry.soLuongCong || ""}
+                          onChange={handleInputChange}
+                      />
+                  </div>
               </div>
-            </div>
 
-            {/* Danh sách vật tư đã thêm */}
-            {currentEntry.agrochemicals && currentEntry.agrochemicals.length > 0 && (
-              <div className="grid grid-cols-4 items-start gap-4">
-                <Label className="text-right text-sm font-medium pt-1">
-                  Đã thêm:
-                </Label>
-                <ul className="col-span-3 list-disc pl-5 space-y-1">
-                  {currentEntry.agrochemicals.map((item, index) => (
-                    <li key={index} className="text-sm text-slate-700">
-                      {item.name} - {item.type} - {item.isOrganic ? "Hữu cơ" : "Không hữu cơ"} -{" "}
-                      {item.lieuLuong} {item.donViTinh}
-                      {item.donGia && ` (${formatCurrency(item.donGia)}/${item.donViTinh})`}
-                    </li>
-                  ))}
-                </ul>
+
+              <div className={"grid grid-cols-4 items-center gap-2"}>
+                  <Label htmlFor="chiPhiVatTu" className="text-right text-sm font-medium">
+                      Chi phí vật tư
+                  </Label>
+                  <div className="grid grid-cols-4 col-span-3 items-center gap-2">
+                      <Input
+                          id="chiPhiVatTu"
+                          name="chiPhiVatTu"
+                      type="number"
+                      placeholder="0"
+                      value={currentEntry.chiPhiVatTu || ""}
+                      onChange={handleInputChange}
+                      className="col-span-2"
+                  />
+                  <Label htmlFor="soLuongVatTu" className="text-right text-sm font-medium">
+                      Số lượng
+                  </Label>
+                  <Input
+                      id="soLuongVatTu"
+                      name="soLuongVatTu"
+                      type="number"
+                      placeholder="0"
+                      value={currentEntry.soLuongVatTu || ""}
+                      onChange={handleInputChange}
+                      className=""
+                  />
+                  </div>
               </div>
-            )}
+
+
+
+              { (currentEntry.congViec === "Bón phân" || currentEntry.congViec === "Phun thuốc") &&
+                  <div>
+                      <div className="grid grid-cols-4 items-start gap-2">
+                          <Label className="text-right text-sm font-medium pt-1">
+                              Vật tư sử dụng
+                          </Label>
+                          <div className="col-span-3">
+                              <AgrochemicalForm onAdd={addAgrochemical} />
+                          </div>
+                      </div>
+
+                      {currentEntry.agrochemicals && currentEntry.agrochemicals.length > 0 && (
+                          <div className="grid grid-cols-4 items-start gap-2">
+                              <Label className="text-right text-sm font-medium pt-1">
+                                  Đã thêm:
+                              </Label>
+                              <ul className="col-span-3 list-disc pl-5 space-y-1">
+                                  {currentEntry.agrochemicals.map((item, index) => (
+                                      <li key={index} className="text-sm text-slate-700">
+                                          {item.name} - {item.type} - {item.isOrganic ? "Hữu cơ" : "Không hữu cơ"} -{" "}
+                                          {item.lieuLuong} {item.donViTinh}
+                                          {item.donGia && ` (${formatCurrency(item.donGia)}/${item.donViTinh})`}
+                                      </li>
+                                  ))}
+                              </ul>
+                          </div>
+                      )}
+                  </div>
+              }
+
 
             {/* Nút submit */}
             <div className="flex justify-center">

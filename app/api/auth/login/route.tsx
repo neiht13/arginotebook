@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signJwtToken } from "@/lib/jwt";
-import { connectToDatabaseLink } from "@/lib/mongodb";
+// @ts-ignore
+import clientPromise from "@/mongo/client";
 
-// Giả lập "database" dạng mảng. Trong thực tế thay bằng DB thật.
 const users: { id: number; username: string; password: string }[] = [
 ];
 
@@ -16,9 +16,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const { db } = await connectToDatabaseLink();
+    // @ts-ignore
+    const { db } = await clientPromise;
 
-    const user = await db.collection('account').findOne({
+    const user = await db.collection('accountnew').findOne({
         username: username,
         password: password,
       });
@@ -28,13 +29,8 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-
-
-    // Tạo token và lưu vào cookie HttpOnly
     const token = signJwtToken({ id: user.id, username: user.username });
-
     const response = NextResponse.json({ message: "Đăng nhập thành công" });
-    // Thiết lập cookie HttpOnly, Secure (nên bật Secure = true trên môi trường production)
     response.cookies.set({
       name: "token",
       value: token,
@@ -46,7 +42,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error: any) {
-    console.error("Login error:", error);
     return NextResponse.json(
       { message: "Có lỗi xảy ra khi đăng nhập" },
       { status: 500 }

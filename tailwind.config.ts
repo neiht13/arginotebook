@@ -10,16 +10,16 @@ module.exports = {
     "registry/**/*.{ts,tsx}",],
     safelist: [
       'bg-teal-500',
-      'bg-cyan-500',
+      'bg-lime-500',
       'bg-lime-500',
       'bg-red-500',
       'bg-yellow-500',
       'bg-white',
-      'bg-black',
+      'bg-slate-700',
       'text-white',
-      'text-black',
+      'text-slate-700',
       'text-red-500',
-      'text-cyan-500',
+      'text-lime-500',
       'text-lime-500',
       'text-yellow-500',
     ],
@@ -34,7 +34,7 @@ module.exports = {
   	extend: {
 		fontFamily: {
 			'poppins': ['Poppins', 'sans-serif'],
-			'helveticaneue': ['Helvetica Neue', 'sans-serif']
+			'helveticaneue': ['HelveticaNeue', 'sans-serif']
 		  },
   		colors: {
   			border: 'hsl(var(--border))',

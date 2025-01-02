@@ -16,7 +16,7 @@ const Calculator: React.FC = () => {
 
   return (
 
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-300 to-cyan-400 p-5">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-300 to-lime-400 p-5">
       <LanguageToggle/>
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-3xl w-full">
         <Tabs key={language}>

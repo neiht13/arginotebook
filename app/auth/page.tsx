@@ -42,7 +42,7 @@ export default function AuthenticationPage() {
                 onClick={() => setIsLogin(true)}
                 className={`px-4 py-2 rounded ${
                   isLogin
-                    ? "bg-cyan-600 text-white"
+                    ? "bg-lime-600 text-white"
                     : "bg-slate-200 text-slate-700"
                 }`}
               >
@@ -52,7 +52,7 @@ export default function AuthenticationPage() {
                 onClick={() => setIsLogin(false)}
                 className={`px-4 py-2 rounded ${
                   !isLogin
-                    ? "bg-cyan-600 text-white"
+                    ? "bg-lime-600 text-white"
                     : "bg-slate-200 text-slate-700"
                 }`}
               >
@@ -72,7 +72,7 @@ export default function AuthenticationPage() {
                 Chưa có tài khoản?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
-                  className="text-cyan-600 hover:underline"
+                  className="text-lime-600 hover:underline"
                 >
                   Đăng ký
                 </button>
@@ -83,7 +83,7 @@ export default function AuthenticationPage() {
                 Đã có tài khoản?{" "}
                 <button
                   onClick={() => setIsLogin(true)}
-                  className="text-cyan-600 hover:underline"
+                  className="text-lime-600 hover:underline"
                 >
                   Đăng nhập
                 </button>

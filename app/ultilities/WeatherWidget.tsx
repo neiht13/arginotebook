@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion"
 
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import Spinner from "@/components/ui/spinner"
-import { set } from "date-fns"
+import {format} from "date-fns";
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
 
@@ -139,8 +139,8 @@ export default function WeatherWidget() {
         const dateMap = new Map()
 
         filteredData.forEach((item: any) => {
-          const dateStr = new Date(item.dt * 1000).toLocaleDateString("vi-VN")
-          const timeStr = new Date(item.dt * 1000).toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' })
+          const dateStr = format(new Date(item.dt * 1000), 'dd-MM-yyyy')
+          const timeStr = format(new Date(item.dt * 1000), 'HH:mm')
           if (!dateMap.has(dateStr)) {
             dateMap.set(dateStr, [])
           }
@@ -232,7 +232,7 @@ export default function WeatherWidget() {
     if (!forecast) return []
     const chartData = forecast.flatMap((day: any) => {
       return day.details.map((detail: any) => ({
-        dateTime: `${day.date} ${detail.time}`, // Kết hợp ngày và giờ
+        dateTime: `${day.date.split('-').slice(0,2).join('-')}`, // Kết hợp ngày và giờ
         temp: Math.round(detail.temp),
       }))
     })
@@ -332,7 +332,7 @@ export default function WeatherWidget() {
                     alt="Sunrise"
                     className="h-5 w-5 mr-2"
                   />
-                  <span>Mặt trời mọc: {new Date(weather.sys.sunrise * 1000).toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span>Mặt trời mọc: {format(new Date(weather.sys.sunrise * 1000), 'HH:mm')}</span>
                 </div>
                 <div className="flex items-center">
                   <img
@@ -340,7 +340,7 @@ export default function WeatherWidget() {
                     alt="Sunset"
                     className="h-5 w-5 mr-2"
                   />
-                  <span>Mặt trời lặn: {new Date(weather.sys.sunset * 1000).toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span>Mặt trời lặn: {format(new Date(weather.sys.sunset * 1000), 'HH:mm')}</span>
                 </div>
                 <div className="flex items-center">
                   <img

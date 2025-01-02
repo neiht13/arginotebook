@@ -66,7 +66,7 @@ const Header = () => {
           <div
             className="text-2xl font-bold 
                        bg-clip-text text-transparent
-                       bg-gradient-to-r from-amber-500 to-rose-500
+                       bg-gradient-to-r from-amber-600 to-lime-600
                        transition-transform duration-300 hover:scale-105 cursor-pointer"
           >
             MyApp
@@ -81,8 +81,8 @@ const Header = () => {
                   onClick={() => setActiveLink(item.href)}
                   className={`group font-medium transition-colors flex items-center gap-1 ${
                     activeLink === item.href
-                      ? "text-rose-500"
-                      : "text-slate-700 hover:text-rose-500"
+                      ? "text-lime-600"
+                      : "text-slate-700 hover:text-lime-600"
                   }`}
                 >
                   {/* Icon + Label */}
@@ -90,7 +90,7 @@ const Header = () => {
                     {item.icon}
                     {/* Hiệu ứng underline hover */}
                     <span
-                      className="absolute left-0 bottom-0 w-0 h-[2px] bg-rose-500
+                      className="absolute left-0 bottom-0 w-0 h-[2px] bg-lime-600
                                transition-all duration-300 group-hover:w-full"
                     ></span>
                   </span>
@@ -115,8 +115,8 @@ const Header = () => {
               className={
                 "flex flex-col items-center justify-center py-2 w-full text-xs font-medium border-t-2 transition-all " +
                 (activeLink === item.href
-                  ? "border-rose-500 text-rose-500"
-                  : "border-transparent text-slate-700 hover:text-rose-500")
+                  ? "border-lime-600 text-lime-600"
+                  : "border-transparent text-slate-700 hover:text-lime-600")
               }
             >
               <div

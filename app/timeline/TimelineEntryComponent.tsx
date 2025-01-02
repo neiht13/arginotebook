@@ -46,7 +46,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
     return agrochemicals.map((item) => (
       <div key={item.id} className="flex items-center text-sm text-slate-600 mt-2">
         {item.type === "thuốc" ? (
-          <Droplet className="mr-2 h-4 w-4 text-cyan-500" />
+          <Droplet className="mr-2 h-4 w-4 text-lime-500" />
         ) : (
           <Leaf className="mr-2 h-4 w-4 text-lime-500" />
         )}
@@ -132,29 +132,31 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
                 {getIconByTask(data.congViec)}
                 <span className="text-sm md:text-base font-medium">{data.giaiDoan}</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+
                 <div className="flex items-center">
-                  <Sprout className="mr-2 h-4 w-4 text-lime-500" />
-                  <span>Số lượng công: {data.soLuongCong ?? 0}</span>
-                </div>
-                <div className="flex items-center">
-                  <DollarSign className="mr-2 h-4 w-4 text-yellow-500" />
+                  <DollarSign className="mr-2 h-4 w-4 text-yellow-500"/>
                   <span>Chi phí công: {formatCurrency(data.chiPhiCong)}</span>
                 </div>
                 <div className="flex items-center">
-                  <Sprout className="mr-2 h-4 w-4 text-lime-500" />
-                  <span>Số lượng vật tư: {data.soLuongVatTu ?? 0}</span>
+                  <Sprout className="mr-2 h-4 w-4 text-lime-500"/>
+                  <span>Số lượng công: {data.soLuongCong ?? 0}</span>
+                </div>
+
+                <div className="flex items-center">
+                  <DollarSign className="mr-2 h-4 w-4 text-yellow-500"/>
+                  <span>Chi phí vật tư: {formatCurrency(data.chiPhiVatTu)}</span>
                 </div>
                 <div className="flex items-center">
-                  <DollarSign className="mr-2 h-4 w-4 text-yellow-500" />
-                  <span>Chi phí vật tư: {formatCurrency(data.chiPhiVatTu)}</span>
+                  <Sprout className="mr-2 h-4 w-4 text-lime-500"/>
+                  <span>Số lượng vật tư: {data.soLuongVatTu ?? 0}</span>
                 </div>
               </div>
 
               {/* Agrochemicals */}
               {data.agrochemicals.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-slate-200">
-                  <h3 className="text-lg font-semibold text-slate-700 mb-2">Vật tư sử dụng:</h3>
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <h3 className="text-lg font-semibold text-slate-700 mb-2">Vật tư sử dụng:</h3>
                   {renderAgrochemicals(data.agrochemicals)}
                 </div>
               )}
@@ -176,7 +178,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
                           alt={`Image ${index + 1}`}
                           className="w-24 h-24 object-cover rounded shadow-sm transition-transform duration-300 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute inset-0 bg-slate-700 bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <ImageIcon className="text-white" />
                         </div>
                       </div>
@@ -198,7 +200,7 @@ const TimelineEntryComponent: React.FC<TimelineEntryProps> = ({ data, isLast, on
                 {onEdit && (
                   <button
                     onClick={() => onEdit(data)}
-                    className="flex items-center gap-1 text-sm text-cyan-600 hover:text-cyan-800"
+                    className="flex items-center gap-1 text-sm text-lime-600 hover:text-lime-800"
                   >
                     <Edit className="h-4 w-4" />
                     Chỉnh sửa

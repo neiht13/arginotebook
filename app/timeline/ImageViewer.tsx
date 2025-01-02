@@ -12,7 +12,7 @@ const ImageViewer: React.FC<ImageModalProps> = ({ isOpen, onClose, imageSrc, alt
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-700 bg-opacity-70">
       <div className="relative">
         <img src={imageSrc || "/no-image.svg"} alt={altText} className="max-w-full max-h-screen rounded" />
         <button

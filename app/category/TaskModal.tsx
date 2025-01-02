@@ -86,7 +86,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập STT"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Tên công việc */}
@@ -101,7 +101,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập tên công việc"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Tên giai đoạn */}
@@ -116,7 +116,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập tên giai đoạn"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Chi tiết công việc */}
@@ -130,7 +130,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 value={formData.chitietcongviec}
                 onChange={handleChange}
                 placeholder="Nhập chi tiết công việc"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Ghi chú */}
@@ -144,7 +144,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 value={formData.ghichu}
                 onChange={handleChange}
                 placeholder="Nhập ghi chú"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Chi phí DVT */}
@@ -160,7 +160,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập chi phí DVT"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function TaskModal({ isOpen, onClose, item }) {
             <Button type="button" onClick={onClose} variant="ghost" className="px-4 py-2">
               Hủy
             </Button>
-            <Button type="submit" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white">
+            <Button type="submit" className="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-white">
               Lưu
             </Button>
           </DialogFooter>

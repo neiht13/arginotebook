@@ -72,21 +72,21 @@ export default function CategoryPage() {
           <TabsList className="flex space-x-1 bg-zinc-100 rounded-t-lg px-1 py-5 w-fit mx-auto mt-2">
             <TabsTrigger
               value="seasons"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
             >
               <Calendar className="w-4 h-4" />
               <span>Mùa Vụ</span>
             </TabsTrigger>
             <TabsTrigger
               value="stages"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
             >
               <Layers className="w-4 h-4" />
               <span>Giai Đoạn</span>
             </TabsTrigger>
             <TabsTrigger
               value="tasks"
-              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
             >
               <ClipboardList className="w-4 h-4" />
               <span>Công Việc</span>

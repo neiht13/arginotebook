@@ -73,7 +73,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu hiện tại"
-            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-lime-500"
           />
         </div>
       </div>
@@ -93,7 +93,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Nhập mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-lime-500"
           />
         </div>
       </div>
@@ -113,7 +113,7 @@ export default function ChangePasswordForm() {
             onChange={handleChange}
             required
             placeholder="Xác nhận mật khẩu mới"
-            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="mt-1 block w-full p-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-lime-500"
           />
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function ChangePasswordForm() {
 
       {/* Nút Lưu */}
       <div className="flex justify-end">
-        <Button type="submit" className="flex items-center space-x-2 bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md shadow">
+        <Button type="submit" className="flex items-center space-x-2 bg-lime-500 hover:bg-lime-600 text-white px-4 py-2 rounded-md shadow">
           <span>Đổi Mật Khẩu</span>
         </Button>
       </div>

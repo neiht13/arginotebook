@@ -79,7 +79,7 @@ export default function StageModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giai đoạn"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Tên Giai Đoạn */}
@@ -94,7 +94,7 @@ export default function StageModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập tên giai đoạn"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Màu sắc */}
@@ -108,7 +108,7 @@ export default function StageModal({ isOpen, onClose, item }) {
                 name="color"
                 value={formData.color}
                 onChange={handleChange}
-                className="w-10 h-10 p-0 border-0 rounded-md focus:ring-2 focus:ring-cyan-500"
+                className="w-10 h-10 p-0 border-0 rounded-md focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Ghi chú */}
@@ -122,7 +122,7 @@ export default function StageModal({ isOpen, onClose, item }) {
                 value={formData.ghichu}
                 onChange={handleChange}
                 placeholder="Nhập ghi chú"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function StageModal({ isOpen, onClose, item }) {
             <Button type="button" onClick={onClose} variant="ghost" className="px-4 py-2">
               Hủy
             </Button>
-            <Button type="submit" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white">
+            <Button type="submit" className="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-white">
               Lưu
             </Button>
           </DialogFooter>

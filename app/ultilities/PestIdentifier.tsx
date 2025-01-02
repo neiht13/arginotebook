@@ -107,7 +107,7 @@ export default function PestIdentifier() {
         <CardContent className="py-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col items-center">
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-cyan-400 transition">
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-lime-400 transition">
                 {image ? (
                   <img src={image} alt="Uploaded" className="object-cover w-full h-full rounded-lg" />
                 ) : (

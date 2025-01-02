@@ -9,8 +9,12 @@ import { Input } from "@/components/ui/input"
 import PersonalInfoForm from './PersonalInfoForm'
 import ChangePasswordForm from './ChangePasswordForm'
 import ProductInfoForm from './ProductInfoForm'
-import { Edit2, Lock, ClipboardList, User, Key, Package } from 'lucide-react'
+import {Edit2, Lock, ClipboardList, User, Key, Package, LogOutIcon} from 'lucide-react'
 import { motion } from 'framer-motion'
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
+import {signOut} from "next-auth/react";
+import {toast} from "react-toastify";
 
 export default function ProfilePage() {
     const [user, setUser] = useState({
@@ -22,6 +26,7 @@ export default function ProfilePage() {
         location: { lat: 10.452992, lng: 105.6178176 }
     })
 
+    const router = useRouter()
     const handleAvatarChange = (e) => {
         const file = e.target.files[0]
         if (file) {
@@ -31,6 +36,11 @@ export default function ProfilePage() {
             }
             reader.readAsDataURL(file)
         }
+    }
+    const handleLogout = () => {
+        signOut({ callbackUrl: "/auth" }).then(()=>
+        toast.success("Đã đăng xuất")
+        )
     }
 
     return (
@@ -42,13 +52,15 @@ export default function ProfilePage() {
                 className="max-w-4xl mx-auto"
             >
                 <Card className="w-full bg-white shadow-lg rounded-lg">
-                    <CardHeader className="flex flex-col items-center space-y-4 p-6 border-b">
+                    <CardHeader className="relative flex flex-col items-center space-y-4 p-6 border-b">
+                        <LogOutIcon onClick={handleLogout} className="absolute top-2 right-2 text-slate-700"/>
+
                         <div className="relative">
                             <Avatar className="w-24 h-24">
                                 <AvatarImage src={user.avatar} alt={user.name} />
                                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-cyan-500 text-white rounded-full p-2 cursor-pointer hover:bg-cyan-600 transition-colors">
+                            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-lime-500 text-white rounded-full p-2 cursor-pointer hover:bg-lime-600 transition-colors">
                                 <Edit2 className="w-4 h-4" />
                             </label>
                             <Input
@@ -69,21 +81,21 @@ export default function ProfilePage() {
                             <TabsList className="flex h-auto space-x-2 mb-6 bg-slate-200 p-1 rounded-md">
                                 <TabsTrigger
                                     value="personal"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
                                 >
                                     <User className="w-4 h-4" />
                                     <span>Thông Tin Cá Nhân</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="password"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
                                 >
                                     <Lock className="w-4 h-4" />
                                     <span>Đổi Mật Khẩu</span>
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="product"
-                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="flex h-full whitespace-normal items-center space-x-2 px-4 py-2 text-sm font-medium text-slate-700 rounded-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-lime-500"
                                 >
                                     <Package className="w-4 h-4" />
                                     <span>Thông Tin Sản Phẩm</span>

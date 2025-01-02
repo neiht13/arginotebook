@@ -54,7 +54,7 @@ export default function TaskTable({ data, onEdit }) {
                       <Button
                         variant="ghost"
                         onClick={() => onEdit(task)}
-                        className="flex items-center justify-center text-cyan-500 hover:text-cyan-700 transition"
+                        className="flex items-center justify-center text-lime-500 hover:text-lime-700 transition"
                       >
                         <Edit2 className="w-4 h-4 mr-1" />
                         Sửa
@@ -99,7 +99,7 @@ export default function TaskTable({ data, onEdit }) {
             <CardFooter>
               <Button
                 onClick={() => onEdit(task)}
-                className="w-full flex items-center justify-center text-cyan-500 hover:text-cyan-700 transition"
+                className="w-full flex items-center justify-center text-lime-500 hover:text-lime-700 transition"
                 variant="ghost"
               >
                 <Edit2 className="w-4 h-4 mr-1" />

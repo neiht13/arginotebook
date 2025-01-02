@@ -1335,10 +1335,10 @@ export default function StatisticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg border-t-4 border-cyan-500">
+          <Card className="shadow-lg border-t-4 border-lime-500">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChartIcon className="text-cyan-500 w-5 h-5" />
+                <BarChartIcon className="text-lime-500 w-5 h-5" />
                 Chi phí
               </CardTitle>
             </CardHeader>

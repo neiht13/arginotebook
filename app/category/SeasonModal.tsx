@@ -96,7 +96,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập mùa vụ"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Năm */}
@@ -112,7 +112,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập năm"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Ngày bắt đầu */}
@@ -127,7 +127,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 value={formData.ngaybatdau}
                 onChange={handleChange}
                 required
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Phương pháp */}
@@ -142,7 +142,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập phương pháp"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Giống */}
@@ -157,7 +157,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giống"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Diện tích */}
@@ -173,7 +173,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập diện tích"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Số lượng */}
@@ -189,7 +189,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập số lượng"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Giá giống */}
@@ -205,7 +205,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập giá giống"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Số thửa */}
@@ -221,7 +221,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 onChange={handleChange}
                 required
                 placeholder="Nhập số thửa"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
             {/* Chi phí khác */}
@@ -236,7 +236,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
                 value={formData.chiphikhac}
                 onChange={handleChange}
                 placeholder="Nhập chi phí khác"
-                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               />
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function SeasonModal({ isOpen, onClose, item }) {
             <Button type="button" onClick={onClose} variant="ghost" className="px-4 py-2">
               Hủy
             </Button>
-            <Button type="submit" className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white">
+            <Button type="submit" className="px-4 py-2 bg-lime-500 hover:bg-lime-600 text-white">
               Lưu
             </Button>
           </DialogFooter>
