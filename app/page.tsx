@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Calculator from './Calculator';
-import TimelinePage from './timeline/page';
+import TimelinePage from './(auth)/timeline/page';
 
 const Home: React.FC = () => {
 

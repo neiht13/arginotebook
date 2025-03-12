@@ -1,13 +1,13 @@
 // File: /app/api/nhatkynew/route.js
 
-import clientPromise from "../../../mongo/client";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/auth"
+import { authOptions } from "@/lib/authOption"
+import { connectToDatabase } from "@/lib/mongodb";
 
 const upsertAgrochemicals = async (agrochemical, farmingLogId) => {
-    const { db } = await clientPromise;
+    const { db } = await connectToDatabase();
 
     const collectionAgrochemicals = db.collection("agrochemicals");
     const id = agrochemical.id;
@@ -30,7 +30,7 @@ const upsertAgrochemicals = async (agrochemical, farmingLogId) => {
 };
 
 const syncAgrochemicals = async (incomingAgrochemicals, farmingLogId) => {
-    const { db } = await clientPromise;
+    const { db } = await connectToDatabase();
     const collectionAgrochemicals = db.collection("agrochemicals");
     const incomingIds = incomingAgrochemicals
         .filter((agro) => agro.id)
@@ -57,21 +57,21 @@ export const POST = async (request: Request) => {
     }
 
     try {
-        const { db } = await clientPromise
+        const { db } = await connectToDatabase();
         const data = await request.json()
-        const { id } = data
-        delete data.id
+        const { _id } = data
+        delete data._id
 
         const collection = db.collection("nhatkynew")
         let result
 
-        if (!id) {
+        if (!_id) {
             const iid = new ObjectId()
             result = await collection.insertOne({ ...data, _id: iid })
             await syncAgrochemicals(data.agrochemicals || [], iid)
             return NextResponse.json(result, { status: 201 })
         } else {
-            const objectId = ObjectId.createFromHexString(id)
+            const objectId = ObjectId.createFromHexString(_id)
             result = await collection.updateOne({ _id: objectId }, { $set: data })
             await syncAgrochemicals(data.agrochemicals || [], objectId)
             return NextResponse.json(result, { status: 200 })
@@ -90,12 +90,12 @@ export const GET = async (request: Request) => {
     }
 
     try {
-        const { db } = await clientPromise
+        const { db } = await connectToDatabase();
         const { searchParams } = new URL(request.url)
 
-        const idQuery = searchParams.get("id")
-        const uId = searchParams.get("uId")
-        const xId = searchParams.get("xId")
+        const idQuery = searchParams.get("id") 
+        const uId = searchParams.get("uId")|| session?.user.uId
+        const xId = searchParams.get("xId")|| session?.user.xId
 
         const collection = db.collection("nhatkynew")
         let result
@@ -131,7 +131,7 @@ export const DELETE = async (request: Request) => {
     }
 
     try {
-        const { db } = await clientPromise
+        const { db } = await connectToDatabase();
         const { searchParams } = new URL(request.url)
         const idQuery = searchParams.get("id")
 

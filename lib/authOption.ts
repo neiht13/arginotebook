@@ -1,25 +1,39 @@
 // lib/authOptions.ts
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { connectToDatabase } from '@/lib/mongodb';
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        username: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       //@ts-ignore
       async authorize(credentials) {
         if (!credentials) return null;
-        const user = {
-          username: "thien",
-          role: "Admin",
-          xId: "vnpt"
-        }
+ 
+        const { db } = await connectToDatabase();
+        const account = await db.collection('accountnew').findOne({
+          username: credentials.username,
+          password: credentials.password,
+        });
+        
 
-      
-        return user
+        if (account && account.status)  {
+          const user = await db.collection('usernew').findOne({
+            username:  credentials.username
+          })
+          if(user) {
+            return user;
+          } else {
+            return null;
+          }
+        
+        } else {
+          return null;
+        }
       },
     }),
   ],

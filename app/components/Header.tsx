@@ -6,6 +6,7 @@ import {
   ChartBarIcon,
   ContactIcon,
   LayoutDashboardIcon,
+  Settings,
   UserIcon,
   UtilityPoleIcon,
 } from "lucide-react"
@@ -13,6 +14,13 @@ import {
 const Header = () => {
   const [activeLink, setActiveLink] = useState("/")
   const [scrollActive, setScrollActive] = useState(false)
+  const [userRole, setUserRole] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Giả sử role lưu trong localStorage, nếu từ API thì dùng fetch/axios
+    const role = localStorage.getItem("userRole") // Hoặc lấy từ Redux, Zustand...
+    setUserRole(role)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,6 +59,21 @@ const Header = () => {
     },
   ]
 
+  // Nếu role là "admin", thêm route /admin
+  // if (userRole === "admin") {
+  //   navItems.push({
+  //     href: "/admin",
+  //     label: "Quản trị",
+  //     icon: <Settings className="w-5 h-5" />,
+  //   })
+  // }
+    navItems.push({
+      href: "/admin",
+      label: "Quản trị",
+      icon: <Settings className="w-5 h-5" />,
+    })
+  
+
   return (
     <>
       {/* Nav cho Desktop (lg trở lên) */}
@@ -62,14 +85,12 @@ const Header = () => {
         }`}
       >
         <div className="mx-auto max-w-7xl px-6 py-3 flex justify-between items-center">
-          {/* Logo hoặc brand name */}
           <div
-            className="text-2xl font-bold 
-                       bg-clip-text text-transparent
+            className="text-2xl font-bold bg-clip-text text-transparent
                        bg-gradient-to-r from-amber-600 to-lime-600
                        transition-transform duration-300 hover:scale-105 cursor-pointer"
           >
-            MyApp
+            Nhật ký sản xuất
           </div>
 
           {/* Menu items */}
@@ -85,10 +106,8 @@ const Header = () => {
                       : "text-slate-700 hover:text-lime-600"
                   }`}
                 >
-                  {/* Icon + Label */}
                   <span className="relative">
                     {item.icon}
-                    {/* Hiệu ứng underline hover */}
                     <span
                       className="absolute left-0 bottom-0 w-0 h-[2px] bg-lime-600
                                transition-all duration-300 group-hover:w-full"
@@ -102,10 +121,8 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Nav cho Mobile (dưới cùng) */}
-      <nav
-        className={`fixed lg:hidden bottom-0 left-0 right-0 z-50 bg-white/80 shadow-2xl backdrop-blur-md`}
-      >
+      {/* Nav cho Mobile */}
+      <nav className="fixed lg:hidden bottom-0 left-0 right-0 z-50 bg-white/80 shadow-2xl backdrop-blur-md">
         <ul className="flex w-full justify-between items-center px-4">
           {navItems.map((item) => (
             <Link
@@ -121,9 +138,7 @@ const Header = () => {
             >
               <div
                 className={
-                  activeLink === item.href
-                    ? "mb-1 transform scale-110"
-                    : "mb-1"
+                  activeLink === item.href ? "mb-1 transform scale-110" : "mb-1"
                 }
               >
                 {item.icon}

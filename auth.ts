@@ -39,8 +39,8 @@ export const authOptions: NextAuthOptions = {
       // Ví dụ: session.user.role = user.role
       // Lưu ý: user.* chỉ có trong authorize() => token => ...
       if (token && session.user) {
-        session.user.id = token.uid
-        session.user.role = token.role
+        session.user.id = token.uid;
+        session.user.role = token.role;
       }
       return session
     },

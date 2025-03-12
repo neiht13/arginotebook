@@ -101,7 +101,7 @@ export default function PestIdentifier() {
       <Card className="w-full max-w-md shadow-lg rounded-lg bg-white">
         <CardHeader className="border-b">
           <CardTitle className="text-3xl font-extrabold text-slate-800 flex items-center">
-            🐞 Nhận Diện Sâu Bệnh
+            🐞 Nhận Diện Sâu Bệnh thông qua lá lúa (thử nghiệm)
           </CardTitle>
         </CardHeader>
         <CardContent className="py-6">

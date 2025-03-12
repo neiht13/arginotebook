@@ -1,9 +1,7 @@
 // app/layout.tsx
 import React, { Suspense } from 'react';
-import Providers from './components/Providers';
-import "./styles/globals.css"
+import "@/app/styles/globals.css"
 import Head from 'next/head';
-import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import SessionProvider from '@/lib/provider';
@@ -34,7 +32,6 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
       </Head>
       <body className={nunito.className} >
         <Suspense fallback={<div className='flex justify-center items-center h-screen'><Spinner/></div>}>
-        <Header />
 
         <ToastContainer
         position="top-right"
@@ -50,9 +47,7 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
               <div className='lg:mt-16'>
               <SessionProvider>
 
-          <Providers>
             {children}
-          </Providers>
           </SessionProvider>
         </div>
         </Suspense>

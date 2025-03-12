@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from './LanguageContext';
 import translations from './translations';
+import Image from 'next/image';
 
 const LanguageToggle: React.FC = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -31,7 +32,7 @@ const LanguageToggle: React.FC = () => {
         aria-label={t.tooltipLanguage}
         className="relative w-full h-full focus:outline-none"
       >
-        <img
+        <Image
           src={`/flags/${language === 'en' ? 'us' : 'vn'}.png`}
           alt={t.tooltipLanguage}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-200 ${isAnimating ? 'opacity-0' : 'opacity-100'
