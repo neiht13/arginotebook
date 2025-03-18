@@ -10,6 +10,7 @@ import SessionProvider from '@/lib/provider';
 import { nunito } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import Spinner from '@/components/ui/spinner';
+import { Toaster } from '@/components/ui/toaster';
 
 
 export const metadata = {
@@ -34,20 +35,9 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
       </Head>
       <body className={nunito.className} >
         <Suspense fallback={<div className='flex justify-center items-center h-screen'><Spinner/></div>}>
-        <Header />
+        <Toaster />
 
-        <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-              <div className='lg:mt-16'>
+              <div>
               <SessionProvider>
 
           <Providers>
