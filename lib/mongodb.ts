@@ -43,3 +43,4 @@ export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db
     throw error;
   }
 }
+export default clientPromise

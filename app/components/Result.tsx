@@ -62,10 +62,10 @@ const Result: React.FC<ResultProps> = ({ type, value, unit }) => {
       )}
     >
       {type === 'egfr'
-        ? `${t.egfrLevel}: ${value.toFixed(
+        ? `${t.egfrLevel}: ${value?.toFixed(
             2
           )} mL/min/1.73m² (${status})`
-        : `${t.ldlLevel}: ${value.toFixed(
+        : `${t.ldlLevel}: ${value?.toFixed(
             2
           )} ${unit} (${status})`}
     </div>

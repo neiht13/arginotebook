@@ -80,7 +80,7 @@ export default function HarvestTracker() {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`${totalWeight.toFixed(2)}`)
+      await navigator.clipboard.writeText(`${totalWeight?.toFixed(2)}`)
       setCopied(true)
       toast.success("Đã sao chép tổng cân nặng!")
       setTimeout(() => setCopied(false), 2000)
@@ -126,7 +126,7 @@ export default function HarvestTracker() {
                     {history.map((entry, index) => (
                         <li key={index} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg shadow-sm">
                           <div>
-                            <p className="text-lg font-medium text-slate-800">{entry.weight.toFixed(2)} kg</p>
+                            <p className="text-lg font-medium text-slate-800">{entry.weight?.toFixed(2)} kg</p>
                             <p className="text-sm text-slate-500">{format(entry.timestamp, 'HH:mm dd-MM-yyyy')}</p>
                           </div>
                         </li>
@@ -164,7 +164,7 @@ export default function HarvestTracker() {
               <div className="space-x-2">
                 <p className="text-xl text-slate-600">Tổng Cân Nặng Hiện Tại:</p>
                 <div className='flex items-center justify-center '>
-                  <p className="text-4xl font-bold text-lime-600">{totalWeight.toFixed(2)} kg</p>
+                  <p className="text-4xl font-bold text-lime-600">{totalWeight?.toFixed(2)} kg</p>
                 </div>
                 <div className='flex items-center justify-end'>
                   <Button

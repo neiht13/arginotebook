@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signJwtToken } from "@/lib/jwt";
 // @ts-ignore
-import clientPromise from "@/mongo/client";
+import clientPromise from "@/lib/mongodb";
 
 const users: { id: number; username: string; password: string }[] = [
 ];

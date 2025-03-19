@@ -15,7 +15,7 @@ import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { CalendarIcon, Loader2 } from "lucide-react"
 import CurrencyInput from "@/components/ui/input-currency"
-import type { VatTu, VatTuFormData } from "./types"
+import type { VatTu, VatTuFormData } from "../types"
 
 interface VatTuModalProps {
   isOpen: boolean

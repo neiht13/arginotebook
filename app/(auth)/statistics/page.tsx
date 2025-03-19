@@ -12,12 +12,12 @@ import { DataCard } from "@/components/ui/data-card"
 import { EmptyState } from "@/components/ui/empty-state"
 import Spinner from "@/components/ui/spinner"
 
-import TaskCountChart from "./TaskCountChart"
-import TaskDateChart from "./TaskDateChart"
-import TaskTypeChart from "./TaskTypeChart"
-import FinancialChart from "./FinancialChart"
-import CostBreakdownChart from "./CostBreakdownChart"
-import SeasonComparisonChart from "./SeasonComparisonChart"
+import TaskCountChart from "./components/TaskCountChart"
+import TaskDateChart from "./components/TaskDateChart"
+import TaskTypeChart from "./components/TaskTypeChart"
+import FinancialChart from "./components/FinancialChart"
+import CostBreakdownChart from "./components/CostBreakdownChart"
+import SeasonComparisonChart from "./components/SeasonComparisonChart"
 
 export default function StatisticsPage() {
   // Tabs chính: Thời gian

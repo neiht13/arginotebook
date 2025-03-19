@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 import { Package, Leaf, AlertTriangle } from "lucide-react"
-import type { VatTu } from "./types"
+import type { VatTu } from "../types"
 
 interface VatTuStatsProps {
   data: VatTu[]
@@ -101,7 +101,7 @@ export default function VatTuStats({ data }: VatTuStatsProps) {
                     outerRadius={70}
                     paddingAngle={5}
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name} ${(percent * 100)?.toFixed(0)}%`}
                     labelLine={false}
                   >
                     {stats.typeDistribution.map((entry, index) => (

@@ -12,10 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "react-toastify"
 import axios from "axios"
 import type { VatTu } from "./types"
-import VatTuTable from "./VatTuTable"
-import VatTuModal from "./VatTuModal"
-import VatTuStats from "./VatTuStats"
-import LoadingScreen from "../timeline/LoadingScreen"
+import VatTuTable from "./components/VatTuTable"
+import VatTuModal from "./components/VatTuModal"
+import VatTuStats from "./components/VatTuStats"
+import LoadingScreen from "../timeline/components/LoadingScreen"
 
 export default function VatTuPage() {
   const { data: session, status } = useSession()

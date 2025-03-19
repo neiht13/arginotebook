@@ -8,9 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { PlusCircle, Calendar, RefreshCw } from "lucide-react"
-import ModernTimeline from "./ModernTimeline"
-import LoadingScreen from "./LoadingScreen"
-import TimelineCalendar from "./TimelineCalendar"
+import ModernTimeline from "./components/ModernTimeline"
+import LoadingScreen from "./components/LoadingScreen"
+import TimelineCalendar from "./components/TimelineCalendar"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function TimelinePage() {
@@ -35,7 +35,7 @@ export default function TimelinePage() {
       })
 
       // Sort data by date (newest first)
-      const sortedData = response.data.sort((a, b) => {
+      const sortedData = response.data.sort((a: TimelineEntry, b: TimelineEntry) => {
         const dateA = parseVietnameseDate(a.ngayThucHien)
         const dateB = parseVietnameseDate(b.ngayThucHien)
         return dateB.getTime() - dateA.getTime()
@@ -54,7 +54,7 @@ export default function TimelinePage() {
     }
   }
 
-  const parseVietnameseDate = (dateString) => {
+  const parseVietnameseDate = (dateString: string) => {
     const [day, month, year] = dateString.split("-").map(Number)
     return new Date(year, month - 1, day)
   }

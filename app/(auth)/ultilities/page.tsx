@@ -1,16 +1,16 @@
 "use client"
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import WeatherWidget from "./WeatherWidget"
-import HarvestTracker from "./HarvestTracker"
-import PestIdentifier from "./PestIdentifier"
+import WeatherWidget from "./components/WeatherWidget"
+import HarvestTracker from "./components/HarvestTracker"
+import PestIdentifier from "./components/PestIdentifier"
 import dynamic from "next/dynamic"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { Cloud, Map, BarChart3, Bug } from 'lucide-react'
-import QuanlyThuhoach from "./QuanlyThuhoach"
+import QuanlyThuhoach from "./components/QuanlyThuhoach"
 
-const CultivationMap = dynamic(() => import("./CultivationMap"), { ssr: false })
+const CultivationMap = dynamic(() => import("./components/CultivationMap"), { ssr: false })
 
 export default function UtilitiesPage() {
   const [activeTab, setActiveTab] = useState("weather")

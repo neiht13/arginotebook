@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import type { TimelineEntry, Agrochemical } from "./types"
+import type { TimelineEntry, Agrochemical } from "../types"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,64 +11,26 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
+import { format, addDays } from "date-fns"
 import { vi } from "date-fns/locale"
-import { CalendarIcon, X, Camera, Trash2, Plus, Loader2, AlertCircle, Search, Leaf } from "lucide-react"
+import { CalendarIcon, X, Camera, Trash2, Plus, Loader2, AlertCircle, Search, Leaf, Info } from "lucide-react"
 import CurrencyInput from "@/components/ui/input-currency"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useToast } from "@/components/ui/use-toast"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface Season {
   _id: string
-  muavu: string
+  tenmuavu: string
   nam: string
   ngaybatdau: string
-  ngayketthuc: string
+  ngayketthuc?: string
+  phuongphap?: string
+  giong?: string
 }
-
-const stages = [
-  { _id: "1", tengiaidoan: "Làm đất - xuống giống", color: "#BB4D00" },
-  { _id: "2", tengiaidoan: "Lúa mạ", color: "#31D304" },
-  { _id: "3", tengiaidoan: "Đẻ nhánh", color: "#1D8300" },
-  { _id: "4", tengiaidoan: "Làm đòng", color: "#B7F305" },
-  { _id: "5", tengiaidoan: "Trổ chín", color: "#FFFF00" },
-  { _id: "6", tengiaidoan: "Chín, thu hoạch", color: "#FFAD00" },
-]
-
-const tasks = [
-  { _id: "1", tenCongViec: "Cày đất", giaidoanId: "1" },
-  { _id: "2", tenCongViec: "Đánh rãnh", giaidoanId: "1" },
-  { _id: "3", tenCongViec: "Trạc đất", giaidoanId: "1" },
-  { _id: "4", tenCongViec: "Phun thuốc", giaidoanId: "1" },
-  { _id: "5", tenCongViec: "Xuống giống", giaidoanId: "1" },
-  { _id: "6", tenCongViec: "Bón phân", giaidoanId: "1" },
-  { _id: "7", tenCongViec: "Bơm nước", giaidoanId: "2" },
-  { _id: "8", tenCongViec: "Bón phân", giaidoanId: "2" },
-  { _id: "9", tenCongViec: "Phun thuốc", giaidoanId: "2" },
-  { _id: "10", tenCongViec: "Cấy dặm", giaidoanId: "2" },
-  { _id: "11", tenCongViec: "Bơm nước", giaidoanId: "3" },
-  { _id: "12", tenCongViec: "Bón phân", giaidoanId: "3" },
-  { _id: "13", tenCongViec: "Phun thuốc", giaidoanId: "3" },
-  { _id: "14", tenCongViec: "Bơm nước", giaidoanId: "4" },
-  { _id: "15", tenCongViec: "Bón phân", giaidoanId: "4" },
-  { _id: "16", tenCongViec: "Phun thuốc", giaidoanId: "4" },
-  { _id: "17", tenCongViec: "Bơm nước", giaidoanId: "5" },
-  { _id: "18", tenCongViec: "Bón phân", giaidoanId: "5" },
-  { _id: "19", tenCongViec: "Phun thuốc", giaidoanId: "5" },
-  { _id: "20", tenCongViec: "Bơm nước", giaidoanId: "6" },
-  { _id: "21", tenCongViec: "Bón phân", giaidoanId: "6" },
-  { _id: "22", tenCongViec: "Phun thuốc", giaidoanId: "6" },
-  { _id: "23", tenCongViec: "Thu hoạch", giaidoanId: "6" },
-  { _id: "24", tenCongViec: "Công việc khác", giaidoanId: "1" },
-  { _id: "25", tenCongViec: "Công việc khác", giaidoanId: "2" },
-  { _id: "26", tenCongViec: "Công việc khác", giaidoanId: "3" },
-  { _id: "27", tenCongViec: "Công việc khác", giaidoanId: "4" },
-  { _id: "28", tenCongViec: "Công việc khác", giaidoanId: "5" },
-  { _id: "29", tenCongViec: "Công việc khác", giaidoanId: "6" },
-]
 
 interface EnhancedAddEditModalProps {
   isOpen: boolean
@@ -89,6 +51,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     congViec: "",
     congViecId: "",
     ngayThucHien: format(new Date(), "dd-MM-yyyy"),
+    ngaySauBatDau: 0,
     chiPhiCong: 0,
     chiPhiVatTu: 0,
     soLuongCong: 0,
@@ -123,6 +86,13 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   const [seasons, setSeasons] = useState<Season[]>([])
   const [loadingSeasons, setLoadingSeasons] = useState(false)
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(null)
+
+  // State for stages and tasks
+  const [stages, setStages] = useState<any[]>([])
+  const [tasks, setTasks] = useState<any[]>([])
+  const [loadingStages, setLoadingStages] = useState(false)
+  const [loadingTasks, setLoadingTasks] = useState(false)
+  const [filteredTasks, setFilteredTasks] = useState<any[]>([])
 
   // Initialize form data when entry changes
   useEffect(() => {
@@ -162,13 +132,14 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       // Reset form for new entry
       resetForm()
     }
-  }, [entry, isOpen])
+  }, [entry, isOpen, stages])
 
   // Fetch available supplies and seasons when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchSupplies()
       fetchSeasons()
+      fetchStages()
     }
   }, [isOpen])
 
@@ -200,6 +171,34 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       }
     }
   }, [selectedDate, selectedSeason])
+
+  // Update selectedDate when ngaySauBatDau changes
+  useEffect(() => {
+    if (selectedSeason && formData.ngaySauBatDau !== undefined) {
+      try {
+        const seasonStartDate = parseVietnameseDate(selectedSeason.ngaybatdau)
+        const newDate = addDays(seasonStartDate, formData.ngaySauBatDau)
+
+        setSelectedDate(newDate)
+        setFormData((prev) => ({
+          ...prev,
+          ngayThucHien: format(newDate, "dd-MM-yyyy"),
+        }))
+      } catch (error) {
+        console.error("Error calculating date from days:", error)
+      }
+    }
+  }, [formData.ngaySauBatDau, selectedSeason])
+
+  // Filter tasks based on selected stage
+  useEffect(() => {
+    if (selectedStageId) {
+      const filtered = tasks.filter((task) => task.giaidoanId === selectedStageId)
+      setFilteredTasks(filtered)
+    } else {
+      setFilteredTasks([])
+    }
+  }, [selectedStageId, tasks])
 
   // Calculate material cost based on agrochemicals
   useEffect(() => {
@@ -262,6 +261,43 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     }
   }
 
+  const fetchStages = async () => {
+    try {
+      setLoadingStages(true)
+      const response = await axios.get("/api/giaidoan")
+      setStages(response.data)
+
+      // Fetch tasks after stages are loaded
+      fetchTasks()
+    } catch (error) {
+      console.error("Error fetching stages:", error)
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: "Không thể tải danh sách giai đoạn",
+      })
+    } finally {
+      setLoadingStages(false)
+    }
+  }
+
+  const fetchTasks = async () => {
+    try {
+      setLoadingTasks(true)
+      const response = await axios.get("/api/congviec")
+      setTasks(response.data)
+    } catch (error) {
+      console.error("Error fetching tasks:", error)
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: "Không thể tải danh sách công việc",
+      })
+    } finally {
+      setLoadingTasks(false)
+    }
+  }
+
   const resetForm = () => {
     setFormData({
       muaVu: "",
@@ -271,6 +307,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       congViec: "",
       congViecId: "",
       ngayThucHien: format(new Date(), "dd-MM-yyyy"),
+      ngaySauBatDau: 0,
       chiPhiCong: 0,
       chiPhiVatTu: 0,
       soLuongCong: 0,
@@ -336,8 +373,9 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       setSelectedSeason(season)
       setFormData((prev) => ({
         ...prev,
-        muaVu: season.muavu,
+        muaVu: season.tenmuavu,
         muaVuId: seasonId,
+        ngaySauBatDau: 0, // Reset days after start
       }))
     }
   }
@@ -347,6 +385,14 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }))
+  }
+
+  const handleNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: Number.parseInt(value) || 0,
     }))
   }
 
@@ -590,9 +636,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     }
   }
 
-  // Filter tasks based on selected stage
-  const filteredTasks = tasks.filter((task) => task.giaidoanId === selectedStageId)
-
   // Check if the current task is related to agrochemicals
   const isAgrochemicalTask = formData.congViec === "Bón phân" || formData.congViec === "Phun thuốc"
 
@@ -621,11 +664,20 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder="Chọn mùa vụ" />
                   </SelectTrigger>
                   <SelectContent>
-                    {seasons.map((season) => (
-                      <SelectItem key={season._id} value={season._id}>
-                        {season.muavu} {season.nam}
-                      </SelectItem>
-                    ))}
+                    {loadingSeasons ? (
+                      <div className="flex items-center justify-center p-2">
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <span>Đang tải...</span>
+                      </div>
+                    ) : seasons.length === 0 ? (
+                      <div className="p-2 text-center text-sm text-muted-foreground">Không có mùa vụ nào</div>
+                    ) : (
+                      seasons.map((season) => (
+                        <SelectItem key={season._id} value={season._id}>
+                          {season.tenmuavu} {season.nam}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -666,14 +718,23 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder="Chọn giai đoạn" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stages.map((stage) => (
-                      <SelectItem key={stage._id} value={stage._id}>
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: stage.color }}></div>
-                          {stage.tengiaidoan}
-                        </div>
-                      </SelectItem>
-                    ))}
+                    {loadingStages ? (
+                      <div className="flex items-center justify-center p-2">
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <span>Đang tải...</span>
+                      </div>
+                    ) : stages.length === 0 ? (
+                      <div className="p-2 text-center text-sm text-muted-foreground">Không có giai đoạn nào</div>
+                    ) : (
+                      stages.map((stage) => (
+                        <SelectItem key={stage._id} value={stage._id}>
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: stage.color }}></div>
+                            {stage.tengiaidoan}
+                          </div>
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -688,11 +749,22 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder={selectedStageId ? "Chọn công việc" : "Vui lòng chọn giai đoạn trước"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {filteredTasks.map((task) => (
-                      <SelectItem key={task._id} value={task._id}>
-                        {task.tenCongViec}
-                      </SelectItem>
-                    ))}
+                    {loadingTasks ? (
+                      <div className="flex items-center justify-center p-2">
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <span>Đang tải...</span>
+                      </div>
+                    ) : filteredTasks.length === 0 ? (
+                      <div className="p-2 text-center text-sm text-muted-foreground">
+                        Không có công việc nào cho giai đoạn này
+                      </div>
+                    ) : (
+                      filteredTasks.map((task) => (
+                        <SelectItem key={task._id} value={task._id}>
+                          {task.tenCongViec}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -700,15 +772,31 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
 
             {/* Days after start */}
             <div className="space-y-2">
-              <Label htmlFor="ngaySauBatDau">Ngày sau bắt đầu</Label>
+              <div className="flex items-center">
+                <Label htmlFor="ngaySauBatDau">Ngày sau bắt đầu</Label>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-6 w-6 ml-1">
+                        <Info className="h-4 w-4 text-slate-500" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">
+                        Số ngày tính từ ngày bắt đầu mùa vụ. Thay đổi giá trị này sẽ tự động cập nhật ngày thực hiện.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <Input
                 id="ngaySauBatDau"
                 name="ngaySauBatDau"
                 type="number"
-                value={formData.ngaySauBatDau || ""}
-                onChange={handleInputChange}
+                value={formData.ngaySauBatDau || "0"}
+                onChange={handleNumberInputChange}
                 placeholder="Số ngày sau khi bắt đầu mùa vụ"
-                disabled={selectedSeason !== null}
+                disabled={!selectedSeason}
               />
               {selectedSeason && (
                 <p className="text-xs text-slate-500 mt-1">

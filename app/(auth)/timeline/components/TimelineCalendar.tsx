@@ -12,7 +12,7 @@ import { format, isSameDay } from "date-fns"
 import { vi } from "date-fns/locale"
 import { motion, AnimatePresence } from "framer-motion"
 import { PlusCircle, CalendarDays, Tractor, Sprout, Droplet, Leaf, Edit } from "lucide-react"
-import type { TimelineEntry } from "./types"
+import type { TimelineEntry } from "../types"
 import EnhancedAddEditModal from "./EnhancedAddEditModal"
 
 interface TimelineCalendarProps {

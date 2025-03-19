@@ -46,19 +46,16 @@ export const GET = async (request) => {
     try {
         const { db } = await connectToDatabase();
         const { searchParams } = new URL(request.url);
-        const idQuery = searchParams.get("id");
-        const uId = await getServerSession(authOptions).then((session) =>  session?.user.uId);
+        // const idQuery = searchParams.get("id");
+        const uId = await getServerSession(authOptions).then((session) =>  session?.user.uId) || "";
 
         console.log("uId", uId);
-        
-        const collection = db.collection("usernew");
+        const collection = db.collection("user");
         let result;
 
-        if (idQuery) {
-            result = await collection.findOne({ accountId: idQuery });
-        } else {
-            result = await collection.find({ uId: uId }).toArray();
-        }
+       
+        result = await collection.findOne({ _id: ObjectId.createFromHexString(uId) });
+        
 
         return NextResponse.json(result, { status: 200 });
     } catch (error) {

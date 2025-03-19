@@ -15,17 +15,20 @@ export const authOptions = {
         if (!credentials) return null;
  
         const { db } = await connectToDatabase();
-        const account = await db.collection('accountnew').findOne({
+        const account = await db.collection('account').findOne({
           username: credentials.username,
           password: credentials.password,
         });
         
 
         if (account && account.status)  {
-          const user = await db.collection('usernew').findOne({
+          const user = await db.collection('user').findOne({
             username:  credentials.username
           })
+          console.log("user", user);
           if(user) {
+            user.role = account.role;
+            console.log("user", user);
             return user;
           } else {
             return null;

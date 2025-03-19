@@ -6,6 +6,7 @@ import type { Season } from "../types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Dialog,
   DialogContent,
@@ -24,8 +25,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { PlusCircle, Pencil, Trash2, Loader2, Calendar } from "lucide-react"
+import { PlusCircle, Pencil, Trash2, Loader2, Calendar, CalendarIcon } from "lucide-react"
 import { motion } from "framer-motion"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useSession } from "next-auth/react"
+import CurrencyInput from "@/components/ui/input-currency"
 
 interface SeasonManagerProps {
   seasons: Season[]
@@ -35,24 +43,43 @@ interface SeasonManagerProps {
   onDelete: (id: string) => Promise<void>
 }
 
+const SEASON_TYPES = ["Đông Xuân", "Hè Thu", "Thu Đông"]
+
 const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd, onUpdate, onDelete }) => {
+  const { data: session } = useSession()
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState<Partial<Season>>({
-    muavu: "",
+    tenmuavu: SEASON_TYPES[0],
     nam: new Date().getFullYear().toString(),
+    ngaybatdau: format(new Date(), "dd-MM-yyyy"),
+    phuongphap: "",
+    giong: "",
+    dientich: 0,
+    soluong: 0,
+    giagiong: 0,
+    ghichu: "",
   })
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(null)
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(new Date())
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+  const handleCurrencyChange = (data: { name: string; value: number }) => {
+    const { name, value } = data
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   const handleAddSeason = async () => {
-    if (!formData.muavu || !formData.nam) return
+    if (!formData.tenmuavu || !formData.nam) return
 
     setIsSubmitting(true)
     try {
@@ -67,7 +94,7 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
   }
 
   const handleEditSeason = async () => {
-    if (!selectedSeason || !selectedSeason.muavu || !selectedSeason.nam) return
+    if (!selectedSeason || !selectedSeason.tenmuavu || !selectedSeason.nam) return
 
     setIsSubmitting(true)
     try {
@@ -96,6 +123,17 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
 
   const openEditDialog = (season: Season) => {
     setSelectedSeason({ ...season })
+    if (season.ngaybatdau) {
+      try {
+        const [day, month, year] = season.ngaybatdau.split("-").map(Number)
+        setSelectedStartDate(new Date(year, month - 1, day))
+      } catch (error) {
+        console.error("Error parsing date:", error)
+        setSelectedStartDate(undefined)
+      }
+    } else {
+      setSelectedStartDate(undefined)
+    }
     setIsEditDialogOpen(true)
   }
 
@@ -106,19 +144,56 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
 
   const resetForm = () => {
     setFormData({
-      muavu: "",
+      tenmuavu: SEASON_TYPES[0],
       nam: new Date().getFullYear().toString(),
+      ngaybatdau: format(new Date(), "dd-MM-yyyy"),
+      phuongphap: "",
+      giong: "",
+      dientich: 0,
+      soluong: 0,
+      giagiong: 0,
+      ghichu: "",
     })
+    setSelectedStartDate(new Date())
   }
 
-  const handleSelectedSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectedSeasonChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setSelectedSeason((prev) => (prev ? { ...prev, [name]: value } : null))
   }
 
-  // Generate years for dropdown (current year - 5 to current year + 5)
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 11 }, (_, i) => (currentYear - 5 + i).toString())
+  const handleSelectedSeasonCurrencyChange = (data: { name: string; value: number }) => {
+    const { name, value } = data
+    setSelectedSeason((prev) => (prev ? { ...prev, [name]: value } : null))
+  }
+
+  const handleStartDateChange = (date: Date | undefined) => {
+    if (date) {
+      setSelectedStartDate(date)
+      setFormData((prev) => ({
+        ...prev,
+        ngaybatdau: format(date, "dd-MM-yyyy"),
+      }))
+    }
+  }
+
+  const handleSelectedStartDateChange = (date: Date | undefined) => {
+    if (date && selectedSeason) {
+      setSelectedStartDate(date)
+      setSelectedSeason({
+        ...selectedSeason,
+        ngaybatdau: format(date, "dd-MM-yyyy"),
+      })
+    }
+  }
+
+  const handleSeasonTypeChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, tenmuavu: value }))
+  }
+
+  const handleSelectedSeasonTypeChange = (value: string) => {
+    setSelectedSeason((prev) => (prev ? { ...prev, tenmuavu: value } : null))
+  }
 
   return (
     <div className="space-y-6">
@@ -154,8 +229,10 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-semibold text-lg text-slate-800">{season.muavu}</h3>
+                  <h3 className="font-semibold text-lg text-slate-800">{season.tenmuavu}</h3>
                   <p className="text-sm text-slate-500">Năm: {season.nam}</p>
+                  {season.ngaybatdau && <p className="text-sm text-slate-500">Bắt đầu: {season.ngaybatdau}</p>}
+                  {season.giong && <p className="text-sm text-slate-500">Giống: {season.giong}</p>}
                 </div>
                 <div className="flex space-x-1">
                   <Button
@@ -183,30 +260,126 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
 
       {/* Add Season Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Thêm mùa vụ mới</DialogTitle>
             <DialogDescription>Nhập thông tin mùa vụ mới. Nhấn Lưu khi hoàn tất.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="tenmuavu">Tên mùa vụ</Label>
+                <Select value={formData.tenmuavu} onValueChange={handleSeasonTypeChange}>
+                  <SelectTrigger id="tenmuavu">
+                    <SelectValue placeholder="Chọn mùa vụ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SEASON_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="nam">Năm</Label>
+                <Input
+                  id="nam"
+                  name="nam"
+                  type="number"
+                  placeholder="Ví dụ: 2025"
+                  value={formData.nam}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="muavu">Tên mùa vụ</Label>
+              <Label htmlFor="ngaybatdau">Ngày bắt đầu</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal" id="ngaybatdau">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedStartDate ? format(selectedStartDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <CalendarComponent
+                    mode="single"
+                    selected={selectedStartDate}
+                    onSelect={handleStartDateChange}
+                    initialFocus
+                    locale={vi}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="phuongphap">Phương pháp canh tác</Label>
               <Input
-                id="muavu"
-                name="muavu"
-                placeholder="Ví dụ: Đông Xuân"
-                value={formData.muavu}
+                id="phuongphap"
+                name="phuongphap"
+                placeholder="Ví dụ: Sạ hàng"
+                value={formData.phuongphap}
                 onChange={handleInputChange}
               />
             </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="nam">Năm</Label>
+              <Label htmlFor="giong">Giống</Label>
               <Input
-                id="nam"
-                name="nam"
-                type="number"
-                placeholder="Ví dụ: 2024"
-                value={formData.nam}
+                id="giong"
+                name="giong"
+                placeholder="Ví dụ: Gạo Tân Hồng"
+                value={formData.giong}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="dientich">Diện tích (ha)</Label>
+                <Input
+                  id="dientich"
+                  name="dientich"
+                  type="number"
+                  placeholder="0"
+                  value={formData.dientich?.toString() || "0"}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="soluong">Số lượng (kg)</Label>
+                <Input
+                  id="soluong"
+                  name="soluong"
+                  type="number"
+                  placeholder="0"
+                  value={formData.soluong?.toString() || "0"}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="giagiong">Giá giống</Label>
+                <CurrencyInput
+                  id="giagiong"
+                  name="giagiong"
+                  value={formData.giagiong || 0}
+                  onChange={handleCurrencyChange}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="ghichu">Ghi chú</Label>
+              <Textarea
+                id="ghichu"
+                name="ghichu"
+                placeholder="Ghi chú thêm về mùa vụ"
+                value={formData.ghichu}
                 onChange={handleInputChange}
               />
             </div>
@@ -217,7 +390,7 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
             </Button>
             <Button
               onClick={handleAddSeason}
-              disabled={isSubmitting || !formData.muavu || !formData.nam}
+              disabled={isSubmitting || !formData.tenmuavu || !formData.nam}
               className="bg-lime-600 hover:bg-lime-700 text-white"
             >
               {isSubmitting ? (
@@ -235,30 +408,129 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
 
       {/* Edit Season Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Chỉnh sửa mùa vụ</DialogTitle>
             <DialogDescription>Chỉnh sửa thông tin mùa vụ. Nhấn Lưu khi hoàn tất.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-tenmuavu">Tên mùa vụ</Label>
+                <Select
+                  value={selectedSeason?.tenmuavu || SEASON_TYPES[0]}
+                  onValueChange={handleSelectedSeasonTypeChange}
+                >
+                  <SelectTrigger id="edit-tenmuavu">
+                    <SelectValue placeholder="Chọn mùa vụ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SEASON_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-nam">Năm</Label>
+                <Input
+                  id="edit-nam"
+                  name="nam"
+                  type="number"
+                  placeholder="Ví dụ: 2025"
+                  value={selectedSeason?.nam || ""}
+                  onChange={handleSelectedSeasonChange}
+                />
+              </div>
+            </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="edit-muavu">Tên mùa vụ</Label>
+              <Label htmlFor="edit-ngaybatdau">Ngày bắt đầu</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal" id="edit-ngaybatdau">
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedStartDate ? format(selectedStartDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <CalendarComponent
+                    mode="single"
+                    selected={selectedStartDate}
+                    onSelect={handleSelectedStartDateChange}
+                    initialFocus
+                    locale={vi}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="edit-phuongphap">Phương pháp canh tác</Label>
               <Input
-                id="edit-muavu"
-                name="muavu"
-                placeholder="Ví dụ: Đông Xuân"
-                value={selectedSeason?.muavu || ""}
+                id="edit-phuongphap"
+                name="phuongphap"
+                placeholder="Ví dụ: Sạ hàng"
+                value={selectedSeason?.phuongphap || ""}
                 onChange={handleSelectedSeasonChange}
               />
             </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="edit-nam">Năm</Label>
+              <Label htmlFor="edit-giong">Giống</Label>
               <Input
-                id="edit-nam"
-                name="nam"
-                type="number"
-                placeholder="Ví dụ: 2024"
-                value={selectedSeason?.nam || ""}
+                id="edit-giong"
+                name="giong"
+                placeholder="Ví dụ: Gạo Tân Hồng"
+                value={selectedSeason?.giong || ""}
+                onChange={handleSelectedSeasonChange}
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-dientich">Diện tích (ha)</Label>
+                <Input
+                  id="edit-dientich"
+                  name="dientich"
+                  type="number"
+                  placeholder="0"
+                  value={selectedSeason?.dientich?.toString() || "0"}
+                  onChange={handleSelectedSeasonChange}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-soluong">Số lượng (kg)</Label>
+                <Input
+                  id="edit-soluong"
+                  name="soluong"
+                  type="number"
+                  placeholder="0"
+                  value={selectedSeason?.soluong?.toString() || "0"}
+                  onChange={handleSelectedSeasonChange}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-giagiong">Giá giống</Label>
+                <CurrencyInput
+                  id="edit-giagiong"
+                  name="giagiong"
+                  value={selectedSeason?.giagiong || 0}
+                  onChange={handleSelectedSeasonCurrencyChange}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="edit-ghichu">Ghi chú</Label>
+              <Textarea
+                id="edit-ghichu"
+                name="ghichu"
+                placeholder="Ghi chú thêm về mùa vụ"
+                value={selectedSeason?.ghichu || ""}
                 onChange={handleSelectedSeasonChange}
               />
             </div>
@@ -269,7 +541,7 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
             </Button>
             <Button
               onClick={handleEditSeason}
-              disabled={isSubmitting || !selectedSeason?.muavu || !selectedSeason?.nam}
+              disabled={isSubmitting || !selectedSeason?.tenmuavu || !selectedSeason?.nam}
               className="bg-lime-600 hover:bg-lime-700 text-white"
             >
               {isSubmitting ? (
@@ -291,8 +563,8 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
           <AlertDialogHeader>
             <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
             <AlertDialogDescription>
-              Bạn có chắc chắn muốn xóa mùa vụ "{selectedSeason?.muavu}"? Hành động này không thể hoàn tác và có thể ảnh
-              hưởng đến dữ liệu nhật ký canh tác.
+              Bạn có chắc chắn muốn xóa mùa vụ "{selectedSeason?.tenmuavu}"? Hành động này không thể hoàn tác và có thể
+              ảnh hưởng đến dữ liệu nhật ký canh tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

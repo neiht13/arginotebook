@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/mongo/client"
+import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/authOption"

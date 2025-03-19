@@ -1,6 +1,6 @@
 "use client"
 
-import type { TimelineEntry } from "./types"
+import type { TimelineEntry } from "../types"
 import { motion } from "framer-motion"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"

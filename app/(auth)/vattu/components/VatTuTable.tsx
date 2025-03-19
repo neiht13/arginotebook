@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, MoreVertical, AlertCircle } from "lucide-react"
 import { format, isAfter, parseISO } from "date-fns"
 import { vi } from "date-fns/locale"
-import type { VatTu } from "./types"
+import type { VatTu } from "../types"
 import {
   AlertDialog,
   AlertDialogAction,

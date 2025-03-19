@@ -597,7 +597,7 @@ export default function QuanlyThuhoach() {
                               outerRadius={100}
                               fill="#8884d8"
                               dataKey="value"
-                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                              label={({ name, percent }) => `${name}: ${(percent * 100)?.toFixed(0)}%`}
                             >
                               {preparePieChartData().map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

@@ -1,9 +1,10 @@
+import { Toaster } from "@/components/ui/toaster"
 import type React from "react"
-import "react-toastify/dist/ReactToastify.css"
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <Toaster />
       {children}
     </>
   )
