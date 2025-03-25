@@ -247,15 +247,15 @@ export default function CertificationsTab() {
                     <Badge className={getStatusColor(cert.status)}>{getStatusText(cert.status)}</Badge>
                   </div>
                   <p className="text-sm text-slate-600 flex items-center">
-                    <Building className="h-4 w-4 mr-1 text-lime-600" />
+                    <Building className="h-4 w-4 mr-1 text-lime-700" />
                     {cert.issuer}
                   </p>
                 </CardHeader>
                 <CardContent className="flex-grow p-4">
                   <div className="space-y-2 text-sm text-slate-600">
-                    <p><CalendarIcon className="h-4 w-4 mr-2 inline text-lime-600" />Ngày cấp: {format(new Date(cert.issueDate), "dd/MM/yyyy", { locale: vi })}</p>
+                    <p><CalendarIcon className="h-4 w-4 mr-2 inline text-lime-700" />Ngày cấp: {format(new Date(cert.issueDate), "dd/MM/yyyy", { locale: vi })}</p>
                     {cert.expiryDate && (
-                      <p><CalendarIcon className="h-4 w-4 mr-2 inline text-lime-600" />Hết hạn: {format(new Date(cert.expiryDate), "dd/MM/yyyy", { locale: vi })}</p>
+                      <p><CalendarIcon className="h-4 w-4 mr-2 inline text-lime-700" />Hết hạn: {format(new Date(cert.expiryDate), "dd/MM/yyyy", { locale: vi })}</p>
                     )}
                     {cert.description && <p className="line-clamp-2 mt-2">{cert.description}</p>}
                   </div>

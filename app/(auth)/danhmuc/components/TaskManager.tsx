@@ -225,7 +225,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
         <div className="flex flex-col md:flex-row gap-4 flex-1">
           <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
             <Input
               placeholder="Tìm kiếm công việc..."
               className="pl-8 border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
@@ -272,7 +272,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-lime-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-lime-700" />
         </div>
       ) : stages.length === 0 ? (
         <div className="text-center py-12 bg-slate-50 rounded-lg">
@@ -284,7 +284,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
           <Button
             onClick={() => setActiveTab("stages")}
             variant="outline"
-            className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-700"
+            className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-800"
           >
             Quản lý giai đoạn
           </Button>
@@ -310,7 +310,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
               setSelectedStageFilter("")
             }}
             variant="outline"
-            className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-700"
+            className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-800"
           >
             <X className="mr-2 h-4 w-4" />
             Xóa bộ lọc
@@ -346,7 +346,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
                       variant="ghost"
                       size="icon"
                       onClick={() => openEditDialog(task)}
-                      className="h-8 w-8 text-slate-500 hover:text-lime-600"
+                      className="h-8 w-8 text-slate-500 hover:text-lime-700"
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
@@ -386,7 +386,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
                     variant="outline"
                     onClick={() => setIsAddDialogOpen(false)}
                     disabled={isSubmitting}
-                    className="border-lime-200 hover:bg-lime-50 text-lime-700"
+                    className="border-lime-200 hover:bg-lime-50 text-lime-800"
                   >
                     Hủy
                   </Button>
@@ -426,7 +426,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
                     variant="outline"
                     onClick={() => setIsEditDialogOpen(false)}
                     disabled={isSubmitting}
-                    className="border-lime-200 hover:bg-lime-50 text-lime-700"
+                    className="border-lime-200 hover:bg-lime-50 text-lime-800"
                   >
                     Hủy
                   </Button>

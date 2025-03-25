@@ -152,7 +152,7 @@ const ModernTimelineEntry: FC<ModernTimelineEntryProps> = ({ entry, onEdit, isLa
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-slate-500 hover:text-lime-600"
+                  className="h-8 w-8 text-slate-500 hover:text-lime-700"
                   onClick={() => onEdit(entry)}
                 >
                   <Edit className="h-4 w-4" />
@@ -179,11 +179,11 @@ const ModernTimelineEntry: FC<ModernTimelineEntryProps> = ({ entry, onEdit, isLa
                 {/* Always visible content */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-lime-600" />
+                    <DollarSign className="h-4 w-4 text-lime-700" />
                     <span className="text-sm">Chi phí công: {formatCurrency(entry.chiPhiCong)}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-lime-600" />
+                    <DollarSign className="h-4 w-4 text-lime-700" />
                     <span className="text-sm">
                       Chi phí vật tư: {formatCurrency(agrochemicalCost > 0 ? agrochemicalCost : entry.chiPhiVatTu)}
                     </span>
@@ -261,7 +261,7 @@ const ModernTimelineEntry: FC<ModernTimelineEntryProps> = ({ entry, onEdit, isLa
                 <div className="mt-1 pt-3 border-t border-slate-100 flex justify-between items-center">
                   <div>
                     <p className="text-xs text-slate-500">Tổng chi phí:</p>
-                    <p className="text-lg font-bold text-lime-600">{formatCurrency(totalCost)}</p>
+                    <p className="text-lg font-bold text-lime-700">{formatCurrency(totalCost)}</p>
                   </div>
                   <TooltipProvider>
                     <Tooltip>

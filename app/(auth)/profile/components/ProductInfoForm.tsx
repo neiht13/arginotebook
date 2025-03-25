@@ -153,7 +153,7 @@ export default function ProductInfoForm() {
   };
 
   if (isLoading) {
-    return <div className="flex justify-center py-12"><svg className="animate-spin h-8 w-8 text-lime-600" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg></div>;
+    return <div className="flex justify-center py-12"><svg className="animate-spin h-8 w-8 text-lime-700" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg></div>;
   }
 
   return (
@@ -166,7 +166,7 @@ export default function ProductInfoForm() {
     >
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="name" className="flex items-center text-slate-700">
-          <Info className="w-4 h-4 mr-2 text-lime-600" />
+          <Info className="w-4 h-4 mr-2 text-lime-700" />
           Tên sản phẩm <span className="text-red-500">*</span>
         </Label>
         <Input
@@ -182,7 +182,7 @@ export default function ProductInfoForm() {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="description" className="flex items-center text-slate-700">
-          <Info className="w-4 h-4 mr-2 text-lime-600" />
+          <Info className="w-4 h-4 mr-2 text-lime-700" />
           Mô tả sản phẩm
         </Label>
         <Textarea
@@ -197,7 +197,7 @@ export default function ProductInfoForm() {
 
       <motion.div className="space-y-4" variants={itemVariants}>
         <Label className="flex items-center text-slate-700">
-          <ImagePlus className="w-4 h-4 mr-2 text-lime-600" />
+          <ImagePlus className="w-4 h-4 mr-2 text-lime-700" />
           Hình ảnh sản phẩm (tối đa 5)
         </Label>
         <div className="flex items-center gap-4">
@@ -233,7 +233,7 @@ export default function ProductInfoForm() {
         )}
         {success && (
           <Alert>
-            <CheckCircle className="h-4 w-4 text-lime-600" />
+            <CheckCircle className="h-4 w-4 text-lime-700" />
             <AlertDescription>{success}</AlertDescription>
           </Alert>
         )}

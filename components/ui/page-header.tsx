@@ -22,7 +22,7 @@ export function PageHeader({ title, description, icon, actions, className }: Pag
     >
       <div className="flex items-center gap-3">
         {icon && (
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-lime-100 text-lime-700">{icon}</div>
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-lime-100 text-lime-800">{icon}</div>
         )}
         <div>
           <h1 className="text-2xl font-bold text-slate-800">{title}</h1>

@@ -162,7 +162,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-lime-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-lime-700" />
         </div>
       ) : stages.length === 0 ? (
         <div className="text-center py-12 bg-slate-50 rounded-lg">
@@ -199,7 +199,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
                     variant="ghost"
                     size="icon"
                     onClick={() => openEditDialog(stage)}
-                    className="h-8 w-8 text-slate-500 hover:text-lime-600"
+                    className="h-8 w-8 text-slate-500 hover:text-lime-700"
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>

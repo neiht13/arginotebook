@@ -193,14 +193,14 @@ export default function VatTuPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="icon" onClick={handleRefresh} className="h-9 w-9 rounded-full bg-white">
-                <RefreshCw className="h-4 w-4 text-lime-600" />
+                <RefreshCw className="h-4 w-4 text-lime-700" />
               </Button>
 
               {isMobile ? (
                 <Drawer>
                   <DrawerTrigger asChild>
                     <Button variant="outline" size="icon" className="h-9 w-9 rounded-full bg-white">
-                      <BarChart3 className="h-4 w-4 text-lime-600" />
+                      <BarChart3 className="h-4 w-4 text-lime-700" />
                     </Button>
                   </DrawerTrigger>
                   <DrawerContent className="p-4 max-h-[90vh] overflow-auto">
@@ -214,7 +214,7 @@ export default function VatTuPage() {
                   onClick={toggleStats}
                   className={`h-9 w-9 rounded-full ${showStats ? "bg-lime-200" : "bg-white"}`}
                 >
-                  <BarChart3 className="h-4 w-4 text-lime-600" />
+                  <BarChart3 className="h-4 w-4 text-lime-700" />
                 </Button>
               )}
 
@@ -224,7 +224,7 @@ export default function VatTuPage() {
                 onClick={handleExportData}
                 className="h-9 w-9 rounded-full bg-white"
               >
-                <Download className="h-4 w-4 text-lime-600" />
+                <Download className="h-4 w-4 text-lime-700" />
               </Button>
 
               <Button
@@ -242,7 +242,7 @@ export default function VatTuPage() {
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="relative flex-1">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
                 <Input
                   placeholder="Tìm kiếm vật tư..."
                   className="pl-8 border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
@@ -252,7 +252,7 @@ export default function VatTuPage() {
               </div>
               <Select value={filterType} onValueChange={setFilterType}>
                 <SelectTrigger className="w-full md:w-[180px] border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500">
-                  <Filter className="mr-2 h-4 w-4 text-lime-600" />
+                  <Filter className="mr-2 h-4 w-4 text-lime-700" />
                   <SelectValue placeholder="Lọc theo loại" />
                 </SelectTrigger>
                 <SelectContent>
@@ -271,25 +271,25 @@ export default function VatTuPage() {
                   <TabsList className="grid w-full grid-cols-4 mb-4 bg-white border-b border-lime-200">
                     <TabsTrigger
                       value="all"
-                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                     >
                       Tất cả <Badge className="bg-lime-200 text-lime-800">{tabCounts.all}</Badge>
                     </TabsTrigger>
                     <TabsTrigger
                       value="thuốc"
-                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                     >
                       Thuốc <Badge className="bg-lime-200 text-lime-800">{tabCounts.thuốc}</Badge>
                     </TabsTrigger>
                     <TabsTrigger
                       value="phân"
-                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                     >
                       Phân bón <Badge className="bg-lime-200 text-lime-800">{tabCounts.phân}</Badge>
                     </TabsTrigger>
                     <TabsTrigger
                       value="khác"
-                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                      className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                     >
                       Khác <Badge className="bg-lime-200 text-lime-800">{tabCounts.khác}</Badge>
                     </TabsTrigger>

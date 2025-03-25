@@ -681,7 +681,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
                   className="w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500"
                   id="date"
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4 text-lime-600" />
+                  <CalendarIcon className="mr-2 h-4 w-4 text-lime-700" />
                   {selectedDate ? format(selectedDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                 </Button>
               </PopoverTrigger>
@@ -901,7 +901,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
               variant="outline"
               size="sm"
               onClick={() => setShowAgrochemicals(!showAgrochemicals)}
-              className="h-8 border-lime-200 hover:bg-lime-50 text-lime-700"
+              className="h-8 border-lime-200 hover:bg-lime-50 text-lime-800"
             >
               {showAgrochemicals ? "Ẩn" : "Hiện"}
             </Button>
@@ -1000,7 +1000,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
                             onClick={() => setSelectedSupply(null)}
                             className="h-8 w-8 p-0 hover:bg-lime-50"
                           >
-                            <X className="h-4 w-4 text-lime-600" />
+                            <X className="h-4 w-4 text-lime-700" />
                           </Button>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
@@ -1081,7 +1081,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
                           <Button
                             type="button"
                             onClick={addAgrochemical}
-                            className="w-full h-8 border-lime-200 hover:bg-lime-50 text-lime-700"
+                            className="w-full h-8 border-lime-200 hover:bg-lime-50 text-lime-800"
                             disabled={!newAgrochemical.name || !newAgrochemical.lieuLuong}
                             variant="outline"
                           >
@@ -1208,7 +1208,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
                 variant="outline"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="border-lime-200 hover:bg-lime-50 text-lime-700"
+                className="border-lime-200 hover:bg-lime-50 text-lime-800"
               >
                 Hủy
               </Button>
@@ -1253,7 +1253,7 @@ const EnhancedAddEditModal = ({ isOpen, onClose, onSubmit, entry, isOffline }: E
             variant="outline"
             onClick={onClose}
             disabled={isSubmitting}
-            className="border-lime-200 hover:bg-lime-50 text-lime-700"
+            className="border-lime-200 hover:bg-lime-50 text-lime-800"
           >
             Hủy
           </Button>

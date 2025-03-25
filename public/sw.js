@@ -6,8 +6,8 @@ const STATIC_ASSETS = [
   "/offline",
   "/manifest.json",
   "/favicon.ico",
-  "/images/icons/icon-192x192.png",
-  "/images/icons/icon-512x512.png",
+  "/images/180.png",
+  "/images/512.png",
 ]
 
 // API endpoints to cache for offline use

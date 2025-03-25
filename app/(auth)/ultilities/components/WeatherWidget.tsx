@@ -218,7 +218,7 @@ export default function WeatherWidget() {
           <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
             <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
               <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-                <Search className="w-5 h-5 text-lime-700 animate-pulse" />
+                <Search className="w-5 h-5 text-lime-800 animate-pulse" />
                 Tra Cứu Thời Tiết
               </CardTitle>
             </CardHeader>
@@ -230,11 +230,11 @@ export default function WeatherWidget() {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Nhập tên thành phố..."
-                    className="flex-1 rounded-xl border-gray-200 focus:border-lime-500 shadow-md bg-white/80 transition-all duration-200"
+                    className="flex-1 rounded-lg border-gray-200 focus:border-lime-500 shadow-md bg-white/80 transition-all duration-200"
                   />
                   <Button
                     type="submit"
-                    className="bg-lime-600 hover:bg-lime-700 rounded-xl shadow-md text-white"
+                    className="bg-lime-600 hover:bg-lime-700 rounded-lg shadow-md text-white"
                     disabled={isLoading}
                   >
                     {isLoading ? <Spinner className="w-4 h-4" /> : <Search className="w-4 h-4" />}
@@ -244,7 +244,7 @@ export default function WeatherWidget() {
                   type="button"
                   variant="outline"
                   onClick={handleLocateMe}
-                  className="w-full border-lime-600 text-lime-700 hover:bg-lime-50 rounded-xl shadow-md bg-white/80 transition-all duration-200"
+                  className="w-full border-lime-600 text-lime-800 hover:bg-lime-50 rounded-lg shadow-md bg-white/80 transition-all duration-200"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -303,7 +303,7 @@ export default function WeatherWidget() {
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: idx * 0.1 }}
-                      className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl shadow-sm hover:bg-gray-100 transition-all duration-200"
+                      className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-200"
                     >
                       <item.icon className="w-6 h-6 text-indigo-600 animate-pulse" />
                       <div>
@@ -327,7 +327,7 @@ export default function WeatherWidget() {
             <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
               <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
                 <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-                  <Wind className="w-5 h-5 text-lime-700 animate-spin-slow" />
+                  <Wind className="w-5 h-5 text-lime-800 animate-spin-slow" />
                   Chất Lượng Không Khí
                 </CardTitle>
               </CardHeader>
@@ -357,13 +357,13 @@ export default function WeatherWidget() {
           <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
             <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
               <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-                <Thermometer className="w-5 h-5 text-lime-700 animate-pulse" />
+                <Thermometer className="w-5 h-5 text-lime-800 animate-pulse" />
                 Xu Hướng Nhiệt Độ 5 Ngày
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               {isLoading ? (
-                <Skeleton className="h-[400px] w-full rounded-xl" />
+                <Skeleton className="h-[400px] w-full rounded-lg" />
               ) : forecast.length > 0 ? (
                 <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={prepareChartData()}>
@@ -411,7 +411,7 @@ export default function WeatherWidget() {
           <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
             <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
               <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-                <Cloud className="w-5 h-5 text-lime-700 animate-bounce" />
+                <Cloud className="w-5 h-5 text-lime-800 animate-bounce" />
                 Dự Báo 5 Ngày
               </CardTitle>
             </CardHeader>
@@ -419,7 +419,7 @@ export default function WeatherWidget() {
               {isLoading ? (
                 <div className="space-y-6">
                   {Array(3).fill(0).map((_, i) => (
-                    <Skeleton key={i} className="h-36 w-full rounded-xl" />
+                    <Skeleton key={i} className="h-36 w-full rounded-lg" />
                   ))}
                 </div>
               ) : forecast.length > 0 ? (
@@ -430,7 +430,7 @@ export default function WeatherWidget() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white shadow-md rounded-xl p-5 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                      className="bg-white shadow-md rounded-lg p-5 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                     >
                       <p className="text-sm font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
                         {day.date}
@@ -478,7 +478,7 @@ export default function WeatherWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
-            className="mt-8 p-6 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-center shadow-lg max-w-2xl mx-auto"
+            className="mt-8 p-6 rounded-lg bg-red-50 border border-red-200 text-red-700 flex items-center shadow-lg max-w-2xl mx-auto"
           >
             <AlertCircle className="w-6 h-6 mr-3 animate-bounce" />
             <span className="font-medium text-lg">{error}</span>

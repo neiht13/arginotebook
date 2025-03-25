@@ -181,7 +181,7 @@ export const IconPicker = ({ value = "FileText", onChange }: IconPickerProps) =>
                 size="icon"
                 className={cn(
                   "h-10 w-10 rounded-md flex items-center justify-center",
-                  value === icon && "bg-lime-100 text-lime-700",
+                  value === icon && "bg-lime-100 text-lime-800",
                 )}
                 onClick={() => {
                   onChange(icon)

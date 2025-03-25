@@ -20,7 +20,6 @@ module.exports = {
       'text-slate-700',
       'text-red-500',
       'text-lime-500',
-      'text-lime-500',
       'text-yellow-500',
     ],
   theme: {

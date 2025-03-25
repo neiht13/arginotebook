@@ -14,7 +14,7 @@ const Tab: React.FC<TabProps> = ({ label, active, onClick, icon }) => {
   return (
     <button
       className={`px-4 py-2 mr-2 rounded-t-lg transition-all duration-200 ${
-        active ? "bg-lime-100 text-lime-700 font-medium" : "bg-white text-slate-600 hover:bg-slate-50"
+        active ? "bg-lime-100 text-lime-800 font-medium" : "bg-white text-slate-600 hover:bg-slate-50"
       }`}
       onClick={onClick}
     >

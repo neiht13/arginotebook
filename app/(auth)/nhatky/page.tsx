@@ -394,7 +394,7 @@ export default function TimelinePage() {
                 className="h-9 w-9 rounded-full bg-white"
                 title={isOnline ? "Làm mới" : "Làm mới (ngoại tuyến)"}
               >
-                <RefreshCw className="h-4 w-4 text-lime-600" />
+                <RefreshCw className="h-4 w-4 text-lime-700" />
               </Button>
 
               <Button
@@ -402,7 +402,7 @@ export default function TimelinePage() {
                 size="icon"
                 onClick={handleManualSync}
                 className={`h-9 w-9 rounded-full bg-white ${
-                  isOnline ? (hasPendingChanges ? "text-blue-600" : "text-lime-600") : "text-amber-600"
+                  isOnline ? (hasPendingChanges ? "text-blue-600" : "text-lime-700") : "text-amber-600"
                 }`}
                 title={isOnline ? "Đồng bộ dữ liệu" : "Đang ở chế độ ngoại tuyến"}
               >
@@ -416,7 +416,7 @@ export default function TimelinePage() {
                 className="h-9 w-9 rounded-full bg-white"
                 title="Xuất dữ liệu"
               >
-                <Download className="h-4 w-4 text-lime-600" />
+                <Download className="h-4 w-4 text-lime-700" />
               </Button>
 
               <Button
@@ -464,7 +464,7 @@ export default function TimelinePage() {
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="relative flex-1">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
                 <Input
                   placeholder="Tìm kiếm nhật ký..."
                   className="pl-8 border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
@@ -476,7 +476,7 @@ export default function TimelinePage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center h-10 border-lime-200 hover:bg-lime-50 text-lime-700"
+                className="flex items-center h-10 border-lime-200 hover:bg-lime-50 text-lime-800"
               >
                 <Filter className="mr-2 h-4 w-4" />
                 Bộ lọc
@@ -511,7 +511,7 @@ export default function TimelinePage() {
                         variant="outline"
                         className="w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500"
                       >
-                        <Calendar className="mr-2 h-4 w-4 text-lime-600" />
+                        <Calendar className="mr-2 h-4 w-4 text-lime-700" />
                         {dateRange?.from ? (
                           dateRange.to ? (
                             <>
@@ -544,7 +544,7 @@ export default function TimelinePage() {
                     variant="ghost"
                     size="sm"
                     onClick={clearFilters}
-                    className="text-slate-600 hover:bg-lime-100 hover:text-lime-700"
+                    className="text-slate-600 hover:bg-lime-100 hover:text-lime-800"
                   >
                     <Filter className="mr-2 h-4 w-4" />
                     Xóa bộ lọc
@@ -576,14 +576,14 @@ export default function TimelinePage() {
                   <TabsTrigger
                     value="timeline"
                     onClick={() => setActiveView("timeline")}
-                    className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                    className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                   >
                     Timeline
                   </TabsTrigger>
                   <TabsTrigger
                     value="calendar"
                     onClick={() => setActiveView("calendar")}
-                    className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                    className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                   >
                     <Calendar className="h-4 w-4 mr-2" />
                     Lịch

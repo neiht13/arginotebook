@@ -25,7 +25,7 @@ const NavItem = ({ href, icon, label, isActive, onClick }: NavItemProps) => (
     onClick={onClick}
     className={cn(
       "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
-      isActive ? "bg-lime-100 text-lime-700 font-medium" : "text-slate-600 hover:bg-slate-100",
+      isActive ? "bg-lime-100 text-lime-800 font-medium" : "text-slate-600 hover:bg-slate-100",
     )}
   >
     {icon}
@@ -50,7 +50,7 @@ const BottomNavItem = ({ href, icon, label, isActive, onClick }: NavItemProps) =
     onClick={onClick}
     className={cn(
       "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
-      isActive ? "text-lime-600" : "text-slate-500",
+      isActive ? "text-lime-700" : "text-slate-500",
     )}
   >
     <div className="relative">
@@ -86,8 +86,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [])
 
   const navItems = [
-    { href: "/timeline", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
-    { href: "/category", icon: <LayoutDashboard className="w-5 h-5" />, label: "Danh mục" },
+    { href: "/nhatky", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
+    { href: "/danhmuc", icon: <LayoutDashboard className="w-5 h-5" />, label: "Danh mục" },
     { href: "/vattu", icon: <Package className="w-5 h-5" />, label: "Vật tư" },
     { href: "/statistics", icon: <BarChart2 className="w-5 h-5" />, label: "Thống kê" },
     { href: "/ultilities", icon: <Settings className="w-5 h-5" />, label: "Tiện ích" },
@@ -97,8 +97,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   // Mobile navigation items (limited to 5 for bottom nav)
   const mobileNavItems = [
-    { href: "/timeline", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
-    { href: "/category", icon: <LayoutDashboard className="w-5 h-5" />, label: "Danh mục" },
+    { href: "/nhatky", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
+    { href: "/danhmuc", icon: <LayoutDashboard className="w-5 h-5" />, label: "Danh mục" },
+    { href: "/vattu", icon: <Package className="w-5 h-5" />, label: "Vật tư" },
     { href: "/statistics", icon: <BarChart2 className="w-5 h-5" />, label: "Thống kê" },
     { href: "/ultilities", icon: <Settings className="w-5 h-5" />, label: "Tiện ích" },
     { href: "/profile", icon: <User className="w-5 h-5" />, label: "Người dùng" },
@@ -113,7 +114,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex md:flex-col md:w-64 p-4 bg-white border-r border-slate-200 shadow-sm">
         <div className="flex items-center gap-2 px-2 py-4">
-          <Leaf className="w-8 h-8 text-lime-600" />
+          <Leaf className="w-8 h-8 text-lime-700" />
           <h1 className="text-xl font-bold text-slate-800">Nhật ký canh tác</h1>
         </div>
 
@@ -149,7 +150,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
       >
         <div className="flex items-center gap-2">
-          <Leaf className="w-6 h-6 text-lime-600" />
+          <Leaf className="w-6 h-6 text-lime-700" />
           <h1 className="text-lg font-bold text-slate-800">Nhật ký canh tác</h1>
         </div>
       </div> 
@@ -174,7 +175,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center gap-2 px-2 py-4">
-                <Leaf className="w-8 h-8 text-lime-600" />
+                <Leaf className="w-8 h-8 text-lime-700" />
                 <h1 className="text-xl font-bold text-slate-800">Nhật ký canh tác</h1>
               </div>
 

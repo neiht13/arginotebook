@@ -323,7 +323,7 @@ export default function QuanlyThuhoach() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-lime-700 border-lime-200 hover:bg-lime-50"
+                  className="text-lime-800 border-lime-200 hover:bg-lime-50"
                   onClick={exportToCSV}
                 >
                   <FileSpreadsheet className="w-4 h-4 mr-1" />
@@ -520,7 +520,7 @@ export default function QuanlyThuhoach() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 text-gray-500 hover:text-lime-600"
+                                className="h-8 w-8 text-gray-500 hover:text-lime-700"
                                 onClick={() => startEditing(record)}
                                 disabled={isAdding || isEditing !== null}
                               >
@@ -671,7 +671,7 @@ export default function QuanlyThuhoach() {
 
                         return Array.from(unitMap.entries()).map(([unit, quantity]) => (
                           <div key={unit} className="bg-white p-2 rounded border border-lime-100">
-                            <p className="text-2xl font-bold text-lime-700">{quantity}</p>
+                            <p className="text-2xl font-bold text-lime-800">{quantity}</p>
                             <p className="text-sm text-gray-500">{unit}</p>
                           </div>
                         ))

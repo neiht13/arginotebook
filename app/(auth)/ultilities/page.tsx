@@ -29,7 +29,7 @@ export default function UtilitiesPage() {
     <div className="container mx-auto p-4 bg-lime-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <motion.h1 
-          className="text-3xl font-bold mb-6 text-emerald-800 border-b pb-2"
+          className="text-3xl font-bold mb-6 text-lime-800 border-b pb-2"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

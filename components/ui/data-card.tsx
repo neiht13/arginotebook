@@ -37,7 +37,7 @@ export function DataCard({ title, value, icon, description, trend, className, on
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-sm font-medium text-slate-500">{title}</CardTitle>
           {icon && (
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-lime-100 text-lime-700">{icon}</div>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-lime-100 text-lime-800">{icon}</div>
           )}
         </CardHeader>
         <CardContent>

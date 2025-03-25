@@ -204,7 +204,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
         <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
           <Input
             placeholder="Tìm kiếm giai đoạn..."
             className="pl-8 border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
@@ -230,7 +230,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-lime-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-lime-700" />
         </div>
       ) : filteredStages.length === 0 ? (
         <div className="text-center py-12 bg-slate-50 rounded-lg">
@@ -248,7 +248,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
               variant="outline"
               size="sm"
               onClick={() => setSearchTerm("")}
-              className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-700"
+              className="mt-4 border-lime-200 hover:bg-lime-50 text-lime-800"
             >
               <X className="mr-2 h-4 w-4" />
               Xóa tìm kiếm
@@ -282,7 +282,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
                     variant="ghost"
                     size="icon"
                     onClick={() => openEditDialog(stage)}
-                    className="h-8 w-8 text-slate-500 hover:text-lime-600"
+                    className="h-8 w-8 text-slate-500 hover:text-lime-700"
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -321,7 +321,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
                     variant="outline"
                     onClick={() => setIsAddDialogOpen(false)}
                     disabled={isSubmitting}
-                    className="border-lime-200 hover:bg-lime-50 text-lime-700"
+                    className="border-lime-200 hover:bg-lime-50 text-lime-800"
                   >
                     Hủy
                   </Button>
@@ -361,7 +361,7 @@ const StageManager: React.FC<StageManagerProps> = ({ stages, isLoading, onAdd, o
                     variant="outline"
                     onClick={() => setIsEditDialogOpen(false)}
                     disabled={isSubmitting}
-                    className="border-lime-200 hover:bg-lime-50 text-lime-700"
+                    className="border-lime-200 hover:bg-lime-50 text-lime-800"
                   >
                     Hủy
                   </Button>

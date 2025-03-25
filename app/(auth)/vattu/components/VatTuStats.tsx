@@ -50,10 +50,10 @@ export default function VatTuStats({ data }: VatTuStatsProps) {
     <div className="space-y-4">
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-4">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800">
             Tổng quan
           </TabsTrigger>
-          <TabsTrigger value="charts" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+          <TabsTrigger value="charts" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800">
             Biểu đồ
           </TabsTrigger>
         </TabsList>

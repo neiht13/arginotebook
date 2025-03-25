@@ -190,7 +190,7 @@ export default function UnitManagement() {
       <CardContent>
         <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
             <Input
               placeholder="Tìm kiếm đơn vị..."
               value={searchTerm}
@@ -234,7 +234,7 @@ export default function UnitManagement() {
                     <p className="text-sm text-slate-500 mt-2">Diện tích: {unit.dientich?.toFixed(2)} ha</p>
                   </div>
                   <div className="flex space-x-1">
-                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(unit)} className="h-8 w-8 text-slate-500 hover:text-lime-600">
+                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(unit)} className="h-8 w-8 text-slate-500 hover:text-lime-700">
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(unit)} className="h-8 w-8 text-slate-500 hover:text-red-600">

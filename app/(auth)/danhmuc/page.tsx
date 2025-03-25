@@ -230,7 +230,7 @@ export default function CategoryPage() {
                 className="h-9 w-9 rounded-full bg-white"
                 title="Làm mới"
               >
-                <RefreshCw className="h-4 w-4 text-lime-600" />
+                <RefreshCw className="h-4 w-4 text-lime-700" />
               </Button>
             </div>
           </CardHeader>
@@ -239,21 +239,21 @@ export default function CategoryPage() {
               <TabsList className="grid w-full grid-cols-3 mb-4 bg-white border-b border-lime-200">
                 <TabsTrigger
                   value="seasons"
-                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                 >
                   <Calendar className="h-4 w-4 mr-2" />
                   Mùa vụ
                 </TabsTrigger>
                 <TabsTrigger
                   value="stages"
-                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                 >
                   <Layers className="h-4 w-4 mr-2" />
                   Giai đoạn
                 </TabsTrigger>
                 <TabsTrigger
                   value="tasks"
-                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
+                  className="py-3 flex items-center justify-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800 data-[state=active]:border-b-2 data-[state=active]:border-lime-500 hover:bg-lime-50"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Công việc

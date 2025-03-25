@@ -341,7 +341,7 @@ export default function CultivationMap() {
         <Card className="lg:col-span-1 shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300">
           <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
             <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-              <Users className="w-5 h-5 text-lime-700 animate-pulse" />
+              <Users className="w-5 h-5 text-lime-800 animate-pulse" />
               Quản Lý Người Dùng
             </CardTitle>
           </CardHeader>
@@ -356,7 +356,7 @@ export default function CultivationMap() {
                 <Input
                   id="search"
                   placeholder="Tên, mã đơn vị, cây trồng..."
-                  className="pl-10 rounded-xl shadow-md border-gray-200 focus:border-lime-500 bg-white/80"
+                  className="pl-10 rounded-lg shadow-md border-gray-200 focus:border-lime-500 bg-white/80"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -371,14 +371,14 @@ export default function CultivationMap() {
               <div className="grid grid-cols-2 gap-3">
                 {loading ? (
                   <>
-                    <Skeleton className="h-10 rounded-xl" />
-                    <Skeleton className="h-10 rounded-xl" />
+                    <Skeleton className="h-10 rounded-lg" />
+                    <Skeleton className="h-10 rounded-lg" />
                   </>
                 ) : (
                   <>
                     <select
                       id="xid-filter"
-                      className="flex h-10 w-full rounded-xl border border-gray-200 bg-white/80 px-3 py-2 text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+                      className="flex h-10 w-full rounded-lg border border-gray-200 bg-white/80 px-3 py-2 text-sm shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500"
                       value={xIdFilter}
                       onChange={(e) => setXIdFilter(e.target.value)}
                     >
@@ -392,7 +392,7 @@ export default function CultivationMap() {
                     <Button 
                       variant="outline" 
                       onClick={resetFilters}
-                      className="flex items-center gap-2 border-lime-600 text-lime-700 hover:bg-lime-50 rounded-xl shadow-md"
+                      className="flex items-center gap-2 border-lime-600 text-lime-800 hover:bg-lime-50 rounded-lg shadow-md"
                     >
                       <RefreshCw className="w-4 h-4 animate-spin-slow" />
                       Đặt Lại
@@ -408,7 +408,7 @@ export default function CultivationMap() {
               <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                 {loading ? (
                   Array(5).fill(0).map((_, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
+                    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
                       <Skeleton className="h-12 w-12 rounded-full" />
                       <div className="space-y-2 flex-1">
                         <Skeleton className="h-4 w-3/4" />
@@ -423,7 +423,7 @@ export default function CultivationMap() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-white shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                      className="flex items-center gap-4 p-4 rounded-lg bg-white shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                       onClick={() => {
                         if (mapRef.current && markerClusterGroupRef.current) {
                           const marker = markerClusterGroupRef.current.getLayers().find((layer: any) => {
@@ -472,20 +472,20 @@ export default function CultivationMap() {
         <Card className="lg:col-span-2 shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300">
           <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200 flex flex-row items-center justify-between">
             <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-lime-700 animate-bounce" />
+              <MapPin className="w-5 h-5 text-lime-800 animate-bounce" />
               Bản Đồ Vùng Canh Tác
             </CardTitle>
             <div className="flex gap-3">
               <Button
                 onClick={toggleMapView}
-                className="flex items-center gap-2 bg-lime-600 hover:bg-lime-700 text-white rounded-xl shadow-md"
+                className="flex items-center gap-2 bg-lime-600 hover:bg-lime-700 text-white rounded-lg shadow-md"
               >
                 <Satellite className="w-4 h-4" />
                 {isSatellite ? "Đường" : "Vệ Tinh"}
               </Button>
               <Button
                 onClick={zoomToAll}
-                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md"
+                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md"
               >
                 <ZoomIn className="w-4 h-4" />
                 Zoom All
@@ -500,7 +500,7 @@ export default function CultivationMap() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="flex items-center bg-lime-100 border border-lime-300 text-lime-800 px-4 py-2 rounded-xl mb-4 shadow-md"
+                  className="flex items-center bg-lime-100 border border-lime-300 text-lime-800 px-4 py-2 rounded-lg mb-4 shadow-md"
                 >
                   <MapPin className="w-5 h-5 mr-2 animate-bounce" />
                   {showNotification}
@@ -509,14 +509,14 @@ export default function CultivationMap() {
             </AnimatePresence>
             
             {loading ? (
-              <div className="h-[600px] rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+              <div className="h-[600px] rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                 <div className="text-center">
                   <Skeleton className="h-10 w-10 rounded-full mx-auto mb-3 animate-pulse" />
                   <p className="text-gray-600 font-medium">Đang tải bản đồ...</p>
                 </div>
               </div>
             ) : (
-              <div id="map" className="h-[600px] rounded-xl overflow-hidden shadow-inner"></div>
+              <div id="map" className="h-[600px] rounded-lg overflow-hidden shadow-inner"></div>
             )}
           </CardContent>
         </Card>

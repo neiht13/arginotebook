@@ -72,7 +72,7 @@ export default function VatTuTable({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <div className="rounded-full bg-lime-100 p-3 mb-4">
-          <AlertCircle className="h-6 w-6 text-lime-600" />
+          <AlertCircle className="h-6 w-6 text-lime-700" />
         </div>
         <h3 className="text-lg font-medium text-slate-800 mb-1">Không có dữ liệu</h3>
         <p className="text-sm text-slate-500 max-w-md">Chưa có vật tư nào được thêm vào hệ thống.</p>
@@ -125,12 +125,12 @@ export default function VatTuTable({
                     >
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div className="flex items-center gap-2">
-                          <Tag className="h-4 w-4 text-lime-600" />
+                          <Tag className="h-4 w-4 text-lime-700" />
                           <span className="text-slate-500">Đơn giá:</span>
                           <span className="font-medium">{formatCurrency(item.donGia)} đ</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-lime-600" />
+                          <Calendar className="h-4 w-4 text-lime-700" />
                           <span className="text-slate-500">Hạn sử dụng:</span>
                           <span
                             className={isExpired(item.hanSuDung || "") ? "text-red-500 font-medium" : "font-medium"}
@@ -140,7 +140,7 @@ export default function VatTuTable({
                         </div>
                         {item.ghiChu && (
                           <div className="col-span-2 flex items-start gap-2 mt-2">
-                            <Clipboard className="h-4 w-4 text-lime-600 mt-0.5" />
+                            <Clipboard className="h-4 w-4 text-lime-700 mt-0.5" />
                             <div>
                               <span className="text-slate-500">Ghi chú:</span>
                               <p className="font-medium">{item.ghiChu}</p>
@@ -159,7 +159,7 @@ export default function VatTuTable({
                           }}
                           className="h-8 border-lime-200 hover:bg-lime-100"
                         >
-                          <Edit className="h-3.5 w-3.5 mr-1 text-lime-600" />
+                          <Edit className="h-3.5 w-3.5 mr-1 text-lime-700" />
                           Sửa
                         </Button>
                         <Button
@@ -241,7 +241,7 @@ export default function VatTuTable({
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-lime-100">
-                              <MoreVertical className="h-4 w-4 text-lime-600" />
+                              <MoreVertical className="h-4 w-4 text-lime-700" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">

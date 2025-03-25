@@ -247,13 +247,13 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
     <>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-4">
-          <TabsTrigger value="basic" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+          <TabsTrigger value="basic" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800">
             Thông tin cơ bản
           </TabsTrigger>
-          <TabsTrigger value="additional" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+          <TabsTrigger value="additional" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800">
             Thông tin bổ sung
           </TabsTrigger>
-          <TabsTrigger value="advanced" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+          <TabsTrigger value="advanced" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-800">
             Nâng cao
           </TabsTrigger>
         </TabsList>
@@ -396,7 +396,7 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                 name="huuCo"
                 checked={formData.huuCo}
                 onChange={handleInputChange}
-                className="h-4 w-4 rounded border-lime-300 text-lime-600 focus:ring-lime-500"
+                className="h-4 w-4 rounded border-lime-300 text-lime-700 focus:ring-lime-500"
               />
               <Label htmlFor="huuCo" className="text-sm font-medium text-slate-700">
                 Hữu cơ
@@ -429,7 +429,7 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                       className="w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500"
                       id="ngayMua"
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-600" />
+                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-700" />
                       {ngayMuaDate ? format(ngayMuaDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                     </Button>
                   </PopoverTrigger>
@@ -461,7 +461,7 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                       className={`w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500 ${formErrors.hanSuDung ? "border-red-300" : ""}`}
                       id="hanSuDung"
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-600" />
+                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-700" />
                       {hanSuDungDate ? format(hanSuDungDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                     </Button>
                   </PopoverTrigger>

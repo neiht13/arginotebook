@@ -52,7 +52,7 @@ export default function Timeline({ nhatky, muavu }) {
         <div className="grid grid-cols-3">
           <div></div>
           <h2 className="text-3xl font-bold text-center text-pretty">Nhật ký canh tác</h2>
-          <div className="bg-white rounded-xl">
+          <div className="bg-white rounded-lg">
             <Select onValueChange={(value) => setSelectedMuaVu(value)}>
               <SelectTrigger aria-label="Mùa vụ">
                 <SelectValue placeholder="Chọn mùa vụ" />

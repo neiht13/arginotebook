@@ -268,7 +268,7 @@ export default function CertificationManagement() {
         <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6">
           <div className="flex flex-col md:flex-row gap-4 flex-1">
             <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-600" />
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-lime-700" />
               <Input
                 placeholder="Tìm kiếm chứng nhận..."
                 value={searchTerm}
@@ -333,7 +333,7 @@ export default function CertificationManagement() {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleEdit(certification)}
-                      className="h-8 w-8 text-slate-500 hover:text-lime-600"
+                      className="h-8 w-8 text-slate-500 hover:text-lime-700"
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>

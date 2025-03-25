@@ -120,7 +120,7 @@ const TimelineCalendar = ({ data, onAddEntry, onDeleteEntry, onEditEntry, isOffl
             <CardHeader className="pb-2 flex flex-row items-center justify-between bg-lime-50">
               <div>
                 <CardTitle className="text-lg flex items-center text-lime-800">
-                  <CalendarDays className="mr-2 h-5 w-5 text-lime-600" />
+                  <CalendarDays className="mr-2 h-5 w-5 text-lime-700" />
                   {selectedDate ? format(selectedDate, "EEEE, dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                 </CardTitle>
                 <p className="text-sm text-slate-500">
@@ -166,7 +166,7 @@ const TimelineCalendar = ({ data, onAddEntry, onDeleteEntry, onEditEntry, isOffl
                                     onClick={() => onEditEntry(entry)}
                                     className="h-8 w-8 hover:bg-lime-100"
                                   >
-                                    <Edit className="h-4 w-4 text-lime-600" />
+                                    <Edit className="h-4 w-4 text-lime-700" />
                                   </Button>
                                 </div>
 
@@ -206,7 +206,7 @@ const TimelineCalendar = ({ data, onAddEntry, onDeleteEntry, onEditEntry, isOffl
                                   <Badge variant="secondary" className="bg-lime-100 text-lime-800">
                                     {entry.muaVu}
                                   </Badge>
-                                  <p className="text-sm font-medium text-lime-600">Tổng: {formatCurrency(totalCost)}</p>
+                                  <p className="text-sm font-medium text-lime-700">Tổng: {formatCurrency(totalCost)}</p>
                                 </div>
                               </CardContent>
                             </Card>

@@ -24,7 +24,7 @@ const Result: React.FC<ResultProps> = ({ type, value, unit }) => {
     if (value >= 90) {
       statusKey = 'normal';
       bgColor = 'bg-lime-100';
-      textColor = 'text-lime-700';
+      textColor = 'text-lime-800';
     } else if (value >= 60) {
       statusKey = 'mild';
       bgColor = 'bg-yellow-100';
@@ -38,7 +38,7 @@ const Result: React.FC<ResultProps> = ({ type, value, unit }) => {
     if (value < 100) {
       statusKey = 'normal';
       bgColor = 'bg-lime-100';
-      textColor = 'text-lime-700';
+      textColor = 'text-lime-800';
     } else if (value < 160) {
       statusKey = 'risk';
       bgColor = 'bg-yellow-100';

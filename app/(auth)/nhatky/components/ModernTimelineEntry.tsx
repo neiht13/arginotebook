@@ -151,11 +151,11 @@ const ModernTimelineEntry = ({ entry, onEdit, onDelete, isLast }: ModernTimeline
             {/* Card header */}
             <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-lime-100 bg-lime-50/30">
               <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-lime-600" />
+                <CalendarDays className="h-4 w-4 text-lime-700" />
                 <span className="font-medium">{formatDate(entry.ngayThucHien)}</span>
                 {entry.ngaySauBatDau && (
                   <Badge variant="outline" className="ml-1 text-xs border-lime-200">
-                    <Clock className="mr-1 h-3 w-3 text-lime-600" />
+                    <Clock className="mr-1 h-3 w-3 text-lime-700" />
                     Ngày {entry.ngaySauBatDau}
                   </Badge>
                 )}
@@ -168,7 +168,7 @@ const ModernTimelineEntry = ({ entry, onEdit, onDelete, isLast }: ModernTimeline
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-slate-500 hover:text-lime-600 hover:bg-lime-50"
+                        className="h-8 w-8 text-slate-500 hover:text-lime-700 hover:bg-lime-50"
                         onClick={() => onEdit(entry)}
                       >
                         <Edit className="h-4 w-4" />
@@ -218,11 +218,11 @@ const ModernTimelineEntry = ({ entry, onEdit, onDelete, isLast }: ModernTimeline
                 {/* Always visible content */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-lime-600" />
+                    <DollarSign className="h-4 w-4 text-lime-700" />
                     <span className="text-sm">Chi phí công: {formatCurrency(entry.chiPhiCong)}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-lime-600" />
+                    <DollarSign className="h-4 w-4 text-lime-700" />
                     <span className="text-sm">
                       Chi phí vật tư: {formatCurrency(agrochemicalCost > 0 ? agrochemicalCost : entry.chiPhiVatTu)}
                     </span>
@@ -300,13 +300,13 @@ const ModernTimelineEntry = ({ entry, onEdit, onDelete, isLast }: ModernTimeline
                 <div className="mt-1 pt-3 border-t border-slate-100 flex justify-between items-center">
                   <div>
                     <p className="text-xs text-slate-500">Tổng chi phí:</p>
-                    <p className="text-lg font-bold text-lime-600">{formatCurrency(totalCost)}</p>
+                    <p className="text-lg font-bold text-lime-700">{formatCurrency(totalCost)}</p>
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => onEdit(entry)}
-                    className="text-slate-500 border-lime-200 hover:bg-lime-50 hover:text-lime-700"
+                    className="text-slate-500 border-lime-200 hover:bg-lime-50 hover:text-lime-800"
                   >
                     <Edit className="h-4 w-4 mr-1" />
                     Chỉnh sửa

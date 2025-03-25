@@ -71,7 +71,7 @@ export default function AuthenticationPage() {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
           <div className="flex justify-center mb-8 lg:hidden">
             <div className="p-3 bg-lime-100 rounded-full">
-              <Leaf className="w-10 h-10 text-lime-600" />
+              <Leaf className="w-10 h-10 text-lime-700" />
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export default function AuthenticationPage() {
                   {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
                   <button
                     onClick={() => setIsLogin(!isLogin)}
-                    className="ml-1 text-lime-600 hover:text-lime-700 font-medium"
+                    className="ml-1 text-lime-700 hover:text-lime-800 font-medium"
                   >
                     {isLogin ? "Đăng ký ngay" : "Đăng nhập"}
                   </button>

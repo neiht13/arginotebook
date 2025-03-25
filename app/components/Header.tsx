@@ -33,13 +33,18 @@ const Header = () => {
   // Danh sách link
   const navItems = [
     {
-      href: "/timeline",
+      href: "/nhatky",
       label: "Nhật ký",
       icon: <LayoutDashboardIcon className="w-5 h-5" />,
     },
     {
-      href: "/category",
-      label: "Danh mục",
+      href: "/danhmuc",
+      label: "Mùa vụ",
+      icon: <ContactIcon className="w-5 h-5" />,
+    },
+    {
+      href: "/vattu",
+      label: "Vật tư",
       icon: <ContactIcon className="w-5 h-5" />,
     },
     {
@@ -102,8 +107,8 @@ const Header = () => {
                   onClick={() => setActiveLink(item.href)}
                   className={`group font-medium transition-colors flex items-center gap-1 ${
                     activeLink === item.href
-                      ? "text-lime-600"
-                      : "text-slate-700 hover:text-lime-600"
+                      ? "text-lime-700"
+                      : "text-slate-700 hover:text-lime-700"
                   }`}
                 >
                   <span className="relative">
@@ -132,8 +137,8 @@ const Header = () => {
               className={
                 "flex flex-col items-center justify-center py-2 w-full text-xs font-medium border-t-2 transition-all " +
                 (activeLink === item.href
-                  ? "border-lime-600 text-lime-600"
-                  : "border-transparent text-slate-700 hover:text-lime-600")
+                  ? "border-lime-600 text-lime-700"
+                  : "border-transparent text-slate-700 hover:text-lime-700")
               }
             >
               <div

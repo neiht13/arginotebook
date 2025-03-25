@@ -164,7 +164,7 @@ export default function HarvestTracker() {
               <div className="space-x-2">
                 <p className="text-xl text-slate-600">Tổng Cân Nặng Hiện Tại:</p>
                 <div className='flex items-center justify-center '>
-                  <p className="text-4xl font-bold text-lime-600">{totalWeight?.toFixed(2)} kg</p>
+                  <p className="text-4xl font-bold text-lime-700">{totalWeight?.toFixed(2)} kg</p>
                 </div>
                 <div className='flex items-center justify-end'>
                   <Button

@@ -87,7 +87,7 @@ export default function ChangePasswordForm() {
     >
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="currentPassword" className="flex items-center text-slate-700">
-          <Lock className="w-4 h-4 mr-2 text-lime-600" />
+          <Lock className="w-4 h-4 mr-2 text-lime-700" />
           Mật khẩu hiện tại <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
@@ -115,7 +115,7 @@ export default function ChangePasswordForm() {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="newPassword" className="flex items-center text-slate-700">
-          <Key className="w-4 h-4 mr-2 text-lime-600" />
+          <Key className="w-4 h-4 mr-2 text-lime-700" />
           Mật khẩu mới <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
@@ -143,7 +143,7 @@ export default function ChangePasswordForm() {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="confirmPassword" className="flex items-center text-slate-700">
-          <Key className="w-4 h-4 mr-2 text-lime-600" />
+          <Key className="w-4 h-4 mr-2 text-lime-700" />
           Xác nhận mật khẩu <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
@@ -180,7 +180,7 @@ export default function ChangePasswordForm() {
       {success && (
         <motion.div variants={itemVariants}>
           <Alert>
-            <CheckCircle className="h-4 w-4 text-lime-600" />
+            <CheckCircle className="h-4 w-4 text-lime-700" />
             <AlertDescription>{success}</AlertDescription>
           </Alert>
         </motion.div>

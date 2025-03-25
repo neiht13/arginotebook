@@ -91,7 +91,7 @@ export function UserAuthForm({ className, ...props }) {
             <Label htmlFor="password" className="text-sm font-medium">
               Mật khẩu
             </Label>
-            <a href="/forgot-password" className="text-xs text-lime-600 hover:text-lime-700 hover:underline">
+            <a href="/forgot-password" className="text-xs text-lime-700 hover:text-lime-800 hover:underline">
               Quên mật khẩu?
             </a>
           </div>

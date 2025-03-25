@@ -125,7 +125,7 @@ export default function PersonalInfoForm({ user, setUser }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Label htmlFor="name" className="flex items-center text-slate-700">
-                  <User className="w-4 h-4 mr-2 text-lime-600" />
+                  <User className="w-4 h-4 mr-2 text-lime-700" />
                   Họ tên <span className="text-red-500">*</span>
                 </Label>
               </TooltipTrigger>
@@ -144,7 +144,7 @@ export default function PersonalInfoForm({ user, setUser }) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="email" className="flex items-center text-slate-700">
-            <Mail className="w-4 h-4 mr-2 text-lime-600" />
+            <Mail className="w-4 h-4 mr-2 text-lime-700" />
             Email <span className="text-red-500">*</span>
           </Label>
           <Input
@@ -163,7 +163,7 @@ export default function PersonalInfoForm({ user, setUser }) {
       <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4" variants={itemVariants}>
         <div className="space-y-2">
           <Label htmlFor="phone" className="flex items-center text-slate-700">
-            <Phone className="w-4 h-4 mr-2 text-lime-600" />
+            <Phone className="w-4 h-4 mr-2 text-lime-700" />
             Số điện thoại
           </Label>
           <Input
@@ -178,7 +178,7 @@ export default function PersonalInfoForm({ user, setUser }) {
         </div>
         <div className="space-y-2">
           <Label className="flex items-center text-slate-700">
-            <Building2 className="w-4 h-4 mr-2 text-lime-600" />
+            <Building2 className="w-4 h-4 mr-2 text-lime-700" />
             Đơn vị
           </Label>
           <Badge variant="outline" className="w-full py-2 justify-start">
@@ -189,7 +189,7 @@ export default function PersonalInfoForm({ user, setUser }) {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="address" className="flex items-center text-slate-700">
-          <Home className="w-4 h-4 mr-2 text-lime-600" />
+          <Home className="w-4 h-4 mr-2 text-lime-700" />
           Địa chỉ
         </Label>
         <Textarea
@@ -204,7 +204,7 @@ export default function PersonalInfoForm({ user, setUser }) {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label htmlFor="cultivationArea" className="flex items-center text-slate-700">
-          <AreaChart className="w-4 h-4 mr-2 text-lime-600" />
+          <AreaChart className="w-4 h-4 mr-2 text-lime-700" />
           Diện tích canh tác (ha)
         </Label>
         <Input
@@ -222,7 +222,7 @@ export default function PersonalInfoForm({ user, setUser }) {
 
       <motion.div className="space-y-2" variants={itemVariants}>
         <Label className="flex items-center text-slate-700">
-          <LocateFixed className="w-4 h-4 mr-2 text-lime-600" />
+          <LocateFixed className="w-4 h-4 mr-2 text-lime-700" />
           Vị trí trên bản đồ
         </Label>
         <div className="relative h-[300px] rounded-md overflow-hidden border border-lime-200 shadow-sm">
