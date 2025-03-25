@@ -26,7 +26,7 @@ export default function UtilitiesPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-gradient-to-br from-lime-50 to-emerald-50 min-h-screen">
+    <div className="container mx-auto p-4 bg-lime-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <motion.h1 
           className="text-3xl font-bold mb-6 text-emerald-800 border-b pb-2"
@@ -51,7 +51,7 @@ export default function UtilitiesPage() {
                   { id: "map", label: "Bản đồ canh tác", icon: <Map className="w-5 h-5" /> },
                   { id: "harvest", label: "Theo dõi thu hoạch", icon: <BarChart3 className="w-5 h-5" /> },
                   { id: "quanlythuhoach", label: "Quản lý thu hoạch", icon: <BarChart3 className="w-5 h-5" /> },
-                  { id: "pest", label: "Nhận diện dịch hại", icon: <Bug className="w-5 h-5" /> }
+                  { id: "pest", label: "Nhận diện ", icon: <Bug className="w-5 h-5" /> }
                 ].map((tab) => (
                   <motion.div
                     key={tab.id}
@@ -61,10 +61,10 @@ export default function UtilitiesPage() {
                   >
                     <TabsTrigger 
                       value={tab.id}
-                      className="w-full py-4 flex flex-col items-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 rounded-none border-b-2 border-transparent data-[state=active]:border-lime-500 transition-all"
+                      className="w-full h-full py-4 flex flex-col items-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 rounded-none border-b-2 border-transparent data-[state=active]:border-lime-500 transition-all"
                     >
                       {tab.icon}
-                      <span>{tab.label}</span>
+                      <span className="text-sm font-medium text-balance">{tab.label}</span>
                     </TabsTrigger>
                   </motion.div>
                 ))}

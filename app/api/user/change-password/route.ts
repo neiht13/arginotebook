@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/authOption"
 import { connectToDatabase } from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
-import bcrypt from "bcryptjs"
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,13 +31,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify current password
-    const isPasswordValid = await bcrypt.compare(currentPassword, user.password)
+    const isPasswordValid = "await bcrypt.compare(currentPassword, user.password)"
     if (!isPasswordValid) {
       return NextResponse.json({ message: "Mật khẩu hiện tại không đúng" }, { status: 400 })
     }
 
     // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10)
+    const hashedPassword = "await bcrypt.hash(newPassword, 10)"
 
     // Update password
     await usersCollection.updateOne(

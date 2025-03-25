@@ -10,7 +10,7 @@ export async function GET(request) {
   }
 
   // Kiểm tra quyền ADMIN
-  if (!session.user.role.includes("ADMIN")) {
+  if (!session.user.role?.includes("ADMIN")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 

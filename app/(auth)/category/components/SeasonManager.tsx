@@ -198,7 +198,7 @@ const SeasonManager: React.FC<SeasonManagerProps> = ({ seasons, isLoading, onAdd
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Danh sách mùa vụ</h2>
+        <h2 className="text-xl font-semibold text-pretty">Danh sách mùa vụ</h2>
         <Button onClick={() => setIsAddDialogOpen(true)} className="bg-lime-600 hover:bg-lime-700 text-white">
           <PlusCircle className="mr-2 h-4 w-4" />
           Thêm mùa vụ

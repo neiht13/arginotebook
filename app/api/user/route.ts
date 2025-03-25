@@ -15,17 +15,17 @@ export const POST = async (request) => {
         const { db } = await connectToDatabase();
         const data = await request.json();
         log("data", data);
-        const { _id } = data;
+        const { id } = data;
         delete data._id;
 
-        const collection = db.collection("usernew");
+        const collection = db.collection("user");
         let result;
 
-        if (!_id) {
+        if (!id) {
             result = await collection.insertOne({ ...data, _id: new ObjectId() });
             return NextResponse.json(result, { status: 201 });
         } else {
-            const objectId = ObjectId.createFromHexString(_id);
+            const objectId = ObjectId.createFromHexString(id);
             console.log("objectId", objectId);
             
             result = await collection.updateOne({ _id: objectId }, { $set: data });

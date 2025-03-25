@@ -97,21 +97,28 @@ export default function PestIdentifier() {
   return (
     <div className="p-6 bg-white">
       <Tabs 
-        value={activeTab} 
+        value={activeTab}
         onValueChange={setActiveTab}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="identify" className="data-[state=active]:bg-lime-100 data-[state=active]:text-lime-800">
-            <CameraIcon className="w-4 h-4 mr-2" />
+        <TabsList className="grid w-full grid-cols-3 h-auto p-0">
+        <TabsTrigger 
+                      value={"identify"}
+                      className="w-full h-full text-balance py-4 flex flex-col items-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 rounded-none border-b-2 border-transparent data-[state=active]:border-lime-500 transition-all"
+                    > 
+                                  <CameraIcon className="w-4 h-4 mr-2" />
             Nhận diện
           </TabsTrigger>
-          <TabsTrigger value="details" className="data-[state=active]:bg-lime-100 data-[state=active]:text-lime-800" disabled={!identifiedDisease}>
-            <Info className="w-4 h-4 mr-2" />
+          <TabsTrigger 
+                      value={"details"}
+                      className="w-full text-balance  h-auto py-4 flex flex-col items-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 rounded-none border-b-2 border-transparent data-[state=active]:border-lime-500 transition-all"
+                    >            <Info className="w-4 h-4 mr-2" />
             Thông tin chi tiết
           </TabsTrigger>
-          <TabsTrigger value="library" className="data-[state=active]:bg-lime-100 data-[state=active]:text-lime-800">
-            <Leaf className="w-4 h-4 mr-2" />
+          <TabsTrigger 
+                      value={"library"}
+                      className="w-full text-balance  h-auto py-4 flex flex-col items-center gap-2 data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 rounded-none border-b-2 border-transparent data-[state=active]:border-lime-500 transition-all"
+                    >            <Leaf className="w-4 h-4 mr-2" />
             Thư viện bệnh
           </TabsTrigger>
         </TabsList>

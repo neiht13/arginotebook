@@ -11,7 +11,7 @@ export async function PUT(request, { params }) {
   }
 
   // Kiểm tra quyền ADMIN
-  if (!session.user.role.includes("ADMIN")) {
+  if (!session.user.role?.includes("ADMIN")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
@@ -58,7 +58,7 @@ export async function DELETE(request, { params }) {
   }
 
   // Kiểm tra quyền ADMIN
-  if (!session.user.role.includes("ADMIN")) {
+  if (!session.user.role?.includes("ADMIN")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,9 +13,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
-import { CalendarIcon, Loader2 } from "lucide-react"
+import { CalendarIcon, Loader2, Info, AlertTriangle } from "lucide-react"
+import { motion } from "framer-motion"
 import CurrencyInput from "@/components/ui/input-currency"
+import { useSession } from "next-auth/react"
+import { useToast } from "@/components/ui/use-toast"
 import type { VatTu, VatTuFormData } from "../types"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer"
+import { useMediaQuery } from "../use-media-query"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface VatTuModalProps {
   isOpen: boolean
@@ -25,7 +32,11 @@ interface VatTuModalProps {
 }
 
 export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModalProps) {
+  const { data: session } = useSession()
+  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [activeTab, setActiveTab] = useState("basic")
+  const isMobile = useMediaQuery("(max-width: 768px)")
   const [formData, setFormData] = useState<VatTuFormData>({
     ten: "",
     loai: "thuốc",
@@ -37,10 +48,14 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
     ngayMua: "",
     hanSuDung: "",
     ghiChu: "",
+    lichSuSuDung: [],
+    viTriLuuTru: "",
+    thanhPhan: "",
+    huongDanSuDung: "",
   })
-
   const [ngayMuaDate, setNgayMuaDate] = useState<Date | undefined>(undefined)
   const [hanSuDungDate, setHanSuDungDate] = useState<Date | undefined>(undefined)
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     if (vatTu) {
@@ -56,30 +71,19 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
         ngayMua: vatTu.ngayMua || "",
         hanSuDung: vatTu.hanSuDung || "",
         ghiChu: vatTu.ghiChu || "",
+        lichSuSuDung: vatTu.lichSuSuDung || [],
+        viTriLuuTru: vatTu.viTriLuuTru || "",
+        thanhPhan: vatTu.thanhPhan || "",
+        huongDanSuDung: vatTu.huongDanSuDung || "",
       })
-
-      // Parse dates if they exist
-      if (vatTu.ngayMua) {
-        try {
-          setNgayMuaDate(new Date(vatTu.ngayMua))
-        } catch (error) {
-          console.error("Error parsing ngayMua:", error)
-        }
-      }
-
-      if (vatTu.hanSuDung) {
-        try {
-          setHanSuDungDate(new Date(vatTu.hanSuDung))
-        } catch (error) {
-          console.error("Error parsing hanSuDung:", error)
-        }
-      }
+      setNgayMuaDate(vatTu.ngayMua ? new Date(vatTu.ngayMua) : undefined)
+      setHanSuDungDate(vatTu.hanSuDung ? new Date(vatTu.hanSuDung) : undefined)
     } else {
       resetForm()
     }
   }, [vatTu, isOpen])
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormData({
       ten: "",
       loai: "thuốc",
@@ -91,118 +95,202 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
       ngayMua: "",
       hanSuDung: "",
       ghiChu: "",
+      lichSuSuDung: [],
+      viTriLuuTru: "",
+      thanhPhan: "",
+      huongDanSuDung: "",
     })
     setNgayMuaDate(undefined)
     setHanSuDungDate(undefined)
-  }
+    setFormErrors({})
+    setActiveTab("basic")
+  }, [])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value, type } = e.target
+      setFormData((prev) => ({
+        ...prev,
+        [name]:
+          type === "checkbox" ? (e.target as HTMLInputElement).checked : type === "number" ? Number(value) : value,
+      }))
 
-    if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: (e.target as HTMLInputElement).checked,
-      }))
-    } else if (type === "number") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: Number(value),
-      }))
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }))
+      // Clear error when field is edited
+      if (formErrors[name]) {
+        setFormErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors[name]
+          return newErrors
+        })
+      }
+    },
+    [formErrors],
+  )
+
+  const handleCurrencyChange = useCallback(
+    (data: { name: string; value: number }) => {
+      setFormData((prev) => ({ ...prev, [data.name]: data.value }))
+
+      // Clear error when field is edited
+      if (formErrors[data.name]) {
+        setFormErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors[data.name]
+          return newErrors
+        })
+      }
+    },
+    [formErrors],
+  )
+
+  const handleNgayMuaChange = useCallback(
+    (date: Date | undefined) => {
+      setNgayMuaDate(date)
+      setFormData((prev) => ({ ...prev, ngayMua: date ? date.toISOString() : "" }))
+
+      // Clear error when field is edited
+      if (formErrors.ngayMua) {
+        setFormErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.ngayMua
+          return newErrors
+        })
+      }
+    },
+    [formErrors],
+  )
+
+  const handleHanSuDungChange = useCallback(
+    (date: Date | undefined) => {
+      setHanSuDungDate(date)
+      setFormData((prev) => ({ ...prev, hanSuDung: date ? date.toISOString() : "" }))
+
+      // Clear error when field is edited
+      if (formErrors.hanSuDung) {
+        setFormErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.hanSuDung
+          return newErrors
+        })
+      }
+    },
+    [formErrors],
+  )
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {}
+
+    if (!formData.ten.trim()) {
+      errors.ten = "Tên vật tư không được để trống"
     }
-  }
 
-  const handleCurrencyChange = (data: { name: string; value: number }) => {
-    const { name, value } = data
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
-  const handleNgayMuaChange = (date: Date | undefined) => {
-    setNgayMuaDate(date)
-    if (date) {
-      setFormData((prev) => ({
-        ...prev,
-        ngayMua: date.toISOString(),
-      }))
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        ngayMua: "",
-      }))
+    if (formData.soLuong < 0) {
+      errors.soLuong = "Số lượng không được âm"
     }
-  }
 
-  const handleHanSuDungChange = (date: Date | undefined) => {
-    setHanSuDungDate(date)
-    if (date) {
-      setFormData((prev) => ({
-        ...prev,
-        hanSuDung: date.toISOString(),
-      }))
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        hanSuDung: "",
-      }))
+    if (formData.donGia < 0) {
+      errors.donGia = "Đơn giá không được âm"
     }
+
+    if (formData.ngayMua && formData.hanSuDung && new Date(formData.ngayMua) > new Date(formData.hanSuDung)) {
+      errors.hanSuDung = "Hạn sử dụng phải sau ngày mua"
+    }
+
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
   }
 
   const handleSubmit = async () => {
-    // Validate required fields
-    if (!formData.ten || formData.soLuong === undefined || formData.donGia === undefined) {
-      alert("Vui lòng điền đầy đủ thông tin bắt buộc")
+    if (!validateForm()) {
+      // Show first tab with error
+      if (formErrors.ten || formErrors.soLuong || formErrors.donGia) {
+        setActiveTab("basic")
+      } else if (formErrors.hanSuDung) {
+        setActiveTab("additional")
+      }
+
+      toast({
+        variant: "destructive",
+        description: "Vui lòng kiểm tra lại thông tin nhập vào",
+        title: "Lỗi",
+      })
       return
     }
 
     setIsSubmitting(true)
-
     try {
-      // Prepare data for API
       const finalData: VatTu = {
         ...formData,
-        uId: "", // Will be set by the API
+        uId: session?.user?.uId || "",
+        xId: session?.user?.xId || "",
       }
-
       onSave(finalData)
     } catch (error) {
       console.error("Error submitting form:", error)
+      toast({ variant: "destructive", description: "Không thể lưu vật tư" })
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[550px] p-0 max-h-[90vh] overflow-auto">
-        <DialogHeader className="sticky top-0 z-10 bg-white px-6 py-4 border-b">
-          <DialogTitle className="text-xl font-bold">{vatTu ? "Chỉnh sửa vật tư" : "Thêm vật tư mới"}</DialogTitle>
-        </DialogHeader>
+  const formVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  }
 
-        <div className="px-6 py-4 space-y-4">
-          {/* Basic Information */}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="ten">
-                Tên vật tư <span className="text-red-500">*</span>
-              </Label>
+  const itemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.3 } },
+  }
+
+  const ModalContent = (
+    <>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-4">
+          <TabsTrigger value="basic" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+            Thông tin cơ bản
+          </TabsTrigger>
+          <TabsTrigger value="additional" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+            Thông tin bổ sung
+          </TabsTrigger>
+          <TabsTrigger value="advanced" className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700">
+            Nâng cao
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="basic">
+          <motion.div className="space-y-4" variants={formVariants} initial="hidden" animate="visible">
+            <motion.div className="space-y-2" variants={itemVariants}>
+              <div className="flex items-center justify-between">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Label htmlFor="ten" className="flex items-center">
+                        Tên vật tư <span className="text-red-500 ml-1">*</span>
+                        <Info className="h-3.5 w-3.5 ml-1 text-slate-400" />
+                      </Label>
+                    </TooltipTrigger>
+                    <TooltipContent>Tên đầy đủ của vật tư</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                {formErrors.ten && (
+                  <span className="text-xs text-red-500 flex items-center">
+                    <AlertTriangle className="h-3 w-3 mr-1" />
+                    {formErrors.ten}
+                  </span>
+                )}
+              </div>
               <Input
                 id="ten"
                 name="ten"
                 value={formData.ten}
                 onChange={handleInputChange}
                 placeholder="Nhập tên vật tư"
+                className={`border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 ${formErrors.ten ? "border-red-300" : ""}`}
               />
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <motion.div className="grid grid-cols-2 gap-4" variants={itemVariants}>
               <div className="space-y-2">
                 <Label htmlFor="loai">
                   Loại <span className="text-red-500">*</span>
@@ -213,7 +301,10 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                     setFormData((prev) => ({ ...prev, loai: value as "thuốc" | "phân" | "khác" }))
                   }
                 >
-                  <SelectTrigger id="loai">
+                  <SelectTrigger
+                    id="loai"
+                    className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
+                  >
                     <SelectValue placeholder="Chọn loại" />
                   </SelectTrigger>
                   <SelectContent>
@@ -223,7 +314,6 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="donViTinh">
                   Đơn vị tính <span className="text-red-500">*</span>
@@ -232,7 +322,10 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   value={formData.donViTinh}
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, donViTinh: value }))}
                 >
-                  <SelectTrigger id="donViTinh">
+                  <SelectTrigger
+                    id="donViTinh"
+                    className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
+                  >
                     <SelectValue placeholder="Chọn đơn vị" />
                   </SelectTrigger>
                   <SelectContent>
@@ -247,13 +340,21 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   </SelectContent>
                 </Select>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <motion.div className="grid grid-cols-2 gap-4" variants={itemVariants}>
               <div className="space-y-2">
-                <Label htmlFor="soLuong">
-                  Số lượng <span className="text-red-500">*</span>
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="soLuong">
+                    Số lượng <span className="text-red-500">*</span>
+                  </Label>
+                  {formErrors.soLuong && (
+                    <span className="text-xs text-red-500 flex items-center">
+                      <AlertTriangle className="h-3 w-3 mr-1" />
+                      {formErrors.soLuong}
+                    </span>
+                  )}
+                </div>
                 <Input
                   id="soLuong"
                   name="soLuong"
@@ -261,41 +362,52 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   value={formData.soLuong}
                   onChange={handleInputChange}
                   placeholder="Nhập số lượng"
+                  className={`border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 ${formErrors.soLuong ? "border-red-300" : ""}`}
+                  min="0"
                 />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="donGia">
-                  Đơn giá <span className="text-red-500">*</span>
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="donGia">
+                    Đơn giá <span className="text-red-500">*</span>
+                  </Label>
+                  {formErrors.donGia && (
+                    <span className="text-xs text-red-500 flex items-center">
+                      <AlertTriangle className="h-3 w-3 mr-1" />
+                      {formErrors.donGia}
+                    </span>
+                  )}
+                </div>
                 <CurrencyInput
                   id="donGia"
                   name="donGia"
                   value={formData.donGia}
                   onChange={handleCurrencyChange}
                   placeholder="Nhập đơn giá"
+                  className={`border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 ${formErrors.donGia ? "border-red-300" : ""}`}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex items-center gap-2 mt-2">
+            <motion.div className="flex items-center gap-2" variants={itemVariants}>
               <input
                 type="checkbox"
                 id="huuCo"
                 name="huuCo"
                 checked={formData.huuCo}
-                onChange={(e) => setFormData((prev) => ({ ...prev, huuCo: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500"
+                onChange={handleInputChange}
+                className="h-4 w-4 rounded border-lime-300 text-lime-600 focus:ring-lime-500"
               />
-              <Label htmlFor="huuCo" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="huuCo" className="text-sm font-medium text-slate-700">
                 Hữu cơ
               </Label>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
+        </TabsContent>
 
-          {/* Additional Information */}
-          <div className="space-y-4 pt-4 border-t">
-            <div className="space-y-2">
+        <TabsContent value="additional">
+          <motion.div className="space-y-4" variants={formVariants} initial="hidden" animate="visible">
+            <motion.div className="space-y-2" variants={itemVariants}>
               <Label htmlFor="nhaCungCap">Nhà cung cấp</Label>
               <Input
                 id="nhaCungCap"
@@ -303,16 +415,21 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                 value={formData.nhaCungCap}
                 onChange={handleInputChange}
                 placeholder="Nhập tên nhà cung cấp"
+                className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
               />
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <motion.div className="grid grid-cols-2 gap-4" variants={itemVariants}>
               <div className="space-y-2">
                 <Label htmlFor="ngayMua">Ngày mua</Label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start text-left font-normal" id="ngayMua">
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500"
+                      id="ngayMua"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-600" />
                       {ngayMuaDate ? format(ngayMuaDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                     </Button>
                   </PopoverTrigger>
@@ -327,13 +444,24 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   </PopoverContent>
                 </Popover>
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="hanSuDung">Hạn sử dụng</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="hanSuDung">Hạn sử dụng</Label>
+                  {formErrors.hanSuDung && (
+                    <span className="text-xs text-red-500 flex items-center">
+                      <AlertTriangle className="h-3 w-3 mr-1" />
+                      {formErrors.hanSuDung}
+                    </span>
+                  )}
+                </div>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-start text-left font-normal" id="hanSuDung">
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal border-lime-200 hover:bg-lime-50 focus-visible:ring-lime-500 ${formErrors.hanSuDung ? "border-red-300" : ""}`}
+                      id="hanSuDung"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4 text-lime-600" />
                       {hanSuDungDate ? format(hanSuDungDate, "dd/MM/yyyy", { locale: vi }) : "Chọn ngày"}
                     </Button>
                   </PopoverTrigger>
@@ -348,9 +476,21 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="space-y-2">
+            <motion.div className="space-y-2" variants={itemVariants}>
+              <Label htmlFor="viTriLuuTru">Vị trí lưu trữ</Label>
+              <Input
+                id="viTriLuuTru"
+                name="viTriLuuTru"
+                value={formData.viTriLuuTru}
+                onChange={handleInputChange}
+                placeholder="Nhập vị trí lưu trữ"
+                className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500"
+              />
+            </motion.div>
+
+            <motion.div className="space-y-2" variants={itemVariants}>
               <Label htmlFor="ghiChu">Ghi chú</Label>
               <Textarea
                 id="ghiChu"
@@ -358,29 +498,87 @@ export default function VatTuModal({ isOpen, onClose, onSave, vatTu }: VatTuModa
                 value={formData.ghiChu}
                 onChange={handleInputChange}
                 placeholder="Nhập ghi chú"
-                className="min-h-[100px]"
+                className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 min-h-[80px]"
               />
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </TabsContent>
 
-        <div className="flex justify-end gap-2 p-6 border-t">
-          <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
-            Hủy
-          </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-lime-600 hover:bg-lime-700 text-white">
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Đang xử lý...
-              </>
-            ) : vatTu ? (
-              "Cập nhật"
-            ) : (
-              "Thêm mới"
-            )}
-          </Button>
-        </div>
+        <TabsContent value="advanced">
+          <motion.div className="space-y-4" variants={formVariants} initial="hidden" animate="visible">
+            <motion.div className="space-y-2" variants={itemVariants}>
+              <Label htmlFor="thanhPhan">Thành phần</Label>
+              <Textarea
+                id="thanhPhan"
+                name="thanhPhan"
+                value={formData.thanhPhan}
+                onChange={handleInputChange}
+                placeholder="Nhập thành phần của vật tư"
+                className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 min-h-[80px]"
+              />
+            </motion.div>
+
+            <motion.div className="space-y-2" variants={itemVariants}>
+              <Label htmlFor="huongDanSuDung">Hướng dẫn sử dụng</Label>
+              <Textarea
+                id="huongDanSuDung"
+                name="huongDanSuDung"
+                value={formData.huongDanSuDung}
+                onChange={handleInputChange}
+                placeholder="Nhập hướng dẫn sử dụng"
+                className="border-lime-200 focus:border-lime-500 focus-visible:ring-lime-500 min-h-[80px]"
+              />
+            </motion.div>
+          </motion.div>
+        </TabsContent>
+      </Tabs>
+
+      <div className="flex justify-end gap-2 pt-6 border-t mt-6">
+        <Button variant="outline" onClick={onClose} disabled={isSubmitting} className="border-lime-200">
+          Hủy
+        </Button>
+        <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-lime-500 hover:bg-lime-600 text-white">
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Đang xử lý...
+            </>
+          ) : vatTu ? (
+            "Cập nhật"
+          ) : (
+            "Thêm mới"
+          )}
+        </Button>
+      </div>
+    </>
+  )
+
+  if (isMobile) {
+    return (
+      <Drawer open={isOpen} onOpenChange={onClose}>
+        <DrawerContent className="px-4 pb-6 pt-4 max-h-[90vh]">
+          <DrawerHeader className="px-0 pb-4">
+            <DrawerTitle className="text-xl font-bold text-slate-800">
+              {vatTu ? "Chỉnh sửa vật tư" : "Thêm vật tư mới"}
+            </DrawerTitle>
+            <DrawerDescription className="text-slate-500">Điền thông tin vật tư bên dưới</DrawerDescription>
+          </DrawerHeader>
+          {ModalContent}
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[600px] p-6 max-h-[90vh] overflow-auto">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-xl font-bold text-slate-800">
+            {vatTu ? "Chỉnh sửa vật tư" : "Thêm vật tư mới"}
+          </DialogTitle>
+        </DialogHeader>
+
+        {ModalContent}
       </DialogContent>
     </Dialog>
   )

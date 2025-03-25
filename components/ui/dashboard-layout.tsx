@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -43,9 +43,47 @@ const NavItem = ({ href, icon, label, isActive, onClick }: NavItemProps) => (
   </Link>
 )
 
+// Bottom navigation item component
+const BottomNavItem = ({ href, icon, label, isActive, onClick }: NavItemProps) => (
+  <Link
+    href={href}
+    onClick={onClick}
+    className={cn(
+      "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
+      isActive ? "text-lime-600" : "text-slate-500",
+    )}
+  >
+    <div className="relative">
+      {icon}
+      {isActive && (
+        <motion.div
+          layoutId="bottomActiveIndicator"
+          className="absolute -inset-1 rounded-full bg-lime-100"
+          style={{ zIndex: -1 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.2 }}
+        />
+      )}
+    </div>
+    <span className="text-xs font-medium">{label}</span>
+  </Link>
+)
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Track scroll position for header shadow
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const navItems = [
     { href: "/timeline", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
@@ -55,6 +93,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: "/ultilities", icon: <Settings className="w-5 h-5" />, label: "Tiện ích" },
     { href: "/profile", icon: <User className="w-5 h-5" />, label: "Người dùng" },
     { href: "/admin", icon: <Settings className="w-5 h-5" />, label: "Quản trị" },
+  ]
+
+  // Mobile navigation items (limited to 5 for bottom nav)
+  const mobileNavItems = [
+    { href: "/timeline", icon: <Calendar className="w-5 h-5" />, label: "Nhật ký" },
+    { href: "/category", icon: <LayoutDashboard className="w-5 h-5" />, label: "Danh mục" },
+    { href: "/statistics", icon: <BarChart2 className="w-5 h-5" />, label: "Thống kê" },
+    { href: "/ultilities", icon: <Settings className="w-5 h-5" />, label: "Tiện ích" },
+    { href: "/profile", icon: <User className="w-5 h-5" />, label: "Người dùng" },
   ]
 
   const handleLogout = () => {
@@ -93,19 +140,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </Button>
         </div>
       </aside>
-
+{/* 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+      <div
+        className={cn(
+          "md:hidden fixed top-0 left-0 right-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between transition-shadow duration-200",
+          scrolled ? "shadow-md" : "",
+        )}
+      >
         <div className="flex items-center gap-2">
           <Leaf className="w-6 h-6 text-lime-600" />
           <h1 className="text-lg font-bold text-slate-800">Nhật ký canh tác</h1>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </Button>
-      </div>
+      </div> 
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -155,12 +204,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
+
+      {/* Bottom Navigation - Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-slate-200 shadow-lg">
+        <motion.nav
+          className="flex justify-around items-center h-16 px-2"
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.2, duration: 0.3, type: "spring" }}
+        >
+          {mobileNavItems.map((item) => (
+            <BottomNavItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              isActive={pathname === item.href}
+            />
+          ))}
+        </motion.nav>
+      </div>
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto pt-0 md:pt-0">
         <div className="md:hidden h-14"></div> {/* Spacer for mobile header */}
-        <div className="p-4 md:p-6">{children}</div>
+        <div className="p-4 md:p-6 pb-20 md:pb-6">{children}</div> {/* Added bottom padding for mobile */}
       </main>
     </div>
   )

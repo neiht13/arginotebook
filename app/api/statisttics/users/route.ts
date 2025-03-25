@@ -10,7 +10,7 @@ export async function GET(request) {
   }
 
   // Kiểm tra quyền ADMIN
-  if (!session.user.role.includes("ADMIN")) {
+  if (!session.user.role?.includes("ADMIN")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
@@ -38,7 +38,7 @@ export async function GET(request) {
     // Tính toán thống kê
     const totalUsers = users.length
     const activeUsers = users.filter((user) => user.status === "active").length
-    const adminUsers = users.filter((user) => user.role && user.role.includes("ADMIN")).length
+    const adminUsers = users.filter((user) => user.role && user.role?.includes("ADMIN")).length
 
     // Nhóm người dùng theo đơn vị
     const usersByUnitMap = {}

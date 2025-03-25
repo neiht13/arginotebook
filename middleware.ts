@@ -23,7 +23,6 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const nextToken = (await cookies()).get('next-auth.session-token')
 
   // @ts-ignore
-  const { nextUrl: url, geo } = req
   NextResponse.next()
   // const data = await d.json();
   // if (data?.originalUrl) {
@@ -32,12 +31,12 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   //   return NextResponse.redirect('localhost:3000')
   // }
   
-  if (
-    !nextToken &&
-    !path.startsWith('/auth')
-  ) {
-    return NextResponse.redirect(new URL('/auth', req.nextUrl))
-  } 
+  // if (
+  //   !nextToken &&
+  //   !path.startsWith('/auth')
+  // ) {
+  //   return NextResponse.redirect(new URL('/auth', req.nextUrl))
+  // } 
   return NextResponse.next()
 
 

@@ -9,6 +9,7 @@ import SessionProvider from '@/lib/provider';
 import { nunito } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import Spinner from '@/components/ui/spinner';
+import Script from 'next/script';
 
 export const metadata = {
   title: 'NKSX',
@@ -40,6 +41,22 @@ const LisLayout: React.FC<LayoutProps> = ({ children }) => {
             </SessionProvider>
           </div>
         </Suspense>
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(
+                  function(registration) {
+                    console.log('Service Worker registration successful with scope: ', registration.scope);
+                  },
+                  function(err) {
+                    console.log('Service Worker registration failed: ', err);
+                  }
+                );
+              });
+            }
+          `}
+        </Script>
       </body>
     </html>
   );

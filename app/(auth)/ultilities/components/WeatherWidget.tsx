@@ -1,14 +1,12 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, AlertCircle, Cloud, CloudRain, Thermometer, Wind, Droplets } from 'lucide-react'
+import { Search, AlertCircle, Cloud, Thermometer, Wind, Droplets, MapPin } from 'lucide-react'
 import { motion, AnimatePresence } from "framer-motion"
-
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts"
 import Spinner from "@/components/ui/spinner"
 import { format } from "date-fns"
@@ -17,38 +15,35 @@ import { Skeleton } from "@/components/ui/skeleton"
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
 
 export default function WeatherWidget() {
-  const [city, setCity] = useState("Cao Lãnh")
+  const [city, setCity] = useState("Vị trí hiện tại")
   const [weather, setWeather] = useState<any>(null)
   const [forecast, setForecast] = useState<any[]>([])
-  const [aqi, setAqi] = useState<any>(null) // Air Quality Index
+  const [aqi, setAqi] = useState<any>(null)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-
-  // State variables for coordinates
   const [lat, setLat] = useState<number | null>(null)
   const [lon, setLon] = useState<number | null>(null)
 
-  // Attempt to get user's current position on component mount
+  // Fetch initial location on mount
   useEffect(() => {
+    setIsLoading(true)
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setLat(position.coords.latitude)
           setLon(position.coords.longitude)
+          setCity("Vị trí hiện tại")
         },
-        (error) => {
-          console.error("Error getting geolocation:", error)
-          // Fallback to default city if geolocation fails
-          fetchCoordinatesByCity("Cao Lãnh")
-        },
+        () => {
+          fetchCoordinatesByCity("Cao Lãnh") // Fallback to Cao Lãnh
+        }
       )
     } else {
-      // Geolocation not supported, fallback to default city
-      fetchCoordinatesByCity("Cao Lãnh")
+      fetchCoordinatesByCity("Cao Lãnh") // Fallback if geolocation not supported
     }
   }, [])
 
-  // Fetch weather and AQI data whenever coordinates are available
+  // Fetch weather data when coordinates change
   useEffect(() => {
     if (lat !== null && lon !== null) {
       fetchCurrentWeather(lat, lon)
@@ -58,11 +53,11 @@ export default function WeatherWidget() {
     }
   }, [lat, lon])
 
-  // Fetch coordinates based on city name
   const fetchCoordinatesByCity = async (cityName: string) => {
+    setIsLoading(true)
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cityName)}&appid=${API_KEY}`,
+        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(cityName)}&appid=${API_KEY}`
       )
       const data = await response.json()
       if (data.cod === 200) {
@@ -70,27 +65,29 @@ export default function WeatherWidget() {
         setLon(data.coord.lon)
         setCity(data.name)
         setError("")
-      } else {
-        setError(data.message)
+      } else if (data.cod === "404") {
+        setError(`Không tìm thấy "${cityName}". Vui lòng kiểm tra lại.`)
         setWeather(null)
         setForecast([])
         setAqi(null)
+      } else {
+        setError(data.message || "Lỗi không xác định từ API.")
       }
     } catch (error) {
-      console.error("Error fetching coordinates by city:", error)
-      setError("Không thể lấy tọa độ thành phố. Vui lòng thử lại sau.")
+      console.error("Error fetching coordinates:", error)
+      setError("Không thể kết nối đến API thời tiết.")
+    } finally {
       setIsLoading(false)
     }
   }
 
-  // Fetch current weather using Current Weather API
   const fetchCurrentWeather = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=vi`,
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=vi`
       )
       const data = await response.json()
-      if (data) {
+      if (data.cod === 200) {
         setWeather(data)
         setError("")
       } else {
@@ -98,55 +95,36 @@ export default function WeatherWidget() {
         setWeather(null)
       }
     } catch (error) {
-      console.error("Error fetching current weather data:", error)
-      setError("Không thể lấy dữ liệu thời tiết hiện tại. Vui lòng thử lại sau.")
+      console.error("Error fetching weather:", error)
+      setError("Lỗi kết nối khi lấy dữ liệu thời tiết.")
       setWeather(null)
-      setIsLoading(false)
     }
   }
 
-  // Fetch 5-day forecast using Forecast API
   const fetchForecast = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=vi`,
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=vi`
       )
       const data = await response.json()
-
-      if (data && data.list) {
+      if (data.cod === "200") {
         const desiredHours = [1, 7, 10, 13, 16]
-        const filteredData = data.list.filter((item: any) => {
-          const date = new Date(item.dt * 1000)
-          const hour = date.getHours()
-          return desiredHours.includes(hour)
-        })
-
-        // Tổ chức dữ liệu dự báo theo ngày
-        const groupedData: any[] = []
-        const dateMap = new Map()
-
-        filteredData.forEach((item: any) => {
-          const dateStr = format(new Date(item.dt * 1000), "dd-MM-yyyy")
-          const timeStr = format(new Date(item.dt * 1000), "HH:mm")
-          if (!dateMap.has(dateStr)) {
-            dateMap.set(dateStr, [])
-          }
-          dateMap.get(dateStr)?.push({
-            time: timeStr,
-            temp: item.main.temp,
-            weather: item.weather[0],
-          })
-        })
-
-        // Chuyển Map thành mảng
-        dateMap.forEach((value, key) => {
-          groupedData.push({
-            date: key,
-            details: value,
-          })
-        })
-
-        // Giới hạn lên đến 5 ngày
+        const filteredData = data.list.filter((item: any) =>
+          desiredHours.includes(new Date(item.dt * 1000).getHours())
+        )
+        const groupedData = Array.from(
+          filteredData.reduce((map: Map<string, any[]>, item: any) => {
+            const dateStr = format(new Date(item.dt * 1000), "dd-MM-yyyy")
+            if (!map.has(dateStr)) map.set(dateStr, [])
+            map.get(dateStr)!.push({
+              time: format(new Date(item.dt * 1000), "HH:mm"),
+              temp: item.main.temp,
+              weather: item.weather[0],
+            })
+            return map
+          }, new Map()),
+          ([date, details]) => ({ date, details })
+        )
         setForecast(groupedData.slice(0, 5))
         setError("")
       } else {
@@ -154,21 +132,19 @@ export default function WeatherWidget() {
         setForecast([])
       }
     } catch (error) {
-      console.error("Error fetching forecast data:", error)
-      setError("Không thể lấy dữ liệu dự báo thời tiết. Vui lòng thử lại sau.")
+      console.error("Error fetching forecast:", error)
+      setError("Lỗi kết nối khi lấy dự báo thời tiết.")
       setForecast([])
-      setIsLoading(false)
     }
   }
 
-  // Fetch Air Quality Index (AQI) data
   const fetchAqiData = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`,
+        `https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
       )
       const data = await response.json()
-      if (data.list && data.list.length > 0) {
+      if (data.list?.length > 0) {
         setAqi(data.list[0])
         setError("")
       } else {
@@ -176,323 +152,318 @@ export default function WeatherWidget() {
         setAqi(null)
       }
     } catch (error) {
-      console.error("Error fetching AQI data:", error)
-      setError("Không thể lấy dữ liệu chất lượng không khí. Vui lòng thử lại sau.")
+      console.error("Error fetching AQI:", error)
+      setError("Lỗi kết nối khi lấy dữ liệu chất lượng không khí.")
       setAqi(null)
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    fetchCoordinatesByCity(city)
+  }
+
+  const handleLocateMe = () => {
+    setIsLoading(true)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLat(position.coords.latitude)
+          setLon(position.coords.longitude)
+          setCity("Vị trí hiện tại")
+          setError("")
+          setIsLoading(false)
+        },
+        (err) => {
+          console.error("Geolocation error:", err)
+          setError("Không thể lấy vị trí hiện tại.")
+          fetchCoordinatesByCity("Cao Lãnh")
+          setIsLoading(false)
+        }
+      )
+    } else {
+      setError("Trình duyệt không hỗ trợ định vị.")
+      fetchCoordinatesByCity("Cao Lãnh")
       setIsLoading(false)
     }
   }
 
-  // Handle form submission to search for a new city
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    fetchCoordinatesByCity(city)
-  }
+  const getWeatherIconUrl = (iconCode: string, size = "2x") =>
+    `https://openweathermap.org/img/wn/${iconCode}@${size}.png`
 
-  // Function to get weather icon URL from OpenWeather
-  const getWeatherIconUrl = (iconCode: string, size = "2x") => {
-    return `https://openweathermap.org/img/wn/${iconCode}@${size}.png`
-  }
-
-  // Function to get AQI description and color
   const getAqiDescription = (aqiValue: number) => {
-    switch (aqiValue) {
-      case 1:
-        return { label: "Tốt", color: "#4ade80" }
-      case 2:
-        return { label: "Khá", color: "#facc15" }
-      case 3:
-        return { label: "Trung Bình", color: "#fb923c" }
-      case 4:
-        return { label: "Xấu", color: "#ef4444" }
-      case 5:
-        return { label: "Rất Xấu", color: "#a855f7" }
-      default:
-        return { label: "Không xác định", color: "#94a3b8" }
+    const aqiMap = {
+      1: { label: "Tốt", color: "#4ade80", bg: "bg-green-50" },
+      2: { label: "Khá", color: "#facc15", bg: "bg-yellow-50" },
+      3: { label: "Trung Bình", color: "#fb923c", bg: "bg-orange-50" },
+      4: { label: "Xấu", color: "#ef4444", bg: "bg-red-50" },
+      5: { label: "Rất Xấu", color: "#a855f7", bg: "bg-purple-50" },
     }
+    return aqiMap[aqiValue] || { label: "Không xác định", color: "#94a3b8", bg: "bg-gray-50" }
   }
 
-  // Prepare data for temperature chart
-  const prepareChartData = () => {
-    if (!forecast) return []
-    const chartData = forecast.flatMap((day: any) => {
-      return day.details.map((detail: any) => ({
+  const prepareChartData = () =>
+    forecast.flatMap((day: any) =>
+      day.details.map((detail: any) => ({
         dateTime: `${day.date.split("-").slice(0, 2).join("-")} ${detail.time}`,
         temp: Math.round(detail.temp),
       }))
-    })
-    return chartData
-  }
-
-  // Lấy biểu tượng thời tiết dựa trên mã thời tiết
-  const getWeatherIcon = (code: string) => {
-    const iconMap = {
-      "01d": <Cloud className="w-6 h-6 text-amber-500" />,
-      "01n": <Cloud className="w-6 h-6 text-slate-600" />,
-      "02d": <Cloud className="w-6 h-6 text-amber-500" />,
-      "02n": <Cloud className="w-6 h-6 text-slate-600" />,
-      "03d": <Cloud className="w-6 h-6 text-slate-400" />,
-      "03n": <Cloud className="w-6 h-6 text-slate-600" />,
-      "04d": <Cloud className="w-6 h-6 text-slate-500" />,
-      "04n": <Cloud className="w-6 h-6 text-slate-600" />,
-      "09d": <CloudRain className="w-6 h-6 text-blue-400" />,
-      "09n": <CloudRain className="w-6 h-6 text-blue-600" />,
-      "10d": <CloudRain className="w-6 h-6 text-blue-400" />,
-      "10n": <CloudRain className="w-6 h-6 text-blue-600" />,
-      "11d": <CloudRain className="w-6 h-6 text-purple-500" />,
-      "11n": <CloudRain className="w-6 h-6 text-purple-600" />,
-      "13d": <Cloud className="w-6 h-6 text-slate-200" />,
-      "13n": <Cloud className="w-6 h-6 text-slate-300" />,
-      "50d": <Cloud className="w-6 h-6 text-slate-300" />,
-      "50n": <Cloud className="w-6 h-6 text-slate-400" />,
-    }
-    
-    return iconMap[code] || <Cloud className="w-6 h-6 text-slate-400" />
-  }
+    )
 
   return (
-    <div className="p-6 bg-white">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Thông tin thời tiết hiện tại */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Form tìm kiếm */}
-          <Card className="shadow-md border border-lime-100">
-            <CardHeader className="bg-lime-50 border-b border-lime-100">
-              <CardTitle className="text-xl font-bold text-lime-800 flex items-center gap-2">
-                <Search className="w-5 h-5" />
-                Tìm kiếm
+    <div className="p-8 bg-gradient-to-br from-blue-50 via-lime-50 to-purple-50 min-h-screen">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {/* Left Column */}
+        <div className="lg:col-span-1 space-y-8">
+          <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
+            <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
+              <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                <Search className="w-5 h-5 text-lime-700 animate-pulse" />
+                Tra Cứu Thời Tiết
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4">
-              <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                <Input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Nhập tên thành phố..."
-                  className="flex-1"
-                  required
-                />
-                <Button 
-                  type="submit" 
-                  variant="default" 
-                  className="flex items-center gap-1 bg-lime-600 hover:bg-lime-700" 
-                  aria-label="Search"
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Nhập tên thành phố..."
+                    className="flex-1 rounded-xl border-gray-200 focus:border-lime-500 shadow-md bg-white/80 transition-all duration-200"
+                  />
+                  <Button
+                    type="submit"
+                    className="bg-lime-600 hover:bg-lime-700 rounded-xl shadow-md text-white"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <Spinner className="w-4 h-4" /> : <Search className="w-4 h-4" />}
+                  </Button>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleLocateMe}
+                  className="w-full border-lime-600 text-lime-700 hover:bg-lime-50 rounded-xl shadow-md bg-white/80 transition-all duration-200"
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <Spinner className="w-4 h-4" />
+                    <Spinner className="w-4 h-4 mr-2" />
                   ) : (
-                    <Search className="w-4 h-4" />
+                    <MapPin className="w-4 h-4 mr-2 animate-bounce" />
                   )}
-                  <span>Tìm</span>
+                  Vị trí hiện tại
                 </Button>
               </form>
             </CardContent>
           </Card>
 
-          {/* Thời tiết hiện tại */}
-          <Card className="shadow-md border border-lime-100 overflow-hidden">
+          <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
             {isLoading ? (
-              <div className="p-6 space-y-4">
-                <Skeleton className="h-8 w-3/4" />
-                <Skeleton className="h-16 w-1/2" />
-                <Skeleton className="h-4 w-full" />
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
-                  <Skeleton className="h-8 w-full" />
+              <div className="p-6 space-y-6">
+                <Skeleton className="h-8 w-3/4 rounded-lg" />
+                <Skeleton className="h-16 w-1/2 rounded-lg" />
+                <Skeleton className="h-4 w-full rounded-lg" />
+                <div className="grid grid-cols-2 gap-4">
+                  {Array(4).fill(0).map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full rounded-lg" />
+                  ))}
                 </div>
               </div>
             ) : weather ? (
               <>
-                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6">
+                <div className="bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-500 text-white p-6">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h2 className="text-2xl font-bold">{city}</h2>
-                      <p className="text-5xl font-semibold mt-2">{Math.round(weather.main.temp)}°C</p>
-                      <p className="text-base capitalize mt-1">{weather.weather[0].description}</p>
+                      <h2 className="text-2xl font-extrabold tracking-tight text-white drop-shadow-md">{city}</h2>
+                      <p className="text-6xl font-extrabold mt-2 drop-shadow-lg">
+                        {Math.round(weather.main.temp)}°C
+                      </p>
+                      <p className="text-base capitalize mt-1 opacity-90">{weather.weather[0].description}</p>
                     </div>
-                    <div>
-                      <img
-                        src={getWeatherIconUrl(weather.weather[0].icon, "4x") || "/placeholder.svg"}
-                        alt={weather.weather[0].description}
-                        className="w-24 h-24"
-                      />
-                    </div>
+                    <motion.img
+                      src={getWeatherIconUrl(weather.weather[0].icon, "4x")}
+                      alt={weather.weather[0].description}
+                      className="w-28 h-28"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.6 }}
+                    />
                   </div>
                 </div>
-                <div className="p-4 grid grid-cols-2 gap-3">
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                    <Thermometer className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <p className="text-xs text-gray-500">Cảm giác như</p>
-                      <p className="font-medium">{Math.round(weather.main.feels_like)}°C</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                    <Droplets className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <p className="text-xs text-gray-500">Độ ẩm</p>
-                      <p className="font-medium">{weather.main.humidity}%</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                    <Wind className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <p className="text-xs text-gray-500">Gió</p>
-                      <p className="font-medium">{weather.main.wind?.speed} m/s</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                    <Cloud className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <p className="text-xs text-gray-500">Mây</p>
-                      <p className="font-medium">{weather.clouds.all}%</p>
-                    </div>
-                  </div>
+                <div className="p-6 grid grid-cols-2 gap-4">
+                  {[
+                    { icon: Thermometer, label: "Cảm giác", value: `${Math.round(weather.main.feels_like)}°C` },
+                    { icon: Droplets, label: "Độ ẩm", value: `${weather.main.humidity}%` },
+                    { icon: Wind, label: "Gió", value: `${weather.wind.speed} m/s` },
+                    { icon: Cloud, label: "Mây", value: `${weather.clouds.all}%` },
+                  ].map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: idx * 0.1 }}
+                      className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl shadow-sm hover:bg-gray-100 transition-all duration-200"
+                    >
+                      <item.icon className="w-6 h-6 text-indigo-600 animate-pulse" />
+                      <div>
+                        <p className="text-xs text-gray-500">{item.label}</p>
+                        <p className="font-semibold text-gray-800">{item.value}</p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </>
             ) : (
-              <div className="p-6 text-center">
-                <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-2" />
-                <h3 className="text-lg font-medium text-gray-700">Không tìm thấy dữ liệu</h3>
-                <p className="text-gray-500">Vui lòng thử tìm kiếm thành phố khác</p>
+              <div className="p-8 text-center">
+                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4 animate-bounce" />
+                <h3 className="text-xl font-semibold text-gray-800">Không tìm thấy dữ liệu</h3>
+                <p className="text-gray-600 mt-2">Kiểm tra tên thành phố hoặc kết nối mạng.</p>
               </div>
             )}
           </Card>
 
-          {/* Chất lượng không khí */}
-          {aqi && !error && !isLoading && (
-            <Card className="shadow-md border border-lime-100">
-              <CardHeader className="bg-lime-50 border-b border-lime-100 py-3">
-                <CardTitle className="text-lg font-bold text-lime-800 flex items-center gap-2">
-                  <Wind className="w-5 h-5" />
+          {aqi && !isLoading && (
+            <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
+              <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
+                <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                  <Wind className="w-5 h-5 text-lime-700 animate-spin-slow" />
                   Chất Lượng Không Khí
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: getAqiDescription(aqi.main.aqi).color }}
-                    ></div>
-                    <span className="font-medium">{getAqiDescription(aqi.main.aqi).label}</span>
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    AQI: {aqi.main.aqi}/5
-                  </div>
+              <CardContent className="p-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <motion.div
+                    className="w-8 h-8 rounded-full shadow-md"
+                    style={{ backgroundColor: getAqiDescription(aqi.main.aqi).color }}
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                  <span className="font-semibold text-xl text-gray-800">
+                    {getAqiDescription(aqi.main.aqi).label}
+                  </span>
+                </div>
+                <div className="text-sm font-medium text-gray-700 bg-gray-100 px-4 py-1 rounded-full shadow-sm">
+                  AQI: {aqi.main.aqi}/5
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
 
-        {/* Dự báo và biểu đồ */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Biểu đồ nhiệt độ */}
-          <Card className="shadow-md border border-lime-100">
-            <CardHeader className="bg-lime-50 border-b border-lime-100">
-              <CardTitle className="text-xl font-bold text-lime-800 flex items-center gap-2">
-                <Thermometer className="w-5 h-5" />
-                Biểu Đồ Nhiệt Độ 5 Ngày
+        {/* Right Column */}
+        <div className="lg:col-span-2 space-y-8">
+          <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
+            <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
+              <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                <Thermometer className="w-5 h-5 text-lime-700 animate-pulse" />
+                Xu Hướng Nhiệt Độ 5 Ngày
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               {isLoading ? (
-                <Skeleton className="h-[250px] w-full" />
+                <Skeleton className="h-[400px] w-full rounded-xl" />
               ) : forecast.length > 0 ? (
-                <ResponsiveContainer width="100%" height={250}>
+                <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={prepareChartData()}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis 
-                      dataKey="dateTime" 
-                      tick={{ fontSize: 10 }} 
-                      stroke="#64748b"
-                      tickFormatter={(value) => value.split(' ')[0]}
+                    <CartesianGrid strokeDasharray="5 5" stroke="#e5e7eb" opacity={0.6} />
+                    <XAxis
+                      dataKey="dateTime"
+                      tick={{ fontSize: 12, fill: "#6b7280" }}
+                      tickFormatter={(value) => value.split(" ")[0]}
+                      stroke="#6b7280"
                     />
-                    <YAxis 
-                      domain={["auto", "auto"]} 
-                      stroke="#64748b"
+                    <YAxis
+                      stroke="#6b7280"
                       tickFormatter={(value) => `${value}°C`}
+                      domain={["auto", "auto"]}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        borderRadius: '8px',
-                        border: '1px solid #e2e8f0',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "rgba(255, 255, 255, 0.95)",
+                        borderRadius: "12px",
+                        border: "none",
+                        boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+                        padding: "12px",
                       }}
-                      formatter={(value) => [`${value}°C`, 'Nhiệt độ']}
-                      labelFormatter={(label) => `Ngày ${label.split(' ')[0]}, ${label.split(' ')[1]}`}
+                      formatter={(value) => [`${value}°C`, "Nhiệt độ"]}
+                      labelFormatter={(label) => `Ngày ${label}`}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="temp" 
-                      stroke="#84cc16" 
-                      strokeWidth={2}
-                      dot={{ fill: '#84cc16', r: 4 }}
-                      activeDot={{ r: 6, fill: '#65a30d' }} 
+                    <Line
+                      type="monotone"
+                      dataKey="temp"
+                      stroke="#84cc16"
+                      strokeWidth={4}
+                      dot={{ fill: "#84cc16", r: 6, stroke: "#fff", strokeWidth: 2 }}
+                      activeDot={{ r: 10, fill: "#65a30d", stroke: "#fff", strokeWidth: 3 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-[250px] flex items-center justify-center">
-                  <p className="text-gray-500">Không có dữ liệu dự báo</p>
+                <div className="h-[400px] flex items-center justify-center">
+                  <p className="text-gray-600 text-lg font-medium">Không có dữ liệu dự báo</p>
                 </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Dự báo 5 ngày */}
-          <Card className="shadow-md border border-lime-100">
-            <CardHeader className="bg-lime-50 border-b border-lime-100">
-              <CardTitle className="text-xl font-bold text-lime-800 flex items-center gap-2">
-                <Cloud className="w-5 h-5" />
+          <Card className="shadow-lg bg-white/90 backdrop-blur-lg rounded-3xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:border-gradient-to-r hover:from-lime-200 hover:to-blue-200">
+            <CardHeader className="bg-gradient-to-r from-lime-100 to-lime-50 p-5 border-b border-lime-200">
+              <CardTitle className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                <Cloud className="w-5 h-5 text-lime-700 animate-bounce" />
                 Dự Báo 5 Ngày
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               {isLoading ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {Array(3).fill(0).map((_, i) => (
-                    <Skeleton key={i} className="h-24 w-full" />
+                    <Skeleton key={i} className="h-36 w-full rounded-xl" />
                   ))}
                 </div>
               ) : forecast.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {forecast.map((day: any, index: number) => (
                     <motion.div
                       key={index}
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                      className="rounded-lg bg-white shadow-sm border border-gray-100 p-3"
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white shadow-md rounded-xl p-5 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                     >
-                      <p className="text-sm font-medium mb-2 text-gray-700 border-b pb-1">{day.date}</p>
-                      <div className="flex space-x-4 overflow-x-auto pb-2">
+                      <p className="text-sm font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+                        {day.date}
+                      </p>
+                      <div className="flex space-x-6 overflow-x-auto pb-2">
                         {day.details.map((detail: any, idx: number) => (
-                          <div key={idx} className="flex flex-col items-center min-w-[80px]">
-                            <p className="text-xs font-medium mb-1 text-gray-500">{detail.time}</p>
-                            <img
-                              src={getWeatherIconUrl(detail.weather.icon) || "/placeholder.svg"}
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, delay: idx * 0.05 }}
+                            className="flex flex-col items-center min-w-[110px]"
+                          >
+                            <p className="text-xs font-medium text-gray-600">{detail.time}</p>
+                            <motion.img
+                              src={getWeatherIconUrl(detail.weather.icon)}
                               alt={detail.weather.description}
-                              className="w-10 h-10"
+                              className="w-16 h-16 my-3"
+                              whileHover={{ scale: 1.15, rotate: 5 }}
+                              transition={{ duration: 0.2 }}
                             />
-                            <p className="text-lg font-bold mt-1 text-gray-800">{Math.round(detail.temp)}°C</p>
-                            <p className="text-xs text-gray-500 capitalize">{detail.weather.description}</p>
-                          </div>
+                            <p className="text-xl font-bold text-gray-900">{Math.round(detail.temp)}°C</p>
+                            <p className="text-xs text-gray-500 capitalize mt-1">{detail.weather.description}</p>
+                          </motion.div>
                         ))}
                       </div>
                     </motion.div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">Không có dữ liệu dự báo</p>
+                <div className="text-center py-12">
+                  <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4 animate-pulse" />
+                  <p className="text-gray-600 text-lg font-medium">Không có dữ liệu dự báo</p>
                 </div>
               )}
             </CardContent>
@@ -500,18 +471,17 @@ export default function WeatherWidget() {
         </div>
       </div>
 
-      {/* Hiển thị lỗi */}
       <AnimatePresence>
         {error && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="mt-6 p-3 rounded-lg flex items-center border border-red-400 bg-red-100 text-red-700"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="mt-8 p-6 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-center shadow-lg max-w-2xl mx-auto"
           >
-            <AlertCircle className="mr-2 w-5 h-5" />
-            <span>{error}</span>
+            <AlertCircle className="w-6 h-6 mr-3 animate-bounce" />
+            <span className="font-medium text-lg">{error}</span>
           </motion.div>
         )}
       </AnimatePresence>

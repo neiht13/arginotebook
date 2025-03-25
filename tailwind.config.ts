@@ -32,6 +32,7 @@ module.exports = {
   		}
   	},
   	extend: {
+		
 		fontFamily: {
 			'poppins': ['Poppins', 'sans-serif'],
 			'helveticaneue': ['HelveticaNeue', 'sans-serif']

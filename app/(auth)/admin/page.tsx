@@ -1,74 +1,94 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PageHeader } from "@/components/ui/page-header"
-import Spinner from "@/components/ui/spinner"
+import { Users, Building2, Award, BarChart } from "lucide-react"
 import UnitManagement from "./components/UnitManagement"
 import UserManagement from "./components/UserManagement"
+import CertificationManagement from "./components/CertificationManagement"
 import Statistics from "./components/Statistics"
+import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState("units")
-  const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState("units")
 
-  useEffect(() => {
-    // Kiểm tra quyền truy cập
-    if (status === "authenticated") {
-      if (!session?.user?.role?.includes("ADMIN")) {
-        toast({
-          variant: "destructive",
-          title: "Không có quyền truy cập",
-          description: "Bạn không có quyền truy cập trang này"
-        })
-        router.push("/timeline")
-      }
-      setIsLoading(false)
-    } else if (status === "unauthenticated") {
-      router.push("/auth")
-    }
-  }, [status, session, router, toast])
+  // Kiểm tra quyền admin
+  if (status === "loading") {
+    return <div className="flex justify-center items-center min-h-screen">Đang tải...</div>
+  }
 
-  if (isLoading || status === "loading") {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="lg" />
-      </div>
-    )
+  if (status === "unauthenticated" || !session?.user.role?.includes("ADMIN")) {
+    // Nếu không phải admin, chuyển hướng về trang chính
+    router.push("/")
+    toast({
+      title: "Không có quyền truy cập",
+      description: "Bạn không có quyền truy cập vào trang quản trị.",
+      variant: "destructive",
+    })
+    return null
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <PageHeader
-        title="Bảng điều khiển quản trị viên"
-        description="Quản lý đơn vị, tài khoản người dùng và xem thống kê"
-      />
+    <div className="container mx-auto py-6 space-y-6">
+      <PageHeader title="Quản trị hệ thống" description="Quản lý đơn vị, người dùng và chứng nhận trong hệ thống" />
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="units">Quản lý đơn vị</TabsTrigger>
-          <TabsTrigger value="users">Quản lý người dùng</TabsTrigger>
-          <TabsTrigger value="statistics">Thống kê</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid grid-cols-4 gap-4 bg-transparent h-auto p-0">
+          <TabsTrigger
+            value="units"
+            className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-lime-500 border-b-2 border-transparent py-3"
+          >
+            <Building2 className="mr-2 h-5 w-5" />
+            Quản lý đơn vị
+          </TabsTrigger>
+          <TabsTrigger
+            value="users"
+            className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-lime-500 border-b-2 border-transparent py-3"
+          >
+            <Users className="mr-2 h-5 w-5" />
+            Quản lý người dùng
+          </TabsTrigger>
+          <TabsTrigger
+            value="certifications"
+            className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-lime-500 border-b-2 border-transparent py-3"
+          >
+            <Award className="mr-2 h-5 w-5" />
+            Quản lý chứng nhận
+          </TabsTrigger>
+          <TabsTrigger
+            value="statistics"
+            className="data-[state=active]:bg-lime-50 data-[state=active]:text-lime-700 data-[state=active]:border-lime-500 border-b-2 border-transparent py-3"
+          >
+            <BarChart className="mr-2 h-5 w-5" />
+            Thống kê
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="units" className="mt-6">
-          <UnitManagement />
-        </TabsContent>
-
-        <TabsContent value="users" className="mt-6">
-          <UserManagement />
-        </TabsContent>
-
-        <TabsContent value="statistics" className="mt-6">
-          <Statistics />
-        </TabsContent>
+        <Card>
+          <CardContent className="p-6">
+            <TabsContent value="units" className="mt-0">
+              <UnitManagement />
+            </TabsContent>
+            <TabsContent value="users" className="mt-0">
+              <UserManagement />
+            </TabsContent>
+            <TabsContent value="certifications" className="mt-0">
+              <CertificationManagement />
+            </TabsContent>
+            <TabsContent value="statistics" className="mt-0">
+              <Statistics />
+            </TabsContent>
+          </CardContent>
+        </Card>
       </Tabs>
     </div>
   )
 }
+

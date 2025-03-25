@@ -1,29 +1,34 @@
 // components/user-signup-form.tsx
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { EyeIcon, EyeOffIcon, LoaderIcon } from "lucide-react";
+import { useUserStore } from "@/lib/stores/user-store";
 
-//@ts-ignore
-export function UserSignUpForm({ className, ...props }) {
+export function UserSignUpForm({ className, setIsLogin, ...props }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setIsLogin } = props
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [form, setForm] = useState({
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
+    name: "",
+    xId: "", // Đơn vị
   });
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const router = useRouter();
+  const { units, fetchUnits } = useUserStore();
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchUnits(); // Lấy danh sách đơn vị khi component mount
+  }, [fetchUnits]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,24 +41,35 @@ export function UserSignUpForm({ className, ...props }) {
       return;
     }
 
+    if (!form.xId) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn đơn vị",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const response = await axios.post("/api/auth/signup", {
         email: form.email,
+        username: form.username,
         password: form.password,
+        name: form.name,
+        xId: form.xId,
       });
 
       toast({
         title: "Thành công",
-        description: "Tạo tài khoản thành công.",
+        description: "Đăng ký thành công. Vui lòng chờ admin kích hoạt tài khoản.",
       });
       setIsLogin(true);
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Lỗi",
-        description: "Vui lòng sử dụng email khác.",
+        description: "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.",
       });
     } finally {
       setIsLoading(false);
@@ -65,11 +81,7 @@ export function UserSignUpForm({ className, ...props }) {
   };
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className={cn("space-y-4 text-left", className)}
-      {...props}
-    >
+    <form onSubmit={onSubmit} className={cn("space-y-4 text-left", className)} {...props}>
       <div className="grid gap-4">
         <div className="grid gap-1">
           <Input
@@ -84,8 +96,19 @@ export function UserSignUpForm({ className, ...props }) {
             required
           />
         </div>
+        <div className="grid gap-1">
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            label="Tên đăng nhập"
+            className="h-11"
+            disabled={isLoading}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div className="grid gap-1 relative">
-          {/* <Label htmlFor="password">Mật khẩu</Label> */}
           <Input
             id="password"
             name="password"
@@ -103,15 +126,10 @@ export function UserSignUpForm({ className, ...props }) {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-2 top-3 text-slate-500 hover:text-slate-700"
           >
-            {showPassword ? (
-              <EyeOffIcon className="w-5 h-5" />
-            ) : (
-              <EyeIcon className="w-5 h-5" />
-            )}
+            {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
         <div className="grid gap-1 relative">
-          {/* <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label> */}
           <Input
             id="confirmPassword"
             name="confirmPassword"
@@ -123,26 +141,52 @@ export function UserSignUpForm({ className, ...props }) {
             disabled={isLoading}
             onChange={handleChange}
             required
-          /><button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-2 top-3 text-slate-500 hover:text-slate-700"
-        >
-          {showPassword ? (
-            <EyeOffIcon className="w-5 h-5" />
-          ) : (
-            <EyeIcon className="w-5 h-5" />
-          )}
-        </button>
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 top-3 text-slate-500 hover:text-slate-700"
+          >
+            {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+          </button>
+        </div>
+        <div className="grid gap-1">
+          <Input
+            id="name"
+            name="name"
+            type="text"
+            label="Họ tên"
+            className="h-11"
+            disabled={isLoading}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="grid gap-1">
+          <Label htmlFor="xId">Đơn vị</Label>
+          <Select
+            value={form.xId}
+            onValueChange={(value) => setForm({ ...form, xId: value })}
+            disabled={isLoading}
+          >
+            <SelectTrigger className="h-11">
+              <SelectValue placeholder="Chọn đơn vị" />
+            </SelectTrigger>
+            <SelectContent>
+              {units.map((unit) => (
+                <SelectItem key={unit._id} value={unit._id}>
+                  {unit.tendonvi}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <Button
           className="w-full bg-lime-600 text-white hover:bg-lime-700 transition-colors"
           disabled={isLoading}
           type="submit"
         >
-          {isLoading && (
-            <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
-          )}
+          {isLoading && <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />}
           Đăng ký
         </Button>
       </div>

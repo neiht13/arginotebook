@@ -112,9 +112,9 @@ const TimelineCalendar: React.FC<TimelineCalendarProps> = ({ data, onAddEntry })
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         {/* Calendar */}
-        <div className="md:col-span-1">
+        <div className="md:col-span-2">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Lịch hoạt động</CardTitle>
@@ -125,7 +125,7 @@ const TimelineCalendar: React.FC<TimelineCalendarProps> = ({ data, onAddEntry })
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 locale={vi}
-                className="rounded-md border"
+                className="rounded-md border items-center"
                 modifiers={{
                   hasEntry: getDatesWithEntries(),
                 }}
@@ -133,6 +133,7 @@ const TimelineCalendar: React.FC<TimelineCalendarProps> = ({ data, onAddEntry })
                   hasEntry: {
                     backgroundColor: "rgba(132, 204, 22, 0.1)",
                     fontWeight: "bold",
+                    color: "#84cc12",
                     borderBottom: "2px solid #84cc16",
                   },
                 }}
@@ -148,7 +149,7 @@ const TimelineCalendar: React.FC<TimelineCalendarProps> = ({ data, onAddEntry })
         </div>
 
         {/* Entries for selected date */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-3">
           <Card className="h-full">
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
               <div>

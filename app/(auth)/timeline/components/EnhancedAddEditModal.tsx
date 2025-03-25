@@ -1,5 +1,4 @@
 "use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
 import type { TimelineEntry, Agrochemical } from "../types"
@@ -13,7 +12,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format, addDays } from "date-fns"
 import { vi } from "date-fns/locale"
-import { CalendarIcon, X, Camera, Trash2, Plus, Loader2, AlertCircle, Search, Leaf, Info } from "lucide-react"
+import { CalendarIcon, X, Camera, Trash2, Plus, Loader2, AlertCircle, Search, Leaf, Info, WifiOff } from "lucide-react"
 import CurrencyInput from "@/components/ui/input-currency"
 import axios from "axios"
 import { useSession } from "next-auth/react"
@@ -21,16 +20,8 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useToast } from "@/components/ui/use-toast"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
-interface Season {
-  _id: string
-  tenmuavu: string
-  nam: string
-  ngaybatdau: string
-  ngayketthuc?: string
-  phuongphap?: string
-  giong?: string
-}
+import { useNetworkStore } from "@/lib/network-status"
+import { useReferenceDataStore } from "@/lib/stores/reference-data-store"
 
 interface EnhancedAddEditModalProps {
   isOpen: boolean
@@ -43,6 +34,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   const { data: session } = useSession()
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [formData, setFormData] = useState<Partial<TimelineEntry>>({
     muaVu: "",
     muaVuId: "",
@@ -61,8 +53,8 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     agrochemicals: [],
     image: [],
   })
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [selectedStageId, setSelectedStageId] = useState("")
+  const [selectedSeason, setSelectedSeason] = useState<any | null>(null)
   const [newAgrochemical, setNewAgrochemical] = useState<Partial<Agrochemical>>({
     name: "",
     type: "thuốc",
@@ -71,77 +63,77 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     donViTinh: "kg",
     donGia: 0,
   })
-  const [images, setImages] = useState<File[]>([])
-  const [previewImages, setPreviewImages] = useState<string[]>([])
+  const [images, setImages] = useState<File[]>([]) // Ảnh mới (File)
+  const [previewImages, setPreviewImages] = useState<string[]>([]) // URL preview (cũ + mới)
+  const [existingImages, setExistingImages] = useState<{ src: string; alt: string }[]>([]) // Ảnh cũ từ entry
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [filteredTasks, setFilteredTasks] = useState<any[]>([])
+  const isOnline = useNetworkStore((state) => state.isOnline)
 
-  // State for inventory management
   const [availableSupplies, setAvailableSupplies] = useState<any[]>([])
   const [filteredSupplies, setFilteredSupplies] = useState<any[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [loadingSupplies, setLoadingSupplies] = useState(false)
   const [selectedSupply, setSelectedSupply] = useState<any | null>(null)
 
-  // State for seasons
-  const [seasons, setSeasons] = useState<Season[]>([])
-  const [loadingSeasons, setLoadingSeasons] = useState(false)
-  const [selectedSeason, setSelectedSeason] = useState<Season | null>(null)
+  const {
+    seasons,
+    stages,
+    tasks,
+    isLoadingSeasons,
+    isLoadingStages,
+    isLoadingTasks,
+    fetchSeasons,
+    fetchStages,
+    fetchTasks,
+    getFilteredTasks,
+    getStageById,
+    getSeasonById,
+  } = useReferenceDataStore()
 
-  // State for stages and tasks
-  const [stages, setStages] = useState<any[]>([])
-  const [tasks, setTasks] = useState<any[]>([])
-  const [loadingStages, setLoadingStages] = useState(false)
-  const [loadingTasks, setLoadingTasks] = useState(false)
-  const [filteredTasks, setFilteredTasks] = useState<any[]>([])
-
-  // Initialize form data when entry changes
+  // Initialize form data and images when modal opens or entry changes
   useEffect(() => {
+    if (!isOpen) return
     if (entry) {
-      // Find the stage ID based on the stage name
+      const dateObj = entry.ngayThucHien ? parseVietnameseDate(entry.ngayThucHien) : new Date()
       const stageObj = stages.find((s) => s.tengiaidoan === entry.giaiDoan)
-      const stageId = stageObj ? stageObj._id : ""
-
-      // Parse the date
-      let dateObj = new Date()
-      try {
-        if (entry.ngayThucHien) {
-          const [day, month, year] = entry.ngayThucHien.split("-").map(Number)
-          dateObj = new Date(year, month - 1, day)
-        }
-      } catch (error) {
-        console.error("Error parsing date:", error)
-      }
-
+      const seasonObj = getSeasonById(entry.muaVuId)
       setSelectedDate(dateObj)
-      setSelectedStageId(stageId)
-
-      // Set form data
+      setSelectedStageId(stageObj?._id || "")
+      setSelectedSeason(seasonObj || null)
       setFormData({
         ...entry,
-        giaiDoanId: stageId,
+        ngayThucHien: format(dateObj, "dd-MM-yyyy"),
+        giaiDoanId: stageObj?._id || "",
       })
-
-      // Set preview images if available
-      if (entry.image && entry.image.length > 0) {
-        const previews = entry.image.map((img) => img.src)
-        setPreviewImages(previews)
-      } else {
-        setPreviewImages([])
-      }
+      // Đồng bộ ảnh cũ từ entry
+      const existing = entry.image?.map((img) => ({ src: img.src, alt: img.alt })) || []
+      setExistingImages(existing)
+      setPreviewImages(existing.map((img) => img.src))
+      setImages([]) // Reset ảnh mới
     } else {
-      // Reset form for new entry
       resetForm()
     }
-  }, [entry, isOpen, stages])
+  }, [entry, isOpen, stages, getSeasonById])
 
-  // Fetch available supplies and seasons when modal opens
+  // Fetch reference data and supplies when modal opens
   useEffect(() => {
     if (isOpen) {
       fetchSupplies()
-      fetchSeasons()
-      fetchStages()
+      if (seasons.length === 0) fetchSeasons()
+      if (stages.length === 0) fetchStages()
+      if (tasks.length === 0) fetchTasks()
     }
-  }, [isOpen])
+  }, [isOpen, fetchSeasons, fetchStages, fetchTasks, seasons.length, stages.length, tasks.length])
+
+  // Filter tasks based on selected stage
+  useEffect(() => {
+    if (selectedStageId) {
+      setFilteredTasks(getFilteredTasks(selectedStageId))
+    } else {
+      setFilteredTasks([])
+    }
+  }, [selectedStageId, getFilteredTasks])
 
   // Filter supplies based on search term
   useEffect(() => {
@@ -153,65 +145,13 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     }
   }, [searchTerm, availableSupplies])
 
-  // Update ngaySauBatDau when selectedDate or selectedSeason changes
-  useEffect(() => {
-    if (selectedSeason && selectedDate) {
-      try {
-        const seasonStartDate = parseVietnameseDate(selectedSeason.ngaybatdau)
-        const daysDiff = Math.floor((selectedDate.getTime() - seasonStartDate.getTime()) / (1000 * 60 * 60 * 24))
-
-        if (daysDiff >= 0) {
-          setFormData((prev) => ({
-            ...prev,
-            ngaySauBatDau: daysDiff,
-          }))
-        }
-      } catch (error) {
-        console.error("Error calculating days difference:", error)
-      }
-    }
-  }, [selectedDate, selectedSeason])
-
-  // Update selectedDate when ngaySauBatDau changes
-  useEffect(() => {
-    if (selectedSeason && formData.ngaySauBatDau !== undefined) {
-      try {
-        const seasonStartDate = parseVietnameseDate(selectedSeason.ngaybatdau)
-        const newDate = addDays(seasonStartDate, formData.ngaySauBatDau)
-
-        setSelectedDate(newDate)
-        setFormData((prev) => ({
-          ...prev,
-          ngayThucHien: format(newDate, "dd-MM-yyyy"),
-        }))
-      } catch (error) {
-        console.error("Error calculating date from days:", error)
-      }
-    }
-  }, [formData.ngaySauBatDau, selectedSeason])
-
-  // Filter tasks based on selected stage
-  useEffect(() => {
-    if (selectedStageId) {
-      const filtered = tasks.filter((task) => task.giaidoanId === selectedStageId)
-      setFilteredTasks(filtered)
-    } else {
-      setFilteredTasks([])
-    }
-  }, [selectedStageId, tasks])
-
   // Calculate material cost based on agrochemicals
   useEffect(() => {
-    if (formData.agrochemicals && formData.agrochemicals.length > 0) {
-      const totalCost = formData.agrochemicals.reduce((sum, item) => {
-        return sum + (item.donGia || 0) * (item.lieuLuong || 0)
-      }, 0)
-
-      setFormData((prev) => ({
-        ...prev,
-        chiPhiVatTu: totalCost,
-      }))
-    }
+    if (!formData.agrochemicals || formData.agrochemicals.length === 0) return
+    const totalCost = formData.agrochemicals.reduce((sum, item) => {
+      return sum + (item.donGia || 0) * (item.lieuLuong || 0)
+    }, 0)
+    setFormData((prev) => ({ ...prev, chiPhiVatTu: totalCost }))
   }, [formData.agrochemicals])
 
   const parseVietnameseDate = (dateString: string) => {
@@ -227,9 +167,18 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   const fetchSupplies = async () => {
     try {
       setLoadingSupplies(true)
+      if (!isOnline) {
+        toast({
+          title: "Chế độ ngoại tuyến",
+          description: "Không thể tải danh sách vật tư khi ngoại tuyến",
+          variant: "warning",
+        })
+        setAvailableSupplies([])
+        setFilteredSupplies([])
+        return
+      }
       const response = await axios.get("/api/vattu")
-      // Filter out supplies with zero quantity
-      const availableItems = response.data.filter((item) => item.soLuong > 0)
+      const availableItems = response.data.filter((item: any) => item.soLuong > 0)
       setAvailableSupplies(availableItems)
       setFilteredSupplies(availableItems)
     } catch (error) {
@@ -241,60 +190,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       })
     } finally {
       setLoadingSupplies(false)
-    }
-  }
-
-  const fetchSeasons = async () => {
-    try {
-      setLoadingSeasons(true)
-      const response = await axios.get("/api/muavu")
-      setSeasons(response.data)
-    } catch (error) {
-      console.error("Error fetching seasons:", error)
-      toast({
-        variant: "destructive",
-        title: "Lỗi",
-        description: "Không thể tải danh sách mùa vụ",
-      })
-    } finally {
-      setLoadingSeasons(false)
-    }
-  }
-
-  const fetchStages = async () => {
-    try {
-      setLoadingStages(true)
-      const response = await axios.get("/api/giaidoan")
-      setStages(response.data)
-
-      // Fetch tasks after stages are loaded
-      fetchTasks()
-    } catch (error) {
-      console.error("Error fetching stages:", error)
-      toast({
-        variant: "destructive",
-        title: "Lỗi",
-        description: "Không thể tải danh sách giai đoạn",
-      })
-    } finally {
-      setLoadingStages(false)
-    }
-  }
-
-  const fetchTasks = async () => {
-    try {
-      setLoadingTasks(true)
-      const response = await axios.get("/api/congviec")
-      setTasks(response.data)
-    } catch (error) {
-      console.error("Error fetching tasks:", error)
-      toast({
-        variant: "destructive",
-        title: "Lỗi",
-        description: "Không thể tải danh sách công việc",
-      })
-    } finally {
-      setLoadingTasks(false)
     }
   }
 
@@ -319,10 +214,11 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     })
     setSelectedDate(new Date())
     setSelectedStageId("")
+    setSelectedSeason(null)
     setImages([])
     setPreviewImages([])
+    setExistingImages([])
     setSelectedSupply(null)
-    setSelectedSeason(null)
     setNewAgrochemical({
       name: "",
       type: "thuốc",
@@ -334,22 +230,34 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   }
 
   const handleDateChange = (date: Date) => {
+    if (!selectedSeason) {
+      setSelectedDate(date)
+      setFormData((prev) => ({
+        ...prev,
+        ngayThucHien: format(date, "dd-MM-yyyy"),
+        ngaySauBatDau: 0,
+      }))
+      return
+    }
+    const seasonStartDate = parseVietnameseDate(selectedSeason.ngaybatdau)
+    const daysDiff = Math.floor((date.getTime() - seasonStartDate.getTime()) / (1000 * 60 * 60 * 24))
     setSelectedDate(date)
     setFormData((prev) => ({
       ...prev,
       ngayThucHien: format(date, "dd-MM-yyyy"),
+      ngaySauBatDau: daysDiff >= 0 ? daysDiff : 0,
     }))
   }
 
   const handleStageChange = (stageId: string) => {
+    if (stageId === selectedStageId) return
     setSelectedStageId(stageId)
-    const stage = stages.find((s) => s._id === stageId)
+    const stage = getStageById(stageId)
     if (stage) {
       setFormData((prev) => ({
         ...prev,
         giaiDoan: stage.tengiaidoan,
         giaiDoanId: stageId,
-        // Reset task when stage changes
         congViec: "",
         congViecId: "",
       }))
@@ -357,6 +265,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   }
 
   const handleTaskChange = (taskId: string) => {
+    if (taskId === formData.congViecId) return
     const task = tasks.find((t) => t._id === taskId)
     if (task) {
       setFormData((prev) => ({
@@ -368,32 +277,46 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   }
 
   const handleSeasonChange = (seasonId: string) => {
-    const season = seasons.find((s) => s._id === seasonId)
+    if (seasonId === formData.muaVuId) return
+    const season = getSeasonById(seasonId)
     if (season) {
       setSelectedSeason(season)
+      const seasonStartDate = parseVietnameseDate(season.ngaybatdau)
+      const daysDiff = Math.floor((selectedDate.getTime() - seasonStartDate.getTime()) / (1000 * 60 * 60 * 24))
       setFormData((prev) => ({
         ...prev,
         muaVu: season.tenmuavu,
         muaVuId: seasonId,
-        ngaySauBatDau: 0, // Reset days after start
+        ngaySauBatDau: daysDiff >= 0 ? daysDiff : 0,
       }))
     }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "number" ? (value === "" ? "" : Number(value) || 0) : value,
     }))
   }
 
   const handleNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: Number.parseInt(value) || 0,
-    }))
+    const value = Number.parseInt(e.target.value) || 0
+    if (e.target.name === "ngaySauBatDau" && selectedSeason) {
+      const seasonStartDate = parseVietnameseDate(selectedSeason.ngaybatdau)
+      const newDate = addDays(seasonStartDate, value)
+      setSelectedDate(newDate)
+      setFormData((prev) => ({
+        ...prev,
+        ngaySauBatDau: value,
+        ngayThucHien: format(newDate, "dd-MM-yyyy"),
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [e.target.name]: value,
+      }))
+    }
   }
 
   const handleCurrencyChange = (data: { name: string; value: number }) => {
@@ -406,7 +329,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
 
   const handleAgrochemicalChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
-
     if (type === "checkbox") {
       setNewAgrochemical((prev) => ({
         ...prev,
@@ -447,8 +369,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       })
       return
     }
-
-    // Check if we're using an existing supply and validate quantity
     if (selectedSupply && newAgrochemical.lieuLuong > selectedSupply.soLuong) {
       toast({
         variant: "destructive",
@@ -457,7 +377,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       })
       return
     }
-
     const newItem: Agrochemical = {
       id: Date.now().toString(),
       name: newAgrochemical.name || "",
@@ -469,13 +388,10 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       farmingLogId: "",
       vattuId: newAgrochemical.vattuId,
     }
-
     setFormData((prev) => ({
       ...prev,
       agrochemicals: [...(prev.agrochemicals || []), newItem],
     }))
-
-    // Reset form
     setNewAgrochemical({
       name: "",
       type: "thuốc",
@@ -498,41 +414,37 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
       setImages((prev) => [...prev, ...newFiles])
-
-      // Create preview URLs
       const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
       setPreviewImages((prev) => [...prev, ...newPreviews])
     }
   }
 
   const removeImage = (index: number) => {
-    // Revoke object URL to prevent memory leaks
     URL.revokeObjectURL(previewImages[index])
-
-    setImages((prev) => prev.filter((_, i) => i !== index))
+    if (index < existingImages.length) {
+      // Xóa ảnh cũ
+      setExistingImages((prev) => prev.filter((_, i) => i !== index))
+    } else {
+      // Xóa ảnh mới
+      const newImageIndex = index - existingImages.length
+      setImages((prev) => prev.filter((_, i) => i !== newImageIndex))
+    }
     setPreviewImages((prev) => prev.filter((_, i) => i !== index))
   }
 
   const uploadImages = async () => {
     if (images.length === 0) return []
-
     setUploadingImage(true)
     const uploadedImages = []
-
     try {
       for (const file of images) {
-        // Create a FormData object
         const formData = new FormData()
         formData.append("image", file)
-
-        // Upload to your image compression API
         const response = await axios.post("/api/compress-image", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
-
-        // Add the compressed image data to the array
         if (response.data && response.data.base64) {
           uploadedImages.push({
             src: response.data.base64,
@@ -540,7 +452,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
           })
         }
       }
-
       return uploadedImages
     } catch (error) {
       console.error("Error uploading images:", error)
@@ -557,17 +468,13 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
 
   const updateInventory = async (agrochemicals: Agrochemical[]) => {
     try {
-      // Filter only items with vattuId (from inventory)
       const inventoryItems = agrochemicals.filter((item) => item.vattuId)
-
-      // Update inventory for each item
       for (const item of inventoryItems) {
         await axios.patch("/api/vattu", {
           vattuId: item.vattuId,
           soLuongSuDung: item.lieuLuong,
         })
       }
-
       return true
     } catch (error) {
       console.error("Error updating inventory:", error)
@@ -581,7 +488,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
   }
 
   const handleSubmit = async () => {
-    // Validate required fields
     if (!formData.muaVu || !formData.giaiDoan || !formData.congViec || !formData.ngayThucHien) {
       toast({
         variant: "destructive",
@@ -590,28 +496,36 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
       })
       return
     }
-
     setIsSubmitting(true)
-
     try {
-      // Upload images if any
-      let imageData = formData.image || []
-
+      let finalImages = [...existingImages] // Bắt đầu với ảnh cũ
       if (images.length > 0) {
-        const uploadedImages = await uploadImages()
-        imageData = [...imageData, ...uploadedImages]
+        if (isOnline) {
+          const uploadedImages = await uploadImages()
+          finalImages = [...finalImages, ...uploadedImages]
+        } else {
+          toast({
+            variant: "warning",
+            title: "Chế độ ngoại tuyến",
+            description: "Không thể tải lên hình ảnh khi ngoại tuyến. Hình ảnh sẽ được tải lên khi có kết nối.",
+          })
+          const offlineImages = images.map((file, index) => ({
+            src: URL.createObjectURL(file),
+            alt: `Offline image ${index + 1}`,
+            _pendingUpload: true,
+          }))
+          finalImages = [...finalImages, ...offlineImages]
+        }
       }
 
-      // Prepare final data
       const finalData: TimelineEntry = {
         ...(formData as TimelineEntry),
-        image: imageData,
+        image: finalImages,
         uId: session?.user?.uId || "",
         xId: session?.user?.xId || "",
       }
 
-      // Update inventory if needed
-      if (finalData.agrochemicals && finalData.agrochemicals.length > 0) {
+      if (isOnline && finalData.agrochemicals && finalData.agrochemicals.length > 0) {
         const inventoryUpdated = await updateInventory(finalData.agrochemicals)
         if (!inventoryUpdated) {
           setIsSubmitting(false)
@@ -619,11 +533,23 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
         }
       }
 
+      // Gửi dữ liệu lên server qua onSubmit
       onSubmit(finalData)
+
       toast({
         title: "Thành công",
-        description: entry ? "Cập nhật thành công" : "Thêm mới thành công",
+        description: entry
+          ? isOnline
+            ? "Cập nhật thành công"
+            : "Đã lưu thay đổi (chế độ ngoại tuyến)"
+          : isOnline
+            ? "Thêm mới thành công"
+            : "Đã lưu mới (chế độ ngoại tuyến)",
       })
+
+      // Reset form sau khi submit thành công
+      resetForm()
+      onClose()
     } catch (error) {
       console.error("Error submitting form:", error)
       toast({
@@ -636,7 +562,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
     }
   }
 
-  // Check if the current task is related to agrochemicals
   const isAgrochemicalTask = formData.congViec === "Bón phân" || formData.congViec === "Phun thuốc"
 
   return (
@@ -647,14 +572,18 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
             {entry ? "Chỉnh sửa hoạt động" : "Thêm hoạt động mới"}
           </DialogTitle>
         </DialogHeader>
-
+        {!isOnline && (
+          <div className="px-6 py-2 bg-amber-50 border-b border-amber-100 flex items-center">
+            <WifiOff className="h-4 w-4 text-amber-600 mr-2" />
+            <p className="text-sm text-amber-800">
+              Bạn đang ở chế độ ngoại tuyến. Dữ liệu sẽ được lưu cục bộ và đồng bộ khi có kết nối.
+            </p>
+          </div>
+        )}
         <div className="px-6 py-4 space-y-6">
-          {/* Basic Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Thông tin cơ bản</h3>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Season */}
               <div className="space-y-2">
                 <Label htmlFor="season">
                   Mùa vụ <span className="text-red-500">*</span>
@@ -664,7 +593,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder="Chọn mùa vụ" />
                   </SelectTrigger>
                   <SelectContent>
-                    {loadingSeasons ? (
+                    {isLoadingSeasons ? (
                       <div className="flex items-center justify-center p-2">
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                         <span>Đang tải...</span>
@@ -681,8 +610,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                   </SelectContent>
                 </Select>
               </div>
-
-              {/* Date */}
               <div className="space-y-2">
                 <Label htmlFor="date">
                   Ngày thực hiện <span className="text-red-500">*</span>
@@ -706,9 +633,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                 </Popover>
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Stage */}
               <div className="space-y-2">
                 <Label htmlFor="stage">
                   Giai đoạn <span className="text-red-500">*</span>
@@ -718,7 +643,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder="Chọn giai đoạn" />
                   </SelectTrigger>
                   <SelectContent>
-                    {loadingStages ? (
+                    {isLoadingStages ? (
                       <div className="flex items-center justify-center p-2">
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                         <span>Đang tải...</span>
@@ -738,8 +663,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                   </SelectContent>
                 </Select>
               </div>
-
-              {/* Task */}
               <div className="space-y-2">
                 <Label htmlFor="task">
                   Công việc <span className="text-red-500">*</span>
@@ -749,7 +672,7 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     <SelectValue placeholder={selectedStageId ? "Chọn công việc" : "Vui lòng chọn giai đoạn trước"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {loadingTasks ? (
+                    {isLoadingTasks ? (
                       <div className="flex items-center justify-center p-2">
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                         <span>Đang tải...</span>
@@ -769,8 +692,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                 </Select>
               </div>
             </div>
-
-            {/* Days after start */}
             <div className="space-y-2">
               <div className="flex items-center">
                 <Label htmlFor="ngaySauBatDau">Ngày sau bắt đầu</Label>
@@ -804,8 +725,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                 </p>
               )}
             </div>
-
-            {/* Work details */}
             <div className="space-y-2">
               <Label htmlFor="chiTietCongViec">Chi tiết công việc</Label>
               <Textarea
@@ -818,13 +737,9 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
               />
             </div>
           </div>
-
-          {/* Cost Information */}
           <div className="space-y-4 pt-4 border-t">
             <h3 className="text-lg font-medium">Chi phí</h3>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Labor cost */}
               <div className="space-y-2">
                 <Label htmlFor="chiPhiCong">Chi phí công</Label>
                 <CurrencyInput
@@ -838,17 +753,15 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
               <div className="space-y-2">
                 <Label htmlFor="soLuongCong">Số lượng công</Label>
                 <Input
-                  id="soLuongCong"
-                  name="soLuongCong"
-                  type="number"
-                  value={formData.soLuongCong || ""}
-                  onChange={handleInputChange}
-                  placeholder="Số lượng"
-                />
+  id="soLuongCong"
+  name="soLuongCong"
+  type="number"
+  value={formData.soLuongCong === "" ? "" : formData.soLuongCong || 0} // Đảm bảo hiển thị rỗng nếu cần
+  onChange={handleInputChange}
+  placeholder="Số lượng"
+/>
               </div>
             </div>
-
-            {/* Material cost */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="chiPhiVatTu">Chi phí vật tư</Label>
@@ -867,24 +780,20 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
               <div className="space-y-2">
                 <Label htmlFor="soLuongVatTu">Số lượng vật tư</Label>
                 <Input
-                  id="soLuongVatTu"
-                  name="soLuongVatTu"
-                  type="number"
-                  value={formData.soLuongVatTu || ""}
-                  onChange={handleInputChange}
-                  placeholder="Số lượng"
-                />
+  id="soLuongVatTu"
+  name="soLuongVatTu"
+  type="number"
+  value={formData.soLuongVatTu === "" ? "" : formData.soLuongVatTu || 0} // Đảm bảo hiển thị rỗng nếu cần
+  onChange={handleInputChange}
+  placeholder="Số lượng"
+/>
               </div>
             </div>
           </div>
-
-          {/* Agrochemicals section */}
           {isAgrochemicalTask && (
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-medium">Thông tin vật tư sử dụng</h3>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Left column: Available supplies */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label>Vật tư có sẵn</Label>
@@ -898,7 +807,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                       />
                     </div>
                   </div>
-
                   <div className="border rounded-md h-[200px] overflow-hidden">
                     {loadingSupplies ? (
                       <div className="flex items-center justify-center h-full">
@@ -958,11 +866,8 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                     )}
                   </div>
                 </div>
-
-                {/* Right column: Add agrochemical form */}
                 <div className="space-y-3">
                   <Label>Thêm vật tư sử dụng</Label>
-
                   <div className="space-y-3 border rounded-md p-3">
                     {selectedSupply ? (
                       <>
@@ -982,7 +887,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                             <X className="h-4 w-4" />
                           </Button>
                         </div>
-
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-2">
                             <Label htmlFor="lieuLuong" className="text-xs">
@@ -1010,7 +914,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                             />
                           </div>
                         </div>
-
                         <Button
                           type="button"
                           onClick={addAgrochemical}
@@ -1075,8 +978,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                   </div>
                 </div>
               </div>
-
-              {/* Agrochemical list */}
               {formData.agrochemicals && formData.agrochemicals.length > 0 && (
                 <div className="space-y-2 mt-4">
                   <h4 className="font-medium text-sm">Danh sách vật tư sử dụng:</h4>
@@ -1109,8 +1010,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
               )}
             </div>
           )}
-
-          {/* Notes */}
           <div className="space-y-2 pt-4 border-t">
             <Label htmlFor="ghiChu">Ghi chú</Label>
             <Textarea
@@ -1121,11 +1020,8 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
               placeholder="Ghi chú thêm"
             />
           </div>
-
-          {/* Images */}
           <div className="space-y-4 pt-4 border-t">
             <h3 className="text-lg font-medium">Hình ảnh</h3>
-
             <div className="border-2 border-dashed border-slate-200 rounded-lg p-6 text-center">
               <input
                 id="images"
@@ -1141,8 +1037,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
                 <span className="text-xs text-slate-400 mt-1">Hỗ trợ JPG, PNG, GIF (tối đa 5MB)</span>
               </label>
             </div>
-
-            {/* Image previews */}
             {previewImages.length > 0 && (
               <div className="grid grid-cols-3 gap-4 mt-4">
                 {previewImages.map((preview, index) => (
@@ -1166,7 +1060,6 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
             )}
           </div>
         </div>
-
         <div className="flex justify-end gap-2 p-6 border-t">
           <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
             Hủy
@@ -1190,4 +1083,3 @@ const EnhancedAddEditModal: React.FC<EnhancedAddEditModalProps> = ({ isOpen, onC
 }
 
 export default EnhancedAddEditModal
-
